@@ -8,7 +8,8 @@ function App() {
 
   return (
     <>
-      <h1>NGG Store V 2.0 con React y Bootstrap</h1>
+    <br />
+      <h1 className='text-center'>NGG Store V 2.0 con React y Bootstrap</h1>
 
     </>
   )
