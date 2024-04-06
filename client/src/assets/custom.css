@@ -1,18 +1,18 @@
-img {
+#img1 {
   opacity: 1.0;
 }
 
-a:hover img{
+#img1 *:hover img{
   opacity: 0.5;
   
 }
 
-a:hover p{
+#img1 *:hover h2{
   opacity: 0.5;
+  
 }
 
-a:hover h2{
+#img1 *:hover p{
   opacity: 0.5;
+  
 }
-
-
