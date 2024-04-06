@@ -8,7 +8,9 @@ function PiePagina() {
       <Container>
         <Navbar className="border-top">
           <Container>
+          <img src="/public/img/LOGO.sgv" alt="" height={30} />
             <Navbar.Brand className="text-secondary" href="#home">
+              
               Ngg Store 2024.
             </Navbar.Brand>
             <Navbar.Toggle />
