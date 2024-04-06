@@ -1,45 +1,24 @@
 import Container from "react-bootstrap/Container";
-import Row from "react-bootstrap/Row";
-import Col from "react-bootstrap/Col";
+import Navbar from "react-bootstrap/Navbar";
+
 
 function PiePagina() {
   return (
     <>
       <Container>
-        <Row className="border-top">
-          <Col>
-            <div>
-              <h4>
-                <span className="text-muted">Ngg Store 2024.</span>
-              </h4>
-            </div>
-          </Col>
-
-          <Col>
-            <ul className="nav justify-content-end">
-              <li className="nav-item">
-                <a className="nav-link active" aria-current="page" href="#">
-                  Active
-                </a>
-              </li>
-              <li className="nav-item">
-                <a className="nav-link" href="#">
-                  Link
-                </a>
-              </li>
-              <li className="nav-item">
-                <a className="nav-link" href="#">
-                  Link
-                </a>
-              </li>
-              <li className="nav-item">
-                <a className="nav-link disabled" aria-disabled="true">
-                  Disabled
-                </a>
-              </li>
-            </ul>
-          </Col>
-        </Row>
+        <Navbar className="border-top">
+          <Container>
+            <Navbar.Brand className="text-secondary" href="#home">
+              Ngg Store 2024.
+            </Navbar.Brand>
+            <Navbar.Toggle />
+            <Navbar.Collapse className="justify-content-end">
+              <Navbar.Text>
+                Desde el 2021 dando lo mejor
+              </Navbar.Text>
+            </Navbar.Collapse>
+          </Container>
+        </Navbar>
       </Container>
     </>
   );
