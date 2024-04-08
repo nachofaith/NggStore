@@ -72,14 +72,12 @@ function JumboTron() {
             <a id="img1" href="#" className="text-decoration-none">
               <div className="h-100 p-5 ">
                 <h2 className="display-5 fw-bold text-body-emphasis lh-1 mb-3 text-uppercase text-center">
-                  Mouse y Teclados Gamer
+                  Audífonos
                 </h2>
                 <p className="lead text-center text-dark">
-                  Tenemos la mejor coleccion de Mouse y Teclados para llevar tu
-                  juego al siguiente nivel. en Ngg Store encontraras los mejores
-                  teclado mecanicos con las respuesta mas rapida como tambien
-                  los mejores Mouse con sus sensores y Dpi que te haran marcar
-                  la diferencia{" "}
+                  Escucha a tus enemigos antes que ellos a ti y asi eliminalos
+                  de forma instantanea, saca mayor ventaja en tus juegos con
+                  nuestra coleccion de audifonos y microfonos{" "}
                 </p>
 
                 <div className="overflow-hidden">
