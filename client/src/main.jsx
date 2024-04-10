@@ -5,13 +5,15 @@ import MenuPrincipal from './components/Navbar.jsx'
 import JumboTron from './components/Jumbotron.jsx'
 import MostrarOfertas from './components/Ofertas.jsx';
 import PiePagina from './components/Footer.jsx';
-import SliderHome from './components/Slider.jsx';
+import MostrarProdNuevos from './components/Novedades.jsx';
+
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <MenuPrincipal />
-    <SliderHome />
+    <JumboTron />
     <MostrarOfertas />
+    <MostrarProdNuevos />
     <PiePagina />
   </React.StrictMode>,
 )

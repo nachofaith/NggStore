@@ -4,7 +4,7 @@ import Col from "react-bootstrap/Col";
 import Producto from "./Producto";
 import Badge from "react-bootstrap/Badge";
 
-function MostrarOfertas() {
+function MostrarProdNuevos() {
   return (
     <>
  
@@ -14,9 +14,9 @@ function MostrarOfertas() {
         <Row>
           <Col>
             <h1>
-              Productos en oferta{" "}
+            Productos recién llegados  {" "}
               <Badge bg="warning" text="dark">
-                Descuentos
+                Novedades
               </Badge>
             </h1>
           </Col>
@@ -35,4 +35,4 @@ function MostrarOfertas() {
   );
 }
 
-export default MostrarOfertas;
+export default MostrarProdNuevos;

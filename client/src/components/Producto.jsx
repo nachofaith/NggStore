@@ -11,9 +11,16 @@ function Producto() {
     <Card style={{ width: "18rem" }}>
       <Row className="justify-content-md-center text-uppercase fs-5">
         <Col md="auto">
-          <Badge pill bg="success">
+
+
+          <Badge pill bg="danger">
             Oferta
+          </Badge>{" "}
+          <Badge pill bg="success">
+            Nuevo
           </Badge>
+
+          
         </Col>
       </Row>
 

@@ -3,99 +3,91 @@ import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Button from "react-bootstrap/Button";
 import "/src/assets/custom.css";
+import Badge from "react-bootstrap/Badge";
+
 
 function JumboTron() {
   return (
     <>
-      <Container className="border-bottom">
-        <Row className="flex-lg-row-reverse align-items-center g-5 py-5">
-          <Col sm={8} lg={6}>
-            <img
-              src="/public/img/slider1.png"
-              className="d-block mx-lg-auto img-fluid"
-              alt="Productos KD/A"
-              width="700"
-              height="500"
-              loading="lazy"
-            />
-          </Col>
-          <Col className="col-lg-6 align-items-center">
-            <h1 className="display-5 fw-bold text-body-emphasis lh-1 mb-3 text-center ">
-              COLECCION LOGITECH K/DA DE LEAGUE OF LEGENDS®{" "}
+      <Container className="">
+        <Container>
+          <Row className="px-4 pt-2 my-5 text-center ">
+            <h5>
+              <Badge bg="secondary">Destacados</Badge>
+            </h5>
+
+            <h1 className="display-5 fw-bold text-body-emphasis text-uppercase">
+              LOGITECH K/DA de league of legends
             </h1>
-            <p className="lead text-center">
-              Productos de tus POP/STARS favoritas de League Of Legends. Juega
-              con Ahri, Seraphine, Akali, Evelynn o Kai'sa y domina la grieta
-              del invocador. Ya disponibles en NGG STORE.
-            </p>
-            <div className="d-grid gap-2">
-              <Button className="text-uppercase" variant="primary" size="lg">
-                Comprar ahora
-              </Button>
-            </div>
-          </Col>
-        </Row>
-      </Container>
 
-      <Container className="border-bottom">
-        <Row>
-          <Col className="border-end">
-            <a id="img1" href="#" className="text-decoration-none">
-              <div className="h-100 p-5">
-                <h2 className="display-5 fw-bold text-body-emphasis lh-1 mb-3 text-uppercase text-center">
-                  Mouse y Teclados Gamer
-                </h2>
-                <p className="lead text-center text-dark">
-                  Tenemos la mejor coleccion de Mouse y Teclados para llevar tu
-                  juego al siguiente nivel. en Ngg Store encontraras los mejores
-                  teclado mecanicos con las respuesta mas rapida como tambien
-                  los mejores Mouse con sus sensores y Dpi que te haran marcar
-                  la diferencia{" "}
-                </p>
-
-                <div className="overflow-hidden">
-                  <div className="container px-5">
-                    <img
-                      src="/public/img/slider1.png"
-                      className="img-fluid border rounded-3 mb-4"
-                      alt="Example image"
-                      width="700"
-                      height="500"
-                      loading="lazy"
-                    />
-                  </div>
-                </div>
+            <Col className="col-lg-6 mx-auto">
+              <p className="lead mb-4">
+                Penetra en Summoner’s Rift con un teclado apto para torneos,
+                dotado de interruptores GX Brown táctiles. No importa con qué
+                campeona de K/DA juegues, desde Ahri a Seraphine, siempre
+                tendrás las pulsaciones de teclado precisas que necesites para
+                recorrer todo el camino hasta Nexus.
+              </p>
+              <div className="justify-content-sm-center ">
+                <Button className="" variant="primary">
+                  Lo quiero!
+                </Button>
               </div>
-            </a>
-          </Col>
-          <Col>
-            <a id="img1" href="#" className="text-decoration-none">
-              <div className="h-100 p-5 ">
-                <h2 className="display-5 fw-bold text-body-emphasis lh-1 mb-3 text-uppercase text-center">
-                  Audífonos
-                </h2>
-                <p className="lead text-center text-dark">
-                  Escucha a tus enemigos antes que ellos a ti y asi eliminalos
-                  de forma instantanea, saca mayor ventaja en tus juegos con
-                  nuestra coleccion de audifonos y microfonos{" "}
+            </Col>
+          </Row>
+          <Row
+            className="text-center px-5 overflow-hidden"
+            style={{ maxHeight: "30vh" }}
+          >
+            <Col className="border-bottom">
+              {" "}
+              <img
+                src="/public/img/slider1.jpg"
+                className="img-fluid border rounded-3 mb-4"
+                alt="Example image"
+                width="700"
+                height="500"
+                loading="lazy"
+              />
+            </Col>
+          </Row>
+        </Container>
+        <br />
+        <Container>
+          <Row>
+            <Col className="md-6">
+              <div className="h-100 p-5 text-bg-dark p-3 rounded-3">
+              <h5>
+              <Badge bg="secondary">Destacados</Badge>
+            </h5>
+                <h2 className="text-uppercase">Mouse y Teclados</h2>
+                <p>
+                  Swap the background-color utility and add a `.text-*` color
+                  utility to mix up the jumbotron look. Then, mix and match with
+                  additional component themes and more.
                 </p>
-
-                <div className="overflow-hidden">
-                  <div className="container px-5">
-                    <img
-                      src="/public/img/slider1.png"
-                      className="img-fluid border rounded-3 mb-4"
-                      alt="Example image"
-                      width="700"
-                      height="500"
-                      loading="lazy"
-                    />
-                  </div>
-                </div>
+                <Button className="" variant="primary">
+                  Comprar ahora
+                </Button>
               </div>
-            </a>
-          </Col>
-        </Row>
+            </Col>
+            <Col className="md-6">
+              <div className="h-100 p-5 text-bg-dark p-3 rounded-3">
+              <h5>
+              <Badge bg="secondary">Destacados</Badge>
+            </h5>
+                <h2 className="text-uppercase">AUDIFONOS GAMER</h2>
+                <p>
+                Escucha a tus rivales antes que ellos a ti y ¡elimínalos! con la gran variedad de audífonos gamer que tenemos para ti.
+                </p>
+                <Button className="" variant="primary">
+                  Comprar ahora
+                </Button>
+              </div>
+            </Col>
+          </Row>
+        </Container>
+        <br />
       </Container>
     </>
   );
