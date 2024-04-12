@@ -24,7 +24,7 @@ function MostrarProdNuevos() {
 
         <Row>
           <Col>
-            <Producto />
+            <Producto text="nuevo"/>
           </Col>
           <Col></Col>
           <Col></Col>

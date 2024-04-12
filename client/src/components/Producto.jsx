@@ -1,26 +1,30 @@
 import Button from "react-bootstrap/Button";
 import Card from "react-bootstrap/Card";
-import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Badge from "react-bootstrap/Badge";
 import ListGroup from "react-bootstrap/ListGroup";
 
-function Producto() {
+function TipoMuestra(text) {
+  
+  if (text === "oferta") {
+    const tipo = "danger"
+    return tipo;
+  }
+  if (text === "nuevo") {
+    const tipo = "success"
+    return tipo;
+  }
+}
+
+function Producto({ text }) {
   return (
     <Card style={{ width: "18rem" }}>
       <Row className="justify-content-md-center text-uppercase fs-5">
         <Col md="auto">
-
-
-          <Badge pill bg="danger">
-            Oferta
-          </Badge>{" "}
-          <Badge pill bg="success">
-            Nuevo
+          <Badge pill bg={TipoMuestra(text)}>
+            {text}
           </Badge>
-
-          
         </Col>
       </Row>
 

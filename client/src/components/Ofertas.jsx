@@ -7,8 +7,7 @@ import Badge from "react-bootstrap/Badge";
 function MostrarOfertas() {
   return (
     <>
- 
-    <br />
+      <br />
       <Container className="border-top">
         <br />
         <Row>
@@ -24,7 +23,7 @@ function MostrarOfertas() {
 
         <Row>
           <Col>
-            <Producto />
+            <Producto text="oferta" />
           </Col>
           <Col></Col>
           <Col></Col>
