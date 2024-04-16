@@ -5,24 +5,26 @@ import Col from "react-bootstrap/Col";
 import Badge from "react-bootstrap/Badge";
 import ListGroup from "react-bootstrap/ListGroup";
 
-function TipoMuestra(text) {
-  
+function TipoBadge(text) {
   if (text === "oferta") {
-    const tipo = "danger"
+    const tipo = "danger";
     return tipo;
   }
   if (text === "nuevo") {
-    const tipo = "success"
+    const tipo = "success";
     return tipo;
   }
 }
 
 function Producto({ text }) {
+  // const tipo = text == "oferta" ? "danger" : "success";
+
   return (
     <Card style={{ width: "18rem" }}>
       <Row className="justify-content-md-center text-uppercase fs-5">
         <Col md="auto">
-          <Badge pill bg={TipoMuestra(text)}>
+          <Badge pill bg={TipoBadge(text)}>
+            {/* <Badge pill bg={tipo}> */}
             {text}
           </Badge>
         </Col>
