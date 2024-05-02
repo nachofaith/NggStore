@@ -22,13 +22,8 @@ function MostrarProdNuevos() {
           </Col>
         </Row>
 
-        <Row>
-          <Col>
-            <Producto text="nuevo"/>
-          </Col>
-          <Col></Col>
-          <Col></Col>
-          <Col></Col>
+        <Row className="grid gap-3">
+          <Producto text="nuevo" />
         </Row>
       </Container>
     </>

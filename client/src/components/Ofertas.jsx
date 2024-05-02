@@ -21,13 +21,8 @@ function MostrarOfertas() {
           </Col>
         </Row>
 
-        <Row>
-          <Col>
-            <Producto text="oferta" />
-          </Col>
-          <Col></Col>
-          <Col></Col>
-          <Col></Col>
+        <Row className="grid gap-3">
+          <Producto text="oferta" />
         </Row>
       </Container>
     </>
