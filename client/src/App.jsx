@@ -1,18 +1,27 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-
+import React from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import MenuPrincipal from "./components/Navbar";
+import Home from "./pages/Home";
+import Ofertas from "./pages/Ofertas";
+import Login from "./pages/Login";
+import PiePagina from "./components/Footer";
+import Register from "./pages/Register";
 
 function App() {
-  const [count, setCount] = useState(0)
-
   return (
-    <>
-    <br />
-      <h1 className='text-center'>NGG Store V 2.0 con React y Bootstrap</h1>
+    <Router>
+    
 
-    </>
-  )
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/ofertas" element={<Ofertas />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+      </Routes>
+
+      <PiePagina />
+    </Router>
+  );
 }
 
-export default App
+export default App;

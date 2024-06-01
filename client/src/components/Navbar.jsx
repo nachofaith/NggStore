@@ -1,13 +1,43 @@
+import { useState, useEffect } from "react";
 import Container from "react-bootstrap/Container";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
 import Dropdown from "react-bootstrap/Dropdown";
-import { useState, useEffect } from "react";
 import axios from "axios";
+import Button from "react-bootstrap/Button";
+import NavItem from "react-bootstrap/esm/NavItem";
+import { jwtDecode } from "jwt-decode";
+
+
 
 function MenuPrincipal() {
   const apiUrl = "https://api.escuelajs.co/api/v1/categories";
   const [cat, setCat] = useState([]);
+  const [user, setUser] = useState(null);
+
+
+  useEffect(() => {
+    // Obtiene el token JWT del localStorage
+    const token = localStorage.getItem('token');
+
+    if (token) {
+      // Decodifica el token JWT
+      const decoded = jwtDecode(token);
+      // Asigna la información del usuario decodificada al estado
+      console.log(decoded)
+      setUser(decoded);
+    }
+  }, []);
+
+
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    setUser(null);
+    navigate('/login');
+  };
+
+
+
 
   useEffect(() => {
     // Función para obtener los productos del archivo JSON usando Axios
@@ -50,14 +80,34 @@ function MenuPrincipal() {
                 </Dropdown.Menu>
               </Dropdown>
             </Nav.Link>
-            <Nav.Link href="#home">Home</Nav.Link>
-            <Nav.Link href="#features">Features</Nav.Link>
-            <Nav.Link href="#pricing">Pricing</Nav.Link>
+
+            <NavItem>
+              <Nav.Link href="/">Home</Nav.Link>
+            </NavItem>
+            <NavItem>
+              <Nav.Link href="/ofertas">Ofertas</Nav.Link>
+            </NavItem>
           </Nav>
           <Navbar.Collapse className="justify-content-end">
-            <Navbar.Text>
-              Signed in as: <a href="#login">Nachin</a>
-            </Navbar.Text>
+
+
+          {user ? (
+  
+          <Navbar.Text>
+            Signed in as: <a href="#login">{user.username}</a>
+            <Button variant="primary" onClick={handleLogout}>Logout</Button>
+          </Navbar.Text>
+    
+      ) : (
+        <NavItem><Button href="/login">Login</Button></NavItem>
+      )}
+
+
+
+
+
+      
+          
           </Navbar.Collapse>
         </Container>
       </Navbar>

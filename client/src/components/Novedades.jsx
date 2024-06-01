@@ -7,21 +7,20 @@ import Badge from "react-bootstrap/Badge";
 function MostrarProdNuevos() {
   return (
     <>
- 
-    <br />
-      <Container className="border-top">
+      <br />
+      <Container>
         <br />
         <Row>
           <Col>
             <h1>
-            Productos recién llegados  {" "}
+              Productos recién llegados{" "}
               <Badge bg="warning" text="dark">
                 Novedades
               </Badge>
             </h1>
           </Col>
         </Row>
-
+        <br />
         <Row className="grid gap-3">
           <Producto text="nuevo" />
         </Row>

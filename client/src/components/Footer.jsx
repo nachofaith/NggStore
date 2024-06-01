@@ -1,11 +1,12 @@
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
+import Navbar from "react-bootstrap/Navbar";
+import "../assets/custom.css";
 
 function PiePagina() {
   return (
-    <>
-    <br />
+    <footer>
       <Container>
         <Row className="d-flex flex-wrap justify-content-between align-items-center py-3 my-4 border-top">
           <Col>
@@ -14,14 +15,13 @@ function PiePagina() {
               className="mb-3 me-2 mb-md-0 text-body-secondary text-decoration-none lh-1"
             >
               <img src="/public/img/logo2.png" width={200} alt="" />
-          
             </a>
           </Col>
           <Col className="fw-light fs-6 text-center text-secondary">
-          <span>Ngg Store ® 2021-2024</span>
+            <span>Ngg Store ® 2021-2024</span>
           </Col>
           <Col className="nav justify-content-end">
-            <ul className="nav col-md-4 justify-content-end list-unstyled d-flex" >
+            <ul className="nav col-md-4 justify-content-end list-unstyled d-flex">
               <li className="ms-3">
                 <a className="text-body-secondary" href="#">
                   <svg
@@ -68,7 +68,7 @@ function PiePagina() {
           </Col>
         </Row>
       </Container>
-    </>
+    </footer>
   );
 }
 

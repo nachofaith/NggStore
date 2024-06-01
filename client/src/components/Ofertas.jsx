@@ -8,7 +8,7 @@ function MostrarOfertas() {
   return (
     <>
       <br />
-      <Container className="border-top">
+      <Container>
         <br />
         <Row>
           <Col>
@@ -20,7 +20,7 @@ function MostrarOfertas() {
             </h1>
           </Col>
         </Row>
-
+        <br />
         <Row className="grid gap-3">
           <Producto text="oferta" />
         </Row>
