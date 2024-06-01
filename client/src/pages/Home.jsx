@@ -7,7 +7,7 @@ import MenuPrincipal from "../components/Navbar.jsx";
 function Home() {
   return (
     <>
-      <MenuPrincipal />
+    
       <JumboTron />
       <MostrarOfertas />
       <MostrarProdNuevos />

@@ -11,7 +11,7 @@ function App() {
   return (
     <Router>
     
-
+    <MenuPrincipal />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/ofertas" element={<Ofertas />} />

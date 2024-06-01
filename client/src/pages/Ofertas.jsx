@@ -5,7 +5,7 @@ import MenuPrincipal from "../components/Navbar";
 function Ofertas() {
   return (
     <>
-      <MenuPrincipal />
+    
       <MostrarOfertas />
     </>
   );

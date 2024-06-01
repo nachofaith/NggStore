@@ -40,7 +40,7 @@ function Login() {
   };
 
   return (
-    <><MenuPrincipal /><Container className="mt-5">
+    <><Container className="mt-5">
       <Row className="justify-content-md-center">
         <Col md={4}>
           <h2>Login</h2>

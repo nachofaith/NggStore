@@ -7,27 +7,30 @@ import axios from "axios";
 import Button from "react-bootstrap/Button";
 import NavItem from "react-bootstrap/esm/NavItem";
 import { jwtDecode } from "jwt-decode";
+import { useNavigate } from "react-router-dom";
 
 
 
 function MenuPrincipal() {
+
   const apiUrl = "https://api.escuelajs.co/api/v1/categories";
+  const navigate = useNavigate();
   const [cat, setCat] = useState([]);
   const [user, setUser] = useState(null);
-
-
-  useEffect(() => {
     // Obtiene el token JWT del localStorage
     const token = localStorage.getItem('token');
+  
+
+  useEffect(() => {
+
 
     if (token) {
       // Decodifica el token JWT
       const decoded = jwtDecode(token);
       // Asigna la información del usuario decodificada al estado
-      console.log(decoded)
       setUser(decoded);
     }
-  }, []);
+  }, [token]);
 
 
   const handleLogout = () => {
@@ -114,5 +117,11 @@ function MenuPrincipal() {
     </>
   );
 }
+
+
+
+
+
+
 
 export default MenuPrincipal;
