@@ -1,96 +1,104 @@
-import Container from "react-bootstrap/Container";
-import Row from "react-bootstrap/Row";
-import Col from "react-bootstrap/Col";
-import Button from "react-bootstrap/Button";
-import "/src/assets/custom.css";
-import Badge from "react-bootstrap/Badge";
-
-
-function JumboTron() {
+import { Button } from "flowbite-react";
+export default function Jumbotron() {
   return (
-    <>
-      <Container className="">
-        <Container>
-          <Row className="px-4 pt-2 my-5 text-center ">
-            <h5>
-              <Badge bg="secondary">Destacados</Badge>
-            </h5>
-
-            <h1 className="display-5 fw-bold text-body-emphasis text-uppercase">
-              LOGITECH K/DA de league of legends
-            </h1>
-
-            <Col className="col-lg-6 mx-auto">
-              <p className="lead mb-4">
-                Penetra en Summoner’s Rift con un teclado apto para torneos,
-                dotado de interruptores GX Brown táctiles. No importa con qué
-                campeona de K/DA juegues, desde Ahri a Seraphine, siempre
-                tendrás las pulsaciones de teclado precisas que necesites para
-                recorrer todo el camino hasta Nexus.
-              </p>
-              <div className="justify-content-sm-center ">
-                <Button className="" variant="primary">
-                  Lo quiero!
-                </Button>
-              </div>
-            </Col>
-          </Row>
-          <Row
-            className="text-center px-5 overflow-hidden"
-            style={{ maxHeight: "30vh" }}
+    <div className="pt-10 container mx-auto ">
+      <section className="bg-gray-500 rounded md:container md: mx-auto bg-center bg-no-repeat bg-[url('https://resource.logitechg.com/w_1800,h_1800,c_limit,q_auto,f_auto,dpr_1.0/d_transparent.gif/content/dam/gaming/en/products/g915-tkl/g915-white-update/g915-tkl-feature-07-desktop-w.png?v=1')] bg-blend-multiply">
+        <div className="px-4 mx-auto max-w-screen-xl text-center py-24 lg:py-56">
+          <h1 className="tracking-wide mb-4 text-4xl font-extrabold leading-none text-white md:text-5xl lg:text-6xl">
+            Colección Logitech
+          </h1>
+          <p className="mb-8 text-lg font-normal text-gray-200 lg:text-xl sm:px-16 lg:px-48">
+            Tenemos los mejores productos de Logitech a los mejores precios
+          </p>
+          <a
+            href="#"
+            className="inline-flex justify-center items-center bg-white text-gray-900 hover:bg-blue-500 hover:text-white focus:ring-4 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2"
           >
-            <Col className="border-bottom">
-              {" "}
-              <img
-                src="/public/img/slider1.jpg"
-                className="img-fluid border rounded-3 mb-4"
-                alt="Example image"
-                width="700"
-                height="500"
-                loading="lazy"
+            Saber mas
+            <svg
+              className="w-3.5 h-3.5 ms-2 rtl:rotate-180"
+              aria-hidden="true"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 14 10"
+            >
+              <path
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M1 5h12m0 0L9 1m4 4L9 9"
               />
-            </Col>
-          </Row>
-        </Container>
-        <br />
-        <Container>
-          <Row>
-            <Col className="md-6">
-              <div className="h-100 p-5 text-bg-dark p-3 rounded-3">
-              <h5>
-              <Badge bg="secondary">Destacados</Badge>
-            </h5>
-                <h2 className="text-uppercase">Mouse y Teclados</h2>
-                <p>
-                  Swap the background-color utility and add a `.text-*` color
-                  utility to mix up the jumbotron look. Then, mix and match with
-                  additional component themes and more.
-                </p>
-                <Button className="" variant="primary">
-                  Comprar ahora
-                </Button>
-              </div>
-            </Col>
-            <Col className="md-6">
-              <div className="h-100 p-5 text-bg-dark p-3 rounded-3">
-              <h5>
-              <Badge bg="secondary">Destacados</Badge>
-            </h5>
-                <h2 className="text-uppercase">AUDIFONOS GAMER</h2>
-                <p>
-                Escucha a tus rivales antes que ellos a ti y ¡elimínalos! con la gran variedad de audífonos gamer que tenemos para ti.
-                </p>
-                <Button className="" variant="primary">
-                  Comprar ahora
-                </Button>
-              </div>
-            </Col>
-          </Row>
-        </Container>
-        <br />
-      </Container>
-    </>
+            </svg>
+          </a>
+        </div>
+      </section>
+      <section className="pt-10">
+        <div className="grid md:grid-cols-2 gap-8 ">
+        <section className="bg-gray-500 rounded md:container md: mx-auto bg-center bg-no-repeat bg-[url('https://redragon.es/content/uploads/2021/05/HEROS-3.jpg')] bg-blend-multiply">
+        <div className="px-4 mx-auto max-w-screen-xl text-center py-24 lg:py-56">
+          <h1 className="tracking-wide mb-4 text-4xl font-extrabold leading-none text-white md:text-5xl lg:text-6xl">
+            Periféricos
+          </h1>
+          <p className="mb-8 text-lg font-normal text-gray-200 lg:text-xl sm:px-16 lg:px-48">
+            Teclados y mouse para obtener la mayor ventaja contra tus enemigos
+          </p>
+          <a
+            href="#"
+            className="inline-flex justify-center items-center bg-white text-gray-900 hover:bg-blue-500 hover:text-white focus:ring-4 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2"
+          >
+            Saber mas
+            <svg
+              className="w-3.5 h-3.5 ms-2 rtl:rotate-180"
+              aria-hidden="true"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 14 10"
+            >
+              <path
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M1 5h12m0 0L9 1m4 4L9 9"
+              />
+            </svg>
+          </a>
+        </div>
+      </section>
+      <section className="bg-gray-500 rounded md:container md: mx-auto bg-center bg-no-repeat bg-[url('https://assets.xboxservices.com/assets/1d/b8/1db8a7b7-7165-4f1f-976f-ea86e9b3c1cc.jpg?n=284993_Page-Hero-1084_1920x720.jpg')] bg-blend-multiply">
+        <div className="px-4 mx-auto max-w-screen-xl text-center py-24 lg:py-56">
+          <h1 className="tracking-wide mb-4 text-4xl font-extrabold leading-none text-white md:text-5xl lg:text-6xl">
+            Zona Gamer
+          </h1>
+          <p className="mb-8 text-lg font-normal text-gray-200 lg:text-xl sm:px-16 lg:px-48">
+            Controles, audifonos y accesorios para tu Computadora o Consola
+          </p>
+          <a
+            href="#"
+            className="inline-flex justify-center items-center bg-white text-gray-900 hover:bg-blue-500 hover:text-white focus:ring-4 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2"
+          >
+            Saber mas
+            <svg
+              className="w-3.5 h-3.5 ms-2 rtl:rotate-180"
+              aria-hidden="true"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 14 10"
+            >
+              <path
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M1 5h12m0 0L9 1m4 4L9 9"
+              />
+            </svg>
+          </a>
+        </div>
+      </section>
+        </div>
+      </section>
+    </div>
   );
 }
-
-export default JumboTron;

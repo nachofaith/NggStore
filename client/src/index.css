@@ -1,0 +1,13 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    min-height: 100vh;
+    font-family: "Poppins", sans-serif;
+  }
+  h1 {
+    font-family: "Anton SC", sans-serif;
+  }
+}
