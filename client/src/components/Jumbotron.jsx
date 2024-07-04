@@ -1,7 +1,10 @@
 import { Button } from "flowbite-react";
 export default function Jumbotron() {
   return (
+
     <div className="pt-10 container mx-auto ">
+
+      {/* Jumbotron Principal */}
       <section className="bg-gray-500 rounded md:container md: mx-auto bg-center bg-no-repeat bg-[url('https://resource.logitechg.com/w_1800,h_1800,c_limit,q_auto,f_auto,dpr_1.0/d_transparent.gif/content/dam/gaming/en/products/g915-tkl/g915-white-update/g915-tkl-feature-07-desktop-w.png?v=1')] bg-blend-multiply">
         <div className="px-4 mx-auto max-w-screen-xl text-center py-24 lg:py-56">
           <h1 className="tracking-wide mb-4 text-4xl font-extrabold leading-none text-white md:text-5xl lg:text-6xl">
@@ -33,9 +36,14 @@ export default function Jumbotron() {
           </a>
         </div>
       </section>
-      <section className="pt-10">
-        <div className="grid md:grid-cols-2 gap-8 ">
-        <section className="bg-gray-500 rounded md:container md: mx-auto bg-center bg-no-repeat bg-[url('https://redragon.es/content/uploads/2021/05/HEROS-3.jpg')] bg-blend-multiply">
+
+
+
+
+      <div className="grid md:grid-cols-2 gap-8 pt-8">
+
+
+      <section className="bg-gray-500 rounded md:container md: mx-auto bg-center bg-no-repeat bg-[url('https://redragon.es/content/uploads/2021/05/HEROS-3.jpg')] bg-blend-multiply">
         <div className="px-4 mx-auto max-w-screen-xl text-center py-24 lg:py-56">
           <h1 className="tracking-wide mb-4 text-4xl font-extrabold leading-none text-white md:text-5xl lg:text-6xl">
             Periféricos
@@ -66,6 +74,8 @@ export default function Jumbotron() {
           </a>
         </div>
       </section>
+
+
       <section className="bg-gray-500 rounded md:container md: mx-auto bg-center bg-no-repeat bg-[url('https://assets.xboxservices.com/assets/1d/b8/1db8a7b7-7165-4f1f-976f-ea86e9b3c1cc.jpg?n=284993_Page-Hero-1084_1920x720.jpg')] bg-blend-multiply">
         <div className="px-4 mx-auto max-w-screen-xl text-center py-24 lg:py-56">
           <h1 className="tracking-wide mb-4 text-4xl font-extrabold leading-none text-white md:text-5xl lg:text-6xl">
@@ -97,8 +107,13 @@ export default function Jumbotron() {
           </a>
         </div>
       </section>
-        </div>
-      </section>
-    </div>
+
+      </div>
+
+      <hr class="h-px my-8 bg-gray-200 border-0 dark:bg-gray-700" />
+</div>
+
+
+
   );
 }

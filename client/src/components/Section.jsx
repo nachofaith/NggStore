@@ -5,8 +5,9 @@ export default function Section(props) {
   const tipo = props.tipo;
 
   return (
-    <div className="container mx-auto p-10 text-center">
-      <h1 className="text-gray-800 text-6xl p-8">{text}</h1>
+    <div className="container mx-auto pt-10">
+      <h1 className="text-black text-6xl py-8">{text}</h1>
+      
       <div className="inline-grid grid-cols-4 gap-4">
         <Products tipo={tipo} />
         <Products tipo={tipo} />

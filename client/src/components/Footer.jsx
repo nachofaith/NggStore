@@ -1,6 +1,7 @@
 export default function Footer() {
   return (
-    <footer className="p-4 pt-10 mt-10 bg-gradient-to-r from-gray-700 to-black">
+    <footer className="p-4 pt-10 mt-10 bg-gradient-to-t from-gray-900 to-black">
+    
       <div class="mx-auto max-w-screen-xl">
         <div class="md:flex md:justify-between">
           <div class="mb-6 md:mb-0">
@@ -12,7 +13,7 @@ export default function Footer() {
               />
             
           </div>
-          <div class="grid grid-cols-2 gap-8 sm:gap-6 sm:grid-cols-3 text-white">
+          <div class="grid grid-cols-2 gap-8 sm:gap-6 sm:grid-cols-3 text-gray-200">
             <div>
               <h2 class="mb-6 text-sm font-semibold uppercase">
                 Resources
@@ -72,7 +73,7 @@ export default function Footer() {
             </div>
           </div>
         </div>
-        <hr class="my-6 border-gray-200 sm:mx-auto dark:border-gray-700 lg:my-8" />
+      <hr class="h-px my-8 bg-gray-600 border-0"></hr>
         <div class="sm:flex sm:items-center sm:justify-between">
           <span class="text-sm text-gray-500 sm:text-center dark:text-gray-400">
             © 2022{" "}
