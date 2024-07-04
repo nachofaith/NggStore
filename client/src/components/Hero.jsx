@@ -5,12 +5,12 @@ export default function Hero() {
         <div className="basis-1/2 flex flex-col text-grey-600 gap-8">
           <h1 className="text-6xl font-normal tracking-wide">
             Diseñado para
-            <span class="text-transparent bg-clip-text bg-gradient-to-r from-cyan-500 to-blue-500">
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-500 to-blue-500">
               {" "}
               Gamers
             </span>
             , creado para{" "}
-            <span class="text-transparent bg-clip-text bg-gradient-to-r from-cyan-500 to-blue-500">
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-500 to-blue-500">
               {" "}
               Ganadores
             </span>
@@ -27,11 +27,11 @@ export default function Hero() {
             {" "}
             <a
               href="#"
-              class="inline-flex justify-center items-center py-3 px-5 text-base font-medium text-center text-white rounded-lg bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 dark:focus:ring-blue-900"
+              className="inline-flex justify-center items-center py-3 px-5 text-base font-medium text-center text-white rounded-lg bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 dark:focus:ring-blue-900"
             >
               Get started
               <svg
-                class="w-3.5 h-3.5 ms-2 rtl:rotate-180"
+                className="w-3.5 h-3.5 ms-2 rtl:rotate-180"
                 aria-hidden="true"
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
@@ -57,25 +57,25 @@ export default function Hero() {
         </div>
       </div>
       <div id="brands">
-        <section class="bg-white">
-          <div class="py-8 lg:py-16 mx-auto max-w-screen-xl px-4">
-            <h1 class="mb-8 lg:mb-16 text-3xl font-normal tracking-tight leading-tight text-center text-gray-800 md:text-4xl">
+        <section className="bg-white">
+          <div className="py-8 lg:py-16 mx-auto max-w-screen-xl px-4">
+            <h1 className="mb-8 lg:mb-16 text-3xl font-normal tracking-tight leading-tight text-center text-gray-800 md:text-4xl">
               Trabajamos con las mejores marcas
             </h1>
-            <div class="grid grid-cols-2 gap-8 text-gray-500 sm:gap-12 md:grid-cols-3 lg:grid-cols-6">
-              <a href="#" class="flex justify-center items-center">
+            <div className="grid grid-cols-2 gap-8 text-gray-500 sm:gap-12 md:grid-cols-3 lg:grid-cols-6">
+              <a href="#" className="flex justify-center items-center">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  class="h-8 hover:text-gray-900"
+                  className="h-8 hover:text-gray-900"
                   fill="currentColor"
                   viewBox="0 0 1481.715 449.797"
                 >
                   <path d="M0 318.163V6.59h54.729v311.572H0v.002zM194.832 92.128c-70.175 0-118.734 53.954-118.734 115.71 0 68.921 52.829 116.404 119.279 116.404 63.065 0 117.792-46.605 117.792-116.553 0-58.817-45.35-115.56-118.337-115.56zm-.646 52.8c36.725 0 63.754 28.584 63.754 63.108 0 36.606-29.803 63.307-62.764 63.307-38.945 0-63.456-30.867-63.456-63.208.001-35.448 27.674-63.208 62.466-63.208zM450.68 92.128c-70.172 0-118.733 53.954-118.733 115.71 0 68.921 52.829 116.404 119.279 116.404 63.065 0 117.791-46.605 117.791-116.553 0-41.189-17.837-59.464-17.837-59.464l15.171-5.203V98.603h-77.734s-16.854-6.475-37.937-6.475zm-.644 52.8c36.723 0 63.754 28.584 63.754 63.108 0 36.606-29.803 63.307-62.763 63.307-38.946 0-63.456-30.867-63.456-63.208.001-35.448 27.674-63.208 62.465-63.208zM513.403 333.394c0 36.604-29.801 63.506-62.762 63.506-38.947 0-63.556-31.168-63.556-63.506h-55.524c0 68.922 52.827 116.402 119.279 116.402 63.064 0 117.791-46.459 117.791-116.402h-55.228zM590.939 318.163V98.603h54.732v219.56h-54.732zM698.816 318.163v-170.38h-29.349v-49.18h29.349V31.18h54.731v67.423h30.142v49.18h-30.142v170.38h-54.731zM654.434 36.244c0 20.016-16.227 36.243-36.242 36.243-20.019 0-36.244-16.228-36.244-36.243C581.948 16.227 598.175 0 618.192 0c20.016 0 36.242 16.227 36.242 36.244zM906.736 91.98c-70.506 0-115.957 53.98-115.957 117.841 0 65.993 45.604 114.57 117.098 114.57 66.691 0 99.498-41.646 99.498-41.646l-36.587-36.637s-27.625 29.797-62.218 29.797c-28.837 0-51.893-16.096-59.938-45.61h170.541v-15.07c.002-60.136-34.805-123.245-112.437-123.245zm-1.734 48.188c25.212 0 50.997 13.488 56.764 45.708h-114.62c4.538-22.649 24.354-45.708 57.856-45.708zM1156.072 324.42c-70.703 0-118.881-53.853-118.881-117.346 0-65.526 54.448-115.135 118.654-115.135 62.068 0 93.842 43.816 93.842 43.816l-38.183 38.008s-22.116-28.576-55.92-28.576c-37.463 0-63.08 28.66-63.08 62.727 0 35.97 27.249 63.57 62.659 63.57 34.348 0 56.288-28.529 56.288-28.529l38.563 37.986s-31.463 43.48-93.94 43.48h-.002v-.002zM1269.927 318.322V5.798h54.73v114.823s20.957-28.682 66.544-28.682c57.311 0 90.513 42.602 90.513 97.09v129.292h-54.732v-121.02c0-36.606-22.789-51.794-48.037-51.794-28.766 0-54.286 16.371-54.286 54.625v118.19h-54.732z" />
                 </svg>
               </a>
-              <a href="#" class="flex justify-center items-center">
+              <a href="#" className="flex justify-center items-center">
                 <svg
-                  class="h-9 hover:text-gray-900"
+                  className="h-9 hover:text-gray-900"
                   fill="currentColor"
                   viewBox="0 0 133 40"
                   xmlns="http://www.w3.org/2000/svg"
@@ -114,9 +114,9 @@ export default function Hero() {
                   ></path>
                 </svg>
               </a>
-              <a href="#" class="flex justify-center items-center">
+              <a href="#" className="flex justify-center items-center">
                 <svg
-                  class="h-8 hover:text-gray-900 dark:hover:text-white"
+                  className="h-8 hover:text-gray-900 dark:hover:text-white"
                   viewBox="0 0 151 34"
                   fill="currentColor"
                   xmlns="http://www.w3.org/2000/svg"
@@ -140,9 +140,9 @@ export default function Hero() {
                 </svg>
               </a>
 
-              <a href="#" class="flex justify-center items-center">
+              <a href="#" className="flex justify-center items-center">
                 <svg
-                  class="h-9 hover:text-gray-900 dark:hover:text-white"
+                  className="h-9 hover:text-gray-900 dark:hover:text-white"
                   viewBox="0 0 124 38"
                   fill="currentColor"
                   xmlns="http://www.w3.org/2000/svg"
@@ -153,9 +153,9 @@ export default function Hero() {
                   />
                 </svg>
               </a>
-              <a href="#" class="flex justify-center items-center">
+              <a href="#" className="flex justify-center items-center">
                 <svg
-                  class="h-9 hover:text-gray-900 dark:hover:text-white"
+                  className="h-9 hover:text-gray-900 dark:hover:text-white"
                   viewBox="0 0 137 37"
                   fill="currentColor"
                   xmlns="http://www.w3.org/2000/svg"
@@ -234,9 +234,9 @@ export default function Hero() {
                   />
                 </svg>
               </a>
-              <a href="#" class="flex justify-center items-center">
+              <a href="#" className="flex justify-center items-center">
                 <svg
-                  class="h-6 hover:text-gray-900 dark:hover:text-white"
+                  className="h-6 hover:text-gray-900 dark:hover:text-white"
                   viewBox="0 0 124 21"
                   fill="currentColor"
                   xmlns="http://www.w3.org/2000/svg"
@@ -295,7 +295,7 @@ export default function Hero() {
           </div>
         </section>
       </div>
-      <hr class="h-px my-8 bg-gray-200 border-0 dark:bg-gray-700" />
+      <hr className="h-px my-8 bg-gray-200 border-0 dark:bg-gray-700" />
     </section>
   );
 }

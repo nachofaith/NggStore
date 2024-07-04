@@ -6,13 +6,13 @@ export function Header() {
       <div className="container mx-auto">
         <nav className="text-gray-600 flex flex-row mx-auto p-4 justify-between">
           <div id="logo" className="flex flex-row items-end gap-2">
-            <img className="h-14" src="/src/assets/logo.webp" />
-            <span className="text-4xl text-gray-600">
+            <img className="h-20" src="/src/assets/logo.webp" />
+            <h1 className="text-6xl text-gray-400">
               <span className=" text-gray-800">NGG</span>STORE
-            </span>
+            </h1>
           </div>
 
-          <ul className="gap-8 uppercase text-xl justify-center mx-auto flex flex-wrap items-center">
+          <ul className=" tracking-tighter gap-8 uppercase text-xl justify-center mx-auto flex flex-wrap items-center">
             <li className="">
               <Dropdown
                 className=""
