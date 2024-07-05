@@ -1,32 +1,38 @@
 import { Dropdown } from "flowbite-react";
 import { useEffect, useState, React } from "react";
 import { jwtDecode } from "jwt-decode";
+import { useAuth } from "../context/login";
+import  Perfil  from "./Perfil.jsx"
 
 export default function Header() {
-  const [user, setUser] = useState(null);
-  const [token, setToken] = useState(null);
-  const [login, setLogin] = useState(false);
+  const [user, setUser] = useState("");
+  const [email, setEmail] = useState("");
+  const [role, setRole] = useState("");
+ 
+  // const { logout } = useAuth();
+  const { isAuthenticated } = useAuth();
+
+
 
   useEffect(() => {
     // Obtener el token del almacenamiento local
-    const token = localStorage.getItem("token");
-    setToken(token);
-    if (token) {
+    const tokenJwt = localStorage.getItem("token");
+   
+
+    if (tokenJwt) {
       try {
         // Decodificar el token
-        const decoded = jwtDecode(token);
+        const decoded = jwtDecode(tokenJwt);
         setUser(decoded.username);
-        setLogin(true);
+        setEmail(decoded.email);
+        setRole(decoded.role);
       } catch (error) {
         console.error("Error al decodificar el token:", error);
       }
     }
-  }, []);
+  }, [isAuthenticated]);
 
-  const handleClick = () => {
-    localStorage.removeItem("token");
-    setUser(null);
-  };
+
 
   return (
     <div className="">
@@ -64,13 +70,26 @@ export default function Header() {
               <a href="">Contacto</a>
             </li>
           </ul>
+
+          
           <div className="flex justify-between align-middle items-center">
-            {!user ? (
+            {isAuthenticated ? (
+            
+            <Perfil user={user} email={email} role={role}/>
+
+              // <div>
+                
+              //   <p>Bienvenido {user}</p>
+              //   <a onClick={handleClick} href="">
+              //     <span>Cerrar sesión</span>
+              //   </a>
+              // </div>
+            ) : (
               <a href="/login">
-                <button class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                <button className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
                   Login
                   <svg
-                    class="w-6 h-6 text-white"
+                    className="w-6 h-6 text-white"
                     aria-hidden="true"
                     xmlns="http://www.w3.org/2000/svg"
                     width="24"
@@ -79,20 +98,13 @@ export default function Header() {
                     viewBox="0 0 24 24"
                   >
                     <path
-                      fill-rule="evenodd"
+                      fillRule="evenodd"
                       d="M12 4a4 4 0 1 0 0 8 4 4 0 0 0 0-8Zm-2 9a4 4 0 0 0-4 4v1a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2v-1a4 4 0 0 0-4-4h-4Z"
-                      clip-rule="evenodd"
+                      clipRule="evenodd"
                     />
                   </svg>
                 </button>
               </a>
-            ) : (
-              <div>
-                <p>Bienvenido {user}</p>
-                <a onClick={handleClick} href="">
-                  <span>Cerrar sesión</span>
-                </a>
-              </div>
             )}
           </div>
         </nav>

@@ -68,8 +68,8 @@ app.post('/register', async (req, res) => {
       const user = results[0];
       const isMatch = await bcrypt.compare(password, user.password_hash);
       if (isMatch) {
-        const token = jwt.sign({ id: user.id, username: user.username, role: user.role }, jwtSecret, { expiresIn: '1h' });
-      
+        const token = jwt.sign({ id: user.id, username: user.username, email: user.email, role: user.role }, jwtSecret, { expiresIn: '1h' });
+        
         res.status(200).json({ token, user: { id: user.id, username: user.username, email: user.email, role: user.role } });
       } else {
         res.status(401).send('Contraseña incorrecta');

@@ -8,19 +8,18 @@ import { Routes, Route, BrowserRouter } from "react-router-dom";
 import "./index.css";
 import Login from "./Login.jsx";
 import Page404 from "./components/Page404.jsx";
+import { AuthProvider } from "./context/login.jsx";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
-  <React.StrictMode>
+  <AuthProvider>
     <Header />
-
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<App />}></Route>
-        <Route path="/login" element={<Login />}></Route>
-        <Route path="/*" element={<Page404 />}></Route>
-      </Routes>
-    </BrowserRouter>
-
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={<App />}></Route>
+            <Route path="/login" element={<Login />}></Route>
+            <Route path="/*" element={<Page404 />}></Route>
+          </Routes>
+        </BrowserRouter>
     <Footer />
-  </React.StrictMode>
+  </AuthProvider>
 );
