@@ -8,7 +8,7 @@ export default function CategoriesCard(props) {
     >
       <a href="">
         <div className="px-4 text-center py-10 lg:py-56 ">
-          <h1 className="hover:drop-shadow-md mb-4 text-4xl font-normal tracking-tight leading-none text-white md:text-5xl lg:text-6xl ">
+          <h1 className="hover:drop-shadow-md mb-4 text-4xl font-normal tracking-tight leading-none text-white md:text-2xl lg:text-4xl ">
             {title}
           </h1>
         </div>

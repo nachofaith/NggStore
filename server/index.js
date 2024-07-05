@@ -35,7 +35,7 @@ db.connect((err) => {
 // Ruta para registrar un nuevo usuario
 app.post('/register', async (req, res) => {
     const { username, email, password, role } = req.body;
-  
+      
     // Validar el rol
     if (role && !['admin', 'client'].includes(role)) {
       return res.status(400).send('Rol inválido');
@@ -44,9 +44,10 @@ app.post('/register', async (req, res) => {
     // Hash de la contraseña
     const hashedPassword = await bcrypt.hash(password, 10);
     const query = 'INSERT INTO usuarios (username, email, password_hash, role) VALUES (?, ?, ?, ?)';
+   
     db.execute(query, [username, email, hashedPassword, role || 'client'], (err, result) => {
       if (err) {
-        return res.status(500).send('Error al registrar el usuario');
+             return res.status(500).send('Error al registrar el usuario');
       }
       res.status(201).send('Usuario registrado exitosamente');
     });
@@ -55,7 +56,6 @@ app.post('/register', async (req, res) => {
   // Ruta para iniciar sesión
   app.post('/login', (req, res) => {
     const { email, password } = req.body;
-  
     const query = 'SELECT id, username, email, password_hash, role FROM usuarios WHERE email = ?';
     db.execute(query, [email], async (err, results) => {
       if (err) {

@@ -3,8 +3,15 @@
 @tailwind utilities;
 
 @layer base {
+
+  :root{
+  
+  }
   body {
     font-family: "Poppins", sans-serif;
+
+
+ 
  
   }
   h1 {

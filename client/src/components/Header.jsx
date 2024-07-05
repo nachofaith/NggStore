@@ -1,6 +1,33 @@
 import { Dropdown } from "flowbite-react";
+import { useEffect, useState, React } from "react";
+import { jwtDecode } from "jwt-decode";
 
-export function Header() {
+export default function Header() {
+  const [user, setUser] = useState(null);
+  const [token, setToken] = useState(null);
+  const [login, setLogin] = useState(false);
+
+  useEffect(() => {
+    // Obtener el token del almacenamiento local
+    const token = localStorage.getItem("token");
+    setToken(token);
+    if (token) {
+      try {
+        // Decodificar el token
+        const decoded = jwtDecode(token);
+        setUser(decoded.username);
+        setLogin(true);
+      } catch (error) {
+        console.error("Error al decodificar el token:", error);
+      }
+    }
+  }, []);
+
+  const handleClick = () => {
+    localStorage.removeItem("token");
+    setUser(null);
+  };
+
   return (
     <div className="">
       <div className="container mx-auto">
@@ -27,16 +54,47 @@ export function Header() {
               </Dropdown>
             </li>
             <li className="hover:text-sky-400">
-              <a href="">home</a>
+              <a href="/">home</a>
             </li>
 
             <li className="hover:text-sky-400">
-              <a href="">ofertas</a>
+              <a href="/ofertas">ofertas</a>
             </li>
             <li className="hover:text-sky-400">
               <a href="">Contacto</a>
             </li>
           </ul>
+          <div className="flex justify-between align-middle items-center">
+            {!user ? (
+              <a href="/login">
+                <button class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                  Login
+                  <svg
+                    class="w-6 h-6 text-white"
+                    aria-hidden="true"
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    fill="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      fill-rule="evenodd"
+                      d="M12 4a4 4 0 1 0 0 8 4 4 0 0 0 0-8Zm-2 9a4 4 0 0 0-4 4v1a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2v-1a4 4 0 0 0-4-4h-4Z"
+                      clip-rule="evenodd"
+                    />
+                  </svg>
+                </button>
+              </a>
+            ) : (
+              <div>
+                <p>Bienvenido {user}</p>
+                <a onClick={handleClick} href="">
+                  <span>Cerrar sesión</span>
+                </a>
+              </div>
+            )}
+          </div>
         </nav>
       </div>
     </div>
