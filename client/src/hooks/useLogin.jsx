@@ -1,14 +1,12 @@
-import { useState } from 'react';
-import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../context/login';
-
+import { useState } from "react";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../context/login";
 
 const useLogin = () => {
   const [error, setError] = useState(null);
-  const navigate = useNavigate();
   const { login, logout } = useAuth();
- 
+  const navigate = useNavigate();
 
   const handleLogin = async (email, password) => {
     try {
@@ -17,12 +15,10 @@ const useLogin = () => {
         password,
       });
       localStorage.setItem("token", response.data.token);
-      login();
       navigate("/");
-      
+      login();
     } catch (error) {
-      logout()
-      setError("datos incorrectos");
+      setError(error.data);
     }
   };
 

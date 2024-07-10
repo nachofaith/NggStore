@@ -1,23 +1,18 @@
 import { Dropdown } from "flowbite-react";
-import { useEffect, useState, React } from "react";
+import { useEffect, useState, React, useContext } from "react";
 import { jwtDecode } from "jwt-decode";
-import { useAuth } from "../context/login";
-import  Perfil  from "./Perfil.jsx"
+import Perfil from "./Perfil.jsx";
+import { useAuth } from "../context/login.jsx";
 
 export default function Header() {
   const [user, setUser] = useState("");
   const [email, setEmail] = useState("");
   const [role, setRole] = useState("");
- 
-  // const { logout } = useAuth();
-  const { isAuthenticated } = useAuth();
-
-
+  const { isAuth } = useAuth();
 
   useEffect(() => {
     // Obtener el token del almacenamiento local
     const tokenJwt = localStorage.getItem("token");
-   
 
     if (tokenJwt) {
       try {
@@ -30,9 +25,7 @@ export default function Header() {
         console.error("Error al decodificar el token:", error);
       }
     }
-  }, [isAuthenticated]);
-
-
+  }, []);
 
   return (
     <div className="">
@@ -71,20 +64,17 @@ export default function Header() {
             </li>
           </ul>
 
-          
           <div className="flex justify-between align-middle items-center">
-            {isAuthenticated ? (
-            
-            <Perfil user={user} email={email} role={role}/>
-
+            {isAuth ? (
+              <Perfil user={user} email={email} role={role} />
+            ) : (
               // <div>
-                
+
               //   <p>Bienvenido {user}</p>
               //   <a onClick={handleClick} href="">
               //     <span>Cerrar sesión</span>
               //   </a>
               // </div>
-            ) : (
               <a href="/login">
                 <button className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
                   Login
