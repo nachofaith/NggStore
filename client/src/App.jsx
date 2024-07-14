@@ -6,25 +6,15 @@ import Register from "./Register.jsx";
 import Login from "./Login.jsx";
 import Page404 from "./components/Page404.jsx";
 import Dashboard from "./Dashboard.jsx";
-import Users from "./components/Dashboard/Users.jsx";
+import ProtectedRoute from "./components/Dashboard/ProtectedRoute.jsx";
 import Aside from "./components/Dashboard/Aside.jsx";
-
-const DashboardLayout = () => {
-  return (
-    <div>
-      <Aside />
-      <Routes>
-        <Route path="/users" element={<Users />} />
-      </Routes>
-    </div>
-  );
-};
+import Users from "./components/Dashboard/Users.jsx";
+import HomeDS from "./components/Dashboard/Home.jsx";
 
 export default function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/dashboard" element={<DashboardLayout />} />
         <Route
           path="*"
           element={
@@ -42,6 +32,27 @@ export default function App() {
             </div>
           }
         />
+
+        <Route
+          path="/dashboard/*"
+          element={
+            <div>
+              <Aside />
+              <main>
+                <Routes>
+                  <Route element={<ProtectedRoute />}>
+                    <Route path="/" element={<Dashboard />} />
+                    <Route path="/home" element={<HomeDS />} />
+                    <Route path="/users" element={<Users />} />
+                    <Route path="/*" element={<Page404 />} />
+                  </Route>
+                </Routes>
+              </main>
+            </div>
+          }
+        />
+
+        {/* <Route path="/dashboard/*" element={<Dashboard />} /> */}
       </Routes>
     </BrowserRouter>
   );

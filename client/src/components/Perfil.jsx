@@ -2,6 +2,7 @@ import { Dropdown } from "flowbite-react";
 import { HiCog, HiCurrencyDollar, HiLogout, HiViewGrid } from "react-icons/hi";
 import { React } from "react";
 import { useAuth } from "../context/login.jsx";
+import { Link } from "react-router-dom";
 
 export default function Perfil(props) {
   const user = props.user;
@@ -20,8 +21,8 @@ export default function Perfil(props) {
         <Dropdown.Item icon={HiViewGrid}>Perfil</Dropdown.Item>
       )}
       {role === "admin" && (
-        <Dropdown.Item href="/dashboard" icon={HiViewGrid}>
-          Dashboard
+        <Dropdown.Item icon={HiViewGrid}>
+          <Link to="dashboard">Dashboard</Link>
         </Dropdown.Item>
       )}
 
