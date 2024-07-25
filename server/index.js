@@ -48,12 +48,16 @@ app.post("/register", async (req, res) => {
     [username, email, hashedPassword, role || "client"],
     (err, result) => {
       if (err) {
-        return res.status(500).send("Error al registrar el usuario");
+        return res.status(500).send("Error al registrar el usuario"+result);
       }
       res.status(201).send("Usuario registrado exitosamente");
     }
   );
 });
+
+
+
+
 
 // Ruta para iniciar sesión
 app.post("/login", (req, res) => {
@@ -98,6 +102,29 @@ app.post("/login", (req, res) => {
     }
   });
 });
+
+
+// Ruta para eliminar un usuario
+app.post("/delete", async (req, res) => {
+  const { email } = req.body;
+
+
+  const query =
+    "DELETE FROM usuarios WHERE email = ?";
+
+  db.execute(
+    query,
+    [email],
+    (err, result) => {
+      if (err) {
+        return res.status(500).send("Error al registrar el usuario"+result);
+      }
+      res.status(201).send("Usuario registrado exitosamente");
+    }
+  );
+});
+
+
 
 // Middleware para verificar token y rol
 function authenticateToken(req, res, next) {

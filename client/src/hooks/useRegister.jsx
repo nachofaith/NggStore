@@ -14,10 +14,9 @@ const useRegister = () => {
         password,
         role,
       });
-
-      // navigate("/dashboard");
+      //  navigate("/");
     } catch (error) {
-      setError("datos incorrectos");
+      setError("datos incorrectos"+error);
     }
   };
 

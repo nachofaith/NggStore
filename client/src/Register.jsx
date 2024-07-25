@@ -1,18 +1,72 @@
-import { useState, React } from "react";
+import { useState, React, useEffect, useRef } from "react";
 import useRegister from './hooks/useRegister'
 
 export default function Login() {
     const [username, setUsername] = useState("")
     const [email, setEmail] = useState("");
-    const [role, setRole] = useState("admin")
+
+    const [role, setRole] = useState("client")
     const [password, setPassword] = useState("");
+    const [password2, setPassword2] = useState("");
+    const [errorPass, setErrorPass] = useState(null)
     const { handleRegister, error } = useRegister();
+
+    const isFirstInput = useRef(true);
+
+
+
+    useEffect(() => {
+
+        if (isFirstInput.current) {
+            isFirstInput.current = password === "";
+            return;
+        }
+
+        if (password.length < 6) {
+            setErrorPass("La password debe tener al menos 6 caracteres");
+            return;
+        }
+
+        if (password !== password2) {
+            return setErrorPass("Las contrasenas no coinciden")
+        }
+
+        setErrorPass(null);
+    }, [password]);
+
+
+    useEffect(() => {
+
+
+        if (isFirstInput.current) {
+            isFirstInput.current = password2 === "";
+            return;
+        }
+
+        if (password.length < 6) {
+            setErrorPass("La password debe tener al menos 6 caracteres");
+            return;
+        }
+
+        if (password !== password2) {
+            return setErrorPass("Las contrasenas no coinciden")
+        }
+
+        setErrorPass(null);
+    }, [password2]);
 
 
 
     const handleSubmit = (e) => {
         e.preventDefault();
+        if(errorPass){ return }
         handleRegister(username, email, password, role);
+    };
+
+
+    const handleChange = (event) => {
+        const pass2 = event.target.value;
+        setPassword2(pass2);
     };
 
 
@@ -76,22 +130,26 @@ export default function Login() {
                         required
                     />
                 </div>
-                <div className="flex items-start mb-5">
-                    <div className="flex items-center h-5">
-                        <input
-                            id="remember"
-                            type="checkbox"
-                            value=""
-                            className="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-blue-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800"
-                        />
-                    </div>
+                <div className="mb-5">
                     <label
-                        htmlFor="remember"
-                        className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+                        htmlFor="password2"
+                        className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                     >
-                        Remember me
+                        Repite tu contraseña
                     </label>
+                    <input
+                        type="password"
+                        value={password2}
+                        // onChange={(e) => setPassword2(e.target.value)}
+                        onChange={handleChange}
+                        id="password2"
+                        className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                        required
+                    />
                 </div>
+                {errorPass && <div className="p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50" role="alert">
+                    <span className="font-medium">Error!</span> {errorPass}
+                </div>}
                 <div className="flex flex-row gap-4 items-center">
                     <button
                         type="submit"

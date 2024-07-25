@@ -2,7 +2,9 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import AddUser from "./Users/Add";
 import { Button, Modal, Select } from "flowbite-react";
+import { Link } from "react-router-dom";
 import useRegister from "../../hooks/useRegister";
+import useDelete from "../../hooks/useDelete";
 
 export default function Users() {
   const [data, setData] = useState([]);
@@ -14,6 +16,7 @@ export default function Users() {
   const [password, setPassword] = useState("");
   const [trigger, setTrigger] = useState(false);
   const { handleRegister, error } = useRegister();
+  const { handleDelete, errorDel } = useDelete();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -31,9 +34,15 @@ export default function Users() {
   const handleSubmit = (e) => {
     e.preventDefault();
     handleRegister(username, email, password, role);
-
     setTrigger(!trigger);
     setOpenModal(false);
+  };
+
+
+  const handleSubmitDel = (email, e) => {
+    e.preventDefault();
+    handleDelete(email);
+    setTrigger(!trigger);
   };
 
   return (
@@ -176,10 +185,22 @@ export default function Users() {
                 <td class="px-6 py-4">{item.role}</td>
 
                 <td class="px-6 py-4">
-                  <a href="#" class="font-medium text-white hover:underline">
-                    Edit
-                  </a>
+
+
+                  <Link
+                    onClick={(e) => handleSubmitDel(item.email, e)}
+                    to="/"
+                    class="font-medium text-white hover:underline"
+                  >
+                    Eliminar
+                  </Link>
                 </td>
+
+             
+
+
+
+
               </tr>
             ))}
           </tbody>

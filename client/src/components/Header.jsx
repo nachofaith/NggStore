@@ -25,7 +25,7 @@ export default function Header() {
         console.error("Error al decodificar el token:", error);
       }
     }
-  }, []);
+  }, [isAuth]);
 
   return (
     <div className="">
