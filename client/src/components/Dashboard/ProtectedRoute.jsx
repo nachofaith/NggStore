@@ -4,10 +4,10 @@ import { useAuth } from "../../context/login";
 import { useNavigate } from "react-router-dom";
 
 const ProtectedRoute = () => {
-  const { isAuth } = useAuth();
+  const { isAuth, isAdmin } = useAuth();
   const navigate = useNavigate();
 
-  if (!isAuth) {
+  if (!isAuth || !isAdmin) {
     return navigate("/");;
   }
 

@@ -5,7 +5,7 @@ import { useAuth } from "../context/login";
 
 const useLogin = () => {
   const [error, setError] = useState(null);
-  const { login, logout } = useAuth();
+  const { login } = useAuth();
   const navigate = useNavigate();
 
   const handleLogin = async (email, password) => {
