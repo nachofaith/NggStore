@@ -33,7 +33,7 @@ export default function App() {
           }
         />
 
-        <Route
+        {/* <Route
           path="/dashboard/*"
           element={
             <div>
@@ -44,15 +44,34 @@ export default function App() {
                     <Route path="/" element={<Dashboard />} />
                     <Route path="/home" element={<HomeDS />} />
                     <Route path="/users" element={<Users />} />
-                    <Route path="/*" element={<Page404 />} />
                   </Route>
                 </Routes>
               </main>
             </div>
           }
-        />
+        /> */}
 
-        {/* <Route path="/dashboard/*" element={<Dashboard />} /> */}
+        <Route element={<ProtectedRoute />}>
+          <Route
+            path="/dashboard/*"
+            element={
+              <div>
+                <Aside />
+                <main>
+                  <Routes>
+                    <Route path="/" element={<Dashboard />} />
+                    <Route path="/home" element={<HomeDS />} />
+                    <Route path="/users" element={<Users />} />
+                    <Route path="/*" element={<Page404 />} />
+                  </Routes>
+                </main>
+              </div>
+            }
+          />
+        </Route>
+
+
+
       </Routes>
     </BrowserRouter>
   );

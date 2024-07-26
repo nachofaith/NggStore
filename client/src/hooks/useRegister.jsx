@@ -1,10 +1,10 @@
 import { useState } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+
 
 const useRegister = () => {
   const [error, setError] = useState(null);
-  const navigate = useNavigate();
+
 
   const handleRegister = async (username, email, password, role) => {
     try {
@@ -16,7 +16,7 @@ const useRegister = () => {
       });
       //  navigate("/");
     } catch (error) {
-      setError("datos incorrectos"+error);
+      setError("datos incorrectos");
     }
   };
 

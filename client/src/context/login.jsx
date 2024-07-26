@@ -1,30 +1,35 @@
-import { createContext, useState, useContext, React, useEffect } from "react";
+import { createContext, useState, useContext, useEffect } from "react";
 import { jwtDecode } from "jwt-decode";
 export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const [isAuth, setIsAuth] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-
     const savedAuthState = localStorage.getItem("isAuthenticated");
-
-    if (savedAuthState === "true") {
-      setIsAuth(true);
-      localStorage.setItem("isAuthenticated", "true");
-    }
-
-
     const savedAdminState = localStorage.getItem("isAdmin");
+    console.log(savedAuthState)
+    console.log(savedAdminState)
 
-    if (savedAdminState === "true") {
-      setIsAdmin(true);
-      localStorage.setItem("isAdmin", "true");
-    }
+
+    setIsAuth(savedAuthState === "true");
+    setIsAdmin(savedAdminState === "true");
+
+    // if (savedAuthState === "true") {
+    //   setIsAuth(true);
+    //   localStorage.setItem("isAuthenticated", "true");
+    // }
+    // if (savedAdminState === "true") {
+    //   setIsAdmin(true);
+    //   localStorage.setItem("isAdmin", "true");
+    // }
+
+    setIsLoading(false);
   }, []);
 
-  const login = () => {
+  const login = async () => {
     setIsAuth(true);
     localStorage.setItem("isAuthenticated", "true");
 
@@ -34,13 +39,12 @@ export const AuthProvider = ({ children }) => {
       try {
         // Decodificar el token
         const decoded = jwtDecode(tokenJwt);
-        const role = decoded.role
+        const role = decoded.role;
 
-        if(role === "admin"){
-          setIsAdmin(true)
+        if (role == "admin") {
+          setIsAdmin(true);
           localStorage.setItem("isAdmin", "true");
         }
-
       } catch (error) {
         console.error("Error al decodificar el token:", error);
       }
@@ -51,12 +55,12 @@ export const AuthProvider = ({ children }) => {
     setIsAuth(false);
     localStorage.removeItem("isAuthenticated");
     localStorage.removeItem("isAdmin");
-
-   
   };
 
   return (
-    <AuthContext.Provider value={{ isAuth, setIsAuth, isAdmin, setIsAdmin, login, logout }}>
+    <AuthContext.Provider
+      value={{ isAuth, setIsAuth, isAdmin, setIsAdmin, login, logout, isLoading }}
+    >
       {children}
     </AuthContext.Provider>
   );

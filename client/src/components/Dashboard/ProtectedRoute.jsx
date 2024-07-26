@@ -1,17 +1,31 @@
-import { React } from "react";
 import { Outlet } from "react-router-dom";
 import { useAuth } from "../../context/login";
 import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
 
 const ProtectedRoute = () => {
-  const { isAuth, isAdmin } = useAuth();
+  const { isAuth, isAdmin, isLoading } = useAuth();
   const navigate = useNavigate();
+  const [isRedirecting, setIsRedirecting] = useState(true);
 
-  if (!isAuth || !isAdmin) {
-    return navigate("/");;
+  useEffect(() => {
+    console.log("Autenticated?: " + isAuth);
+    console.log("Admin?: " + isAdmin);
+
+    if (!isLoading) {
+      if (!isAuth || !isAdmin) {
+        navigate("/404");
+      } else {
+        setIsRedirecting(false);
+      }
+    }
+  }, [isAdmin, isAuth, navigate, isLoading]);
+
+  if (isLoading || isRedirecting) {
+    return <div>Loading...</div>; // O algún spinner de carga
   }
 
-  return <Outlet />;
+  return isAuth && isAdmin ? <Outlet /> : null;
 };
 
 export default ProtectedRoute;

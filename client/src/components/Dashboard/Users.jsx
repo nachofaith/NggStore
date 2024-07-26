@@ -5,6 +5,7 @@ import { Button, Modal, Select } from "flowbite-react";
 import { Link } from "react-router-dom";
 import useRegister from "../../hooks/useRegister";
 import useDelete from "../../hooks/useDelete";
+import { Table } from "flowbite-react";
 
 export default function Users() {
   const [data, setData] = useState([]);
@@ -38,7 +39,6 @@ export default function Users() {
     setOpenModal(false);
   };
 
-
   const handleSubmitDel = (email, e) => {
     e.preventDefault();
     handleDelete(email);
@@ -46,7 +46,7 @@ export default function Users() {
   };
 
   return (
-    <div class="p-4 sm:ml-64 flex flex-col md:container md:mx-auto">
+    <div className="p-4 sm:ml-64 flex flex-col md:container md:mx-auto">
       <AddUser />
       <h2 className="text-black text-2xl text-center p-10 font-semibold">
         Usuarios
@@ -151,61 +151,39 @@ export default function Users() {
         </Modal.Footer>
       </Modal>
 
-      <div class="relative overflow-x-auto shadow-md rounded-lg">
-        <table class="w-full text-sm text-left rtl:text-right text-blue-100 dark:text-blue-100">
-          <thead class="text-xs text-white uppercase bg-blue-600 border-b border-blue-400 dark:text-white">
-            <tr>
-              <th scope="col" class="px-6 py-3">
-                Nombre de Usuario
-              </th>
-              <th scope="col" class="px-6 py-3">
-                Email
-              </th>
-              <th scope="col" class="px-6 py-3">
-                Rol
-              </th>
-              <th scope="col" class="px-6 py-3">
-                Action
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            {data.map((item) => (
-              <tr
-                key={item.id}
-                class="bg-blue-500 border-b border-blue-300 hover:bg-blue-600"
-              >
-                <th
-                  scope="row"
-                  class="px-6 py-4 font-medium text-blue-50 whitespace-nowrap dark:text-blue-100"
-                >
-                  {item.username}
-                </th>
-                <td class="px-6 py-4">{item.email}</td>
-                <td class="px-6 py-4">{item.role}</td>
+      <Table>
+        <Table.Head>
+          <Table.HeadCell>Usuario</Table.HeadCell>
+          <Table.HeadCell>Email</Table.HeadCell>
+          <Table.HeadCell>Rol</Table.HeadCell>
 
-                <td class="px-6 py-4">
-
-
-                  <Link
-                    onClick={(e) => handleSubmitDel(item.email, e)}
-                    to="/"
-                    class="font-medium text-white hover:underline"
-                  >
-                    Eliminar
-                  </Link>
-                </td>
-
-             
-
-
-
-
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+          <Table.HeadCell>
+            <span className="sr-only">Edit</span>
+          </Table.HeadCell>
+        </Table.Head>
+        <Table.Body className="divide-y">
+          {data.map((item) => (
+            <Table.Row
+              key={item.id}
+              className="bg-white dark:border-gray-700 dark:bg-gray-800"
+            >
+              <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
+                {item.username}
+              </Table.Cell>
+              <Table.Cell>{item.email}</Table.Cell>
+              <Table.Cell>{item.role}</Table.Cell>
+              <Table.Cell>
+                <Link 
+onClick={(e) => handleSubmitDel(item.email, e)} 
+to="/"
+className="font-medium text-cyan-600 hover:underline dark:text-cyan-500">
+                  Eliminar
+                </Link>
+              </Table.Cell>
+            </Table.Row>
+          ))}
+        </Table.Body>
+      </Table>
     </div>
   );
 }

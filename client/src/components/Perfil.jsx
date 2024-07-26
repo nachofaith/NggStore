@@ -1,6 +1,5 @@
 import { Dropdown } from "flowbite-react";
 import { HiCog, HiCurrencyDollar, HiLogout, HiViewGrid } from "react-icons/hi";
-import { React } from "react";
 import { useAuth } from "../context/login.jsx";
 import { Link } from "react-router-dom";
 
@@ -12,7 +11,7 @@ export default function Perfil(props) {
   const { logout } = useAuth();
 
   return (
-    <Dropdown label="Dropdown">
+    <Dropdown color="blue"  label="Mi Cuenta">
       <Dropdown.Header>
         <span className="block text-sm">{user}</span>
         <span className="block truncate text-sm font-medium">{email}</span>

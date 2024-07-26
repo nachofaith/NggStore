@@ -1,15 +1,17 @@
-import { useState, React, useEffect, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 import useRegister from './hooks/useRegister'
+import { useNavigate } from "react-router-dom";
 
 export default function Login() {
     const [username, setUsername] = useState("")
     const [email, setEmail] = useState("");
-
-    const [role, setRole] = useState("client")
+    // const [role, setRole] = useState("client")
+    const role = "client";
     const [password, setPassword] = useState("");
     const [password2, setPassword2] = useState("");
     const [errorPass, setErrorPass] = useState(null)
     const { handleRegister, error } = useRegister();
+    const navigate = useNavigate();
 
     const isFirstInput = useRef(true);
 
@@ -61,6 +63,8 @@ export default function Login() {
         e.preventDefault();
         if(errorPass){ return }
         handleRegister(username, email, password, role);
+        navigate("/")
+
     };
 
 
