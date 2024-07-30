@@ -7,7 +7,7 @@ import useRegister from "../../hooks/useRegister";
 import useDelete from "../../hooks/useDelete";
 import { Table } from "flowbite-react";
 
-export default function Users() {
+export default function Products() {
   const [data, setData] = useState([]);
   const [openModal, setOpenModal] = useState(false);
   const [modalPlacement, setModalPlacement] = useState("center");
@@ -50,7 +50,7 @@ export default function Users() {
       <div className="mx-auto ">
         <AddUser />
         <h2 className="text-black text-2xl text-center p-10 font-semibold">
-          Usuarios
+          Productos
         </h2>
         <div className="py-4">
           <Button onClick={() => setOpenModal(true)}>Agregar</Button>

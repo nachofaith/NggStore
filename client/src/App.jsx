@@ -10,6 +10,8 @@ import ProtectedRoute from "./components/Dashboard/ProtectedRoute.jsx";
 import Aside from "./components/Dashboard/Aside.jsx";
 import Users from "./components/Dashboard/Users.jsx";
 import HomeDS from "./components/Dashboard/Home.jsx";
+import Products from "./components/Dashboard/Products.jsx";
+
 
 export default function App() {
   return (
@@ -62,6 +64,7 @@ export default function App() {
                     <Route path="/" element={<Dashboard />} />
                     <Route path="/home" element={<HomeDS />} />
                     <Route path="/users" element={<Users />} />
+                    <Route path="/products" element={<Products />} />
                     <Route path="/*" element={<Page404 />} />
                   </Routes>
                 </main>

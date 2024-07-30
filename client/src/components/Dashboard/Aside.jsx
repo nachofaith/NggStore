@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-// import { useAuth } from "../../context/login";
+import { useAuth } from "../../context/login";
 import { Sidebar } from "flowbite-react";
 import { BiBuoy } from "react-icons/bi";
 import {
@@ -10,10 +10,11 @@ import {
   HiTable,
   HiUser,
   HiViewBoards,
+  HiLogout,
 } from "react-icons/hi";
 
 export default function Aside() {
-  // const { login, logout } = useAuth();
+  const { logout } = useAuth();
 
   return (
     <aside
@@ -33,15 +34,15 @@ export default function Aside() {
             <Sidebar.Item href="#" icon={HiInbox}>
               Inbox
             </Sidebar.Item>
-            <Sidebar.Item icon={HiUser}>
+
             <Link to="/dashboard/users">
-            Users
-              </Link>
-             
-            </Sidebar.Item>
-            <Sidebar.Item href="#" icon={HiShoppingBag}>
-              Products
-            </Sidebar.Item>
+              <Sidebar.Item icon={HiUser}>Users</Sidebar.Item>
+            </Link>
+
+            <Link to="/dashboard/products">
+              <Sidebar.Item icon={HiShoppingBag}>Products</Sidebar.Item>
+            </Link>
+
             <Sidebar.Item href="#" icon={HiArrowSmRight}>
               Sign In
             </Sidebar.Item>
@@ -56,11 +57,10 @@ export default function Aside() {
             <Sidebar.Item href="#" icon={BiBuoy}>
               Help
             </Sidebar.Item>
-            <Sidebar.Item icon={HiChartPie}>
-              {/* <Link onClick={logout} to="/">
-                Logout
-              </Link> */}
-            </Sidebar.Item>
+
+            <Link onClick={logout} to="/">
+              <Sidebar.Item icon={HiLogout}>Logout</Sidebar.Item>
+            </Link>
           </Sidebar.ItemGroup>
         </Sidebar.Items>
       </Sidebar>
