@@ -5,6 +5,7 @@ const jwt = require("jsonwebtoken");
 const app = express();
 const port = 3000;
 const cors = require("cors");
+const crypto = require('crypto');
 
 const jwtSecret =
   "875032869ee3511558cd74b5be1d517dc63b74bfc92abdc54ba253a619c80ce5"; // Cambia esto por una cadena secreta segura
@@ -74,6 +75,9 @@ app.post("/login", (req, res) => {
 
     const user = results[0];
     const isMatch = await bcrypt.compare(password, user.password_hash);
+
+
+
     if (isMatch) {
       const token = jwt.sign(
         {
@@ -102,6 +106,59 @@ app.post("/login", (req, res) => {
     }
   });
 });
+
+
+
+
+app.post("/loginSHA", (req, res) => {
+  const { email, password } = req.body;
+  const query = "SELECT id, username, email, password_hash, role FROM usuarios WHERE email = ?";
+  
+  db.execute(query, [email], (err, results) => {
+    if (err) {
+      return res.status(500).send("Error en la consulta");
+    }
+    if (results.length === 0) {
+      return res.status(401).send("Usuario no encontrado");
+    }
+
+    const user = results[0];
+
+    // Función para hashear la contraseña con SHA-256
+    const hashPassword = (password) => {
+      return crypto.createHash('sha256').update(password).digest('hex');
+    };
+
+    // Verificar si la contraseña proporcionada coincide con el hash almacenado
+    const isMatch = hashPassword(password) === user.password_hash;
+
+    if (isMatch) {
+      const token = jwt.sign(
+        {
+          id: user.id,
+          username: user.username,
+          email: user.email,
+          role: user.role,
+        },
+        jwtSecret,
+        { expiresIn: "1h" }
+      );
+
+      res.status(200).json({
+        token,
+        user: {
+          id: user.id,
+          username: user.username,
+          email: user.email,
+          role: user.role,
+        },
+      });
+    } else {
+      res.status(401).send("Contraseña incorrecta");
+    }
+  });
+});
+
 
 
 // Ruta para eliminar un usuario
@@ -186,6 +243,21 @@ app.get("/api/datos", (req, res) => {
 // Ruta de ejemplo que obtiene datos de la base de datos
 app.get("/users", (req, res) => {
   const query = "SELECT * FROM usuarios";
+  db.query(query, (err, results) => {
+    if (err) {
+      console.error("Error ejecutando la consulta:", err);
+      res.status(500).json({ error: "Error en el servidor" });
+      return;
+    }
+    res.json(results);
+  });
+});
+
+
+
+
+app.get("/marcas", (req, res) => {
+  const query = "SELECT * FROM marca";
   db.query(query, (err, results) => {
     if (err) {
       console.error("Error ejecutando la consulta:", err);
