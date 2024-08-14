@@ -44,11 +44,7 @@ export default function Aside() {
             </Link>
           </Sidebar.ItemGroup>
           <Sidebar.ItemGroup>
-            <Sidebar.Item href="#" icon={HiViewBoards}>
-              Documentation
-            </Sidebar.Item>
-
-            <Link onClick={logout}>
+             <Link onClick={logout}>
               <Sidebar.Item icon={HiLogout}>Logout</Sidebar.Item>
             </Link>
           </Sidebar.ItemGroup>

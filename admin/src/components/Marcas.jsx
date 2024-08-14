@@ -1,23 +1,21 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { Button, Modal, Select } from "flowbite-react";
+import { Button } from "flowbite-react";
 import { Link } from "react-router-dom";
-// import useRegister from "../../hooks/useRegister";
-// import useDelete from "../../hooks/useDelete";
+import useDelete from "../hooks/Marca/useDelete.jsx";
+
 import { Table } from "flowbite-react";
-import AddMarca from "./AddMarca";
+import AddMarca from "./Modals/Marca/AddMarca.jsx";
+import UpdMarca from "./Modals/Marca/UpdMarca.jsx";
 
 export default function Marcas() {
   const [data, setData] = useState([]);
   const [openModal, setOpenModal] = useState(false);
-  // const [modalPlacement, setModalPlacement] = useState("center");
-  // const [username, setUsername] = useState("");
-  // const [email, setEmail] = useState("");
-  // const [role, setRole] = useState("");
-  // const [password, setPassword] = useState("");
+  const [openModalUpd, setOpenModalUpd] = useState(false);
+  const [nombreMarca, setNombreMarca] = useState("");
+  const [idMarca, setIdMarca] = useState("");
   const [trigger, setTrigger] = useState(false);
-  // const { handleRegister, error } = useRegister();
-  // const { handleDelete, errorDel } = useDelete();
+  const { handleDelete, errorDel } = useDelete();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -32,23 +30,37 @@ export default function Marcas() {
     fetchData();
   }, [trigger]);
 
-  <AddMarca modal={openModal} />;
-
-  // const handleSubmit = (e) => {
-  //   e.preventDefault();
-  //   handleRegister(username, email, password, role);
-  //   setTrigger(!trigger);
-  //   setOpenModal(false);
-  // };
-
-  const handleSubmitDel = (email, e) => {
+  const handleSubmitDel = (id_marca, e) => {
     e.preventDefault();
-    // handleDelete(email);
-    // setTrigger(!trigger);
+    handleDelete(id_marca);
+    setTrigger(!trigger);
+  };
+
+  const handleUpdate = (e, modal, id, nombre) => {
+    e.preventDefault();
+    setOpenModalUpd(modal);
+    setNombreMarca(nombre);
+    setIdMarca(id);
+
+    console.log(modal, id, nombre);
   };
 
   return (
     <div className="p-4 flex flex-col sm:ml-64">
+      <UpdMarca
+        modal={openModalUpd}
+        trigger={trigger}
+        setTrigger={setTrigger}
+        setOpenModalUpd={setOpenModalUpd}
+        id={idMarca}
+        nombre={nombreMarca}
+      />
+      <AddMarca
+        modal={openModal}
+        setOpenModal={setOpenModal}
+        trigger={trigger}
+        setTrigger={setTrigger}
+      />
       <div className="mx-auto ">
         <h2 className="text-black text-4xl text-center p-10 font-semibold">
           Marcas
@@ -58,6 +70,14 @@ export default function Marcas() {
         </div>
 
         <Table>
+          {errorDel && (
+            <div
+              className="p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50"
+              role="alert"
+            >
+              <span className="font-medium">Error!</span> {errorDel}
+            </div>
+          )}
           <Table.Head>
             <Table.HeadCell>Id</Table.HeadCell>
             <Table.HeadCell>Marca</Table.HeadCell>
@@ -67,7 +87,7 @@ export default function Marcas() {
               <span className="sr-only">Edit</span>
             </Table.HeadCell>
           </Table.Head>
-          <Table.Body className="divide-y">
+          <Table.Body className="divide-y font-bold">
             {data.map((item) => (
               <Table.Row
                 key={item.id_marca}
@@ -78,13 +98,21 @@ export default function Marcas() {
                 </Table.Cell>
                 <Table.Cell>{item.nombre_marca}</Table.Cell>
 
-                <Table.Cell>
+                <Table.Cell className="gap-2 flex">
                   <Link
-                    onClick={(e) => handleSubmitDel(item.email, e)}
-                    to="/"
+                    onClick={(e) =>
+                      handleUpdate(e, true, item.id_marca, item.nombre_marca)
+                    }
                     className="font-medium text-cyan-600 hover:underline dark:text-cyan-500"
                   >
-                    Eliminar
+                    <span>Editar</span>
+                  </Link>
+                  |
+                  <Link
+                    onClick={(e) => handleSubmitDel(item.id_marca, e)}
+                    className="font-medium text-cyan-600 hover:underline dark:text-cyan-500"
+                  >
+                    <span>Eliminar</span>
                   </Link>
                 </Table.Cell>
               </Table.Row>

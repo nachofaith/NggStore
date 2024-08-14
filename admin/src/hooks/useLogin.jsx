@@ -10,7 +10,7 @@ const useLogin = () => {
 
   const handleLogin = async (email, password) => {
     try {
-      const response = await axios.post("http://localhost:3000/loginSHA", {
+      const response = await axios.post("http://localhost:3000/login", {
         email,
         password,
       });
@@ -20,7 +20,9 @@ const useLogin = () => {
     } catch (err) {
       if (err.response && err.response.data) {
         // Capturar el mensaje de error específico del servidor si está disponible
-        setError(err.response.data.message || "Login failed. Please try again.");
+        setError(
+          err.response.data.message || "Login failed. Please try again."
+        );
       } else {
         // Capturar un mensaje de error general
         setError("An error occurred. Please try again.");

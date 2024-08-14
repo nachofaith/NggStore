@@ -40,6 +40,7 @@ export default function App() {
           path="*"
           element={
             <Routes>
+              <Route path="/" element={<Login />} />
               <Route path="/login" element={<Login />} />
               <Route path="*" element={<Page404 />} />
             </Routes>
