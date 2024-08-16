@@ -322,17 +322,34 @@ app.post("/catDelete", async (req, res) => {
 
 // Ruta para registrar una nueva Categoria
 app.post("/subCatRegister", async (req, res) => {
-  const { idSubCat, nombreSubCat } = req.body;
+  const { idCat, nombreSubCat } = req.body;
   const query =
     "INSERT INTO sub_categoria (nombre_subCat, categoria_id_cat) VALUES (?,?)";
 
-  db.execute(query, [nombreSubCat, idSubCat], (err, result) => {
+  db.execute(query, [nombreSubCat, idCat], (err, result) => {
     if (err) {
       return res.status(500).send("Error al registrar la marca" + result);
     }
     res.status(201).send("Sub Categoria registrada correctamente");
   });
 });
+
+
+
+// Ruta para eliminar una Marca
+app.post("/subCatDelete", async (req, res) => {
+  const { id } = req.body;
+
+  const query = "DELETE FROM sub_categoria WHERE id_subCat = ?";
+
+  db.execute(query, [id], (err, result) => {
+    if (err) {
+      return res.status(500).send("Error al reliminar la categoria" + result);
+    }
+    res.status(201).send("Categoria eliminada exitosamente");
+  });
+});
+
 
 // Iniciar el servidor
 app.listen(port, () => {

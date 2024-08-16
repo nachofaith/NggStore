@@ -16,10 +16,10 @@ const useRegister = () => {
   };
 
 
-  const handleRegisterSub = async (idSubCat, nombreSubCat) => {
+  const handleRegisterSub = async (idCat, nombreSubCat) => {
     try {
       const response = await axios.post("http://localhost:3000/subCatRegister", {
-        idSubCat,
+        idCat,
         nombreSubCat,
       });
       console.log("Respuesta del servidor:", response.data);

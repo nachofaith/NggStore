@@ -15,8 +15,20 @@ const useDelete = () => {
     }
   };
 
+  const handleDeleteSub = async (id) => {
+    try {
+      const response = await axios.post("http://localhost:3000/subCatDelete", {
+        id,
+      });
+      console.log("Respuesta del servidor:", response.data);
+    } catch (error) {
+      setError("datos incorrectos" + error);
+    }
+  };
+
   return {
     handleDelete,
+    handleDeleteSub,
     error,
   };
 };

@@ -45,7 +45,7 @@ export default function AddCat({ modal, trigger, setTrigger, setOpenModal }) {
     };
 
     fetchData();
-  }, []);
+  }, [modal, trigger]);
 
   return (
     <Modal

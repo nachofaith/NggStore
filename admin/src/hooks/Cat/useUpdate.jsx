@@ -5,6 +5,7 @@ const useUpdate = () => {
   const [errorDel, setErrorDel] = useState(null);
 
   const handleUpdate = async (id, name) => {
+    console.log(id, name)
     try {
       const response = await axios.post("http://localhost:3000/catUpdate", {
         id,

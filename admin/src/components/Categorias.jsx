@@ -33,7 +33,7 @@ export default function Categoria() {
     };
 
     fetchData();
-  }, [trigger]);
+  }, [trigger,openModal,openModalUpd]);
 
   const handleSubmitDel = (id, e) => {
     e.preventDefault();
@@ -79,7 +79,7 @@ export default function Categoria() {
             <span className="font-medium">Error!</span> {error}
           </div>
         )}
-        <Table>
+        <Table className="text-center">
           <Table.Head>
             <Table.HeadCell>Id</Table.HeadCell>
             <Table.HeadCell>Categoria</Table.HeadCell>
