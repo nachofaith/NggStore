@@ -5,7 +5,9 @@ const jwt = require("jsonwebtoken");
 const app = express();
 const port = 3000;
 const cors = require("cors");
-const crypto = require("crypto");
+// const crypto = require("crypto");
+const multer = require('multer');
+const path = require('path');
 
 const jwtSecret =
   "875032869ee3511558cd74b5be1d517dc63b74bfc92abdc54ba253a619c80ce5"; // Cambia esto por una cadena secreta segura
@@ -29,6 +31,38 @@ db.connect((err) => {
   }
   console.log("Conectado a la base de datos MySQL");
 });
+
+// Configuración de almacenamiento
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, 'uploads/'); // Carpeta donde se guardarán las imágenes
+  },
+  filename: function (req, file, cb) {
+    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+    cb(null, file.fieldname + '-' + uniqueSuffix + path.extname(file.originalname));
+  }
+});
+
+
+const upload = multer({ storage: storage });
+
+// Ruta para manejar la carga de archivos
+app.post('/upload', upload.array('images', 10), (req, res) => {
+  // 'images' es la key usada en formData.append
+  // '10' es el número máximo de archivos que se pueden subir a la vez
+
+  try {
+    console.log(req.files);
+    res.status(200).send('Archivos subidos correctamente');
+  } catch (error) {
+    res.status(400).send('Error al subir los archivos');
+  }
+});
+
+
+
+
+
 
 // const registerAdmin = async (username, email, password) => {
 //   try {
@@ -355,3 +389,6 @@ app.post("/subCatDelete", async (req, res) => {
 app.listen(port, () => {
   console.log(`Servidor escuchando en http://localhost:${port}`);
 });
+
+
+

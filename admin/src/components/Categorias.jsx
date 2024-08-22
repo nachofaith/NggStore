@@ -5,8 +5,8 @@ import { Link } from "react-router-dom";
 import { Table } from "flowbite-react";
 
 import useDelete from "../hooks/Cat/useDelete.jsx";
-import AddCat from "./Modals/ Cat/AddCat.jsx";
-import UpdCat from "./Modals/ Cat/UpdCat.jsx";
+import AddCat from "./Modals/Cat/AddCat.jsx";
+import UpdCat from "./Modals/Cat/UpdCat.jsx";
 
 export default function Categoria() {
   const [data, setData] = useState([]);
