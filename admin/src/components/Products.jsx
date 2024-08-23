@@ -2,11 +2,13 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { Button } from "flowbite-react";
 import { Link } from "react-router-dom";
-import useDelete from "../hooks/Marca/useDelete.jsx";
-
+import useDelete from "../hooks/Products/useDelete.jsx";
+import FormatCLP from "./FormateadorCLP.jsx";
 import { Table } from "flowbite-react";
 import AddProd from "./Modals/Products/AddProd.jsx";
 import UpdMarca from "./Modals/Marca/UpdMarca.jsx";
+
+const apiUrl = import.meta.env.VITE_API_URL;
 
 export default function Products() {
   const [data, setData] = useState([]);
@@ -20,8 +22,18 @@ export default function Products() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get("http://localhost:3000/marcas"); // Reemplaza con tu URL de API
-        setData(response.data); // Asigna los datos recibidos al estado
+        const response = await axios.get(`${apiUrl}/products`); // Reemplaza con tu URL de API
+        console.log(response);
+        const mappedData = response.data.map((item) => ({
+          id: item.id_prod,
+          name: item.nombre_prod,
+          marca: item.nombre_marca,
+          cat: item.nombre_cat,
+          stock: item.stock_prod,
+          precio: item.precio_prod,
+          precio_off: item.precio_off_prod,
+        }));
+        setData(mappedData); // Asigna los datos recibidos al estado
       } catch (error) {
         console.error("Error fetching data: ", error);
       }
@@ -30,17 +42,17 @@ export default function Products() {
     fetchData();
   }, [trigger]);
 
-  const handleSubmitDel = (id_marca, e) => {
+  const handleSubmitDel = (id, e) => {
     e.preventDefault();
-    handleDelete(id_marca);
+    handleDelete(id);
     setTrigger(!trigger);
   };
 
   const handleUpdate = (e, modal, id, nombre) => {
     e.preventDefault();
-    setOpenModalUpd(modal);
-    setNombreMarca(nombre);
-    setIdMarca(id);
+    // setOpenModalUpd(modal);
+    // setNombreMarca(nombre);
+    // setIdMarca(id);
 
     console.log(modal, id, nombre);
   };
@@ -78,38 +90,37 @@ export default function Products() {
               <span className="font-medium">Error!</span> {errorDel}
             </div>
           )}
-          <Table.Head>
-            <Table.HeadCell>Id</Table.HeadCell>
+          <Table.Head className="text-center">
+            <Table.HeadCell>Producto</Table.HeadCell>
             <Table.HeadCell>Marca</Table.HeadCell>
+            <Table.HeadCell>Categoría</Table.HeadCell>
+            <Table.HeadCell>Stock</Table.HeadCell>
+            <Table.HeadCell>Precio Normal</Table.HeadCell>
+            <Table.HeadCell>Precio Oferta</Table.HeadCell>
             <Table.HeadCell>Acciones</Table.HeadCell>
-
-            <Table.HeadCell>
-              <span className="sr-only">Edit</span>
-            </Table.HeadCell>
           </Table.Head>
           <Table.Body className="divide-y font-bold">
             {data.map((item) => (
               <Table.Row
-                key={item.id_marca}
-                className="bg-white dark:border-gray-700 dark:bg-gray-800"
+                key={item.id}
+                className="bg-white"
               >
-                <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
-                  {item.id_marca}
-                </Table.Cell>
-                <Table.Cell>{item.nombre_marca}</Table.Cell>
-
+                <Table.Cell>{item.name}</Table.Cell>
+                <Table.Cell>{item.marca}</Table.Cell>
+                <Table.Cell>{item.cat}</Table.Cell>
+                <Table.Cell>{item.stock}</Table.Cell>
+                <Table.Cell><FormatCLP precio={item.precio} /></Table.Cell>
+                <Table.Cell><FormatCLP precio={item.precio_off} /></Table.Cell>
                 <Table.Cell className="gap-2 flex">
                   <Link
-                    onClick={(e) =>
-                      handleUpdate(e, true, item.id_marca, item.nombre_marca)
-                    }
+                    onClick={(e) => handleUpdate(e, true, item.id, item.name)}
                     className="font-medium text-cyan-600 hover:underline dark:text-cyan-500"
                   >
                     <span>Editar</span>
                   </Link>
                   |
                   <Link
-                    onClick={(e) => handleSubmitDel(item.id_marca, e)}
+                    onClick={(e) => handleSubmitDel(item.id, e)}
                     className="font-medium text-cyan-600 hover:underline dark:text-cyan-500"
                   >
                     <span>Eliminar</span>

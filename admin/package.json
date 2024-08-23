@@ -14,13 +14,11 @@
     "flowbite-react": "^0.10.1",
     "js-cookie": "^3.0.5",
     "react": "^18.3.1",
-    "react-beautiful-dnd": "^13.1.1",
-    "react-dnd": "^16.0.1",
-    "react-dnd-html5-backend": "^16.0.1",
     "react-dom": "^18.3.1",
     "react-drag-drop-files": "^2.3.10",
     "react-router-dom": "^6.26.0",
     "react-simple-wysiwyg": "^3.1.1",
+    "tailwindcss": "^3.4.10",
     "uuid": "^10.0.0"
   },
   "devDependencies": {
@@ -35,7 +33,6 @@
     "eslint-plugin-react-refresh": "^0.4.9",
     "globals": "^15.9.0",
     "postcss": "^8.4.41",
-    "tailwindcss": "^3.4.9",
     "vite": "^5.4.0"
   }
 }

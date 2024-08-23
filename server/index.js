@@ -6,8 +6,8 @@ const app = express();
 const port = 3000;
 const cors = require("cors");
 // const crypto = require("crypto");
-const multer = require('multer');
-const path = require('path');
+const multer = require("multer");
+const path = require("path");
 
 const jwtSecret =
   "875032869ee3511558cd74b5be1d517dc63b74bfc92abdc54ba253a619c80ce5"; // Cambia esto por una cadena secreta segura
@@ -35,34 +35,31 @@ db.connect((err) => {
 // Configuración de almacenamiento
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, 'uploads/'); // Carpeta donde se guardarán las imágenes
+    cb(null, "uploads/"); // Carpeta donde se guardarán las imágenes
   },
   filename: function (req, file, cb) {
-    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
-    cb(null, file.fieldname + '-' + uniqueSuffix + path.extname(file.originalname));
-  }
+    const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
+    cb(
+      null,
+      file.fieldname + "-" + uniqueSuffix + path.extname(file.originalname)
+    );
+  },
 });
-
 
 const upload = multer({ storage: storage });
 
 // Ruta para manejar la carga de archivos
-app.post('/upload', upload.array('images', 10), (req, res) => {
+app.post("/upload", upload.array("images", 10), (req, res) => {
   // 'images' es la key usada en formData.append
   // '10' es el número máximo de archivos que se pueden subir a la vez
 
   try {
     console.log(req.files);
-    res.status(200).send('Archivos subidos correctamente');
+    res.status(200).send("Archivos subidos correctamente");
   } catch (error) {
-    res.status(400).send('Error al subir los archivos');
+    res.status(400).send("Error al subir los archivos");
   }
 });
-
-
-
-
-
 
 // const registerAdmin = async (username, email, password) => {
 //   try {
@@ -270,7 +267,6 @@ app.post("/marcaDelete", async (req, res) => {
 //   });
 // });
 
-
 app.get("/categoria", (req, res) => {
   // Consulta para obtener categorías con el conteo de subcategorías
   const query = `
@@ -298,13 +294,11 @@ app.get("/categoria", (req, res) => {
   });
 });
 
-
-
 //Ruta para mostrar Categorias
 app.post("/subCategoria", (req, res) => {
-  const { idCat } = req.body;
+  const { selectedCategory } = req.body;
   const query = "SELECT * FROM sub_categoria WHERE categoria_id_cat = ?";
-  db.query(query, [idCat], (err, results) => {
+  db.query(query, [selectedCategory], (err, results) => {
     if (err) {
       console.error("Error ejecutando la consulta:", err);
       res.status(500).json({ error: "Error en el servidor" });
@@ -368,8 +362,6 @@ app.post("/subCatRegister", async (req, res) => {
   });
 });
 
-
-
 // Ruta para eliminar una Marca
 app.post("/subCatDelete", async (req, res) => {
   const { id } = req.body;
@@ -384,11 +376,85 @@ app.post("/subCatDelete", async (req, res) => {
   });
 });
 
+// Ruta para registrar un nuevo usuario
+app.post("/registerProd", async (req, res) => {
+  const {
+    nombreProd,
+    descProd,
+    stockProd,
+    precioProd,
+    precioProdOff,
+    selectedMarca,
+    selectedCategory,
+    selectedSubcategory,
+  } = req.body;
+
+ 
+  const query =
+    "INSERT INTO producto (nombre_prod, desc_prod, stock_prod, precio_prod, precio_off_prod, id_marca, id_subCat, id_cat) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+
+  db.execute(
+    query,
+    [
+      nombreProd,
+      descProd,
+      stockProd,
+      precioProd,
+      precioProdOff,
+      selectedMarca,
+      selectedSubcategory,
+      selectedCategory,
+    ],
+    (err, result) => {
+      if (err) {
+        console.log("Error al ingresar el Producto" + result + err);
+        return res.status(500).send("Error al ingresar el Producto" + result);
+      }
+      res.status(201).send("Producto registrado exitosamente");
+    }
+  );
+});
+
+
+app.get("/products", (req, res) => {
+  const query = "SELECT p.id_prod,p.nombre_prod,p.desc_prod,p.stock_prod,p.precio_prod,p.precio_off_prod,p.id_marca,m.nombre_marca,p.id_subCat,p.id_cat,c.nombre_cat FROM producto p INNER JOIN marca m ON p.id_marca = m.id_marca INNER JOIN categoria c ON p.id_cat = c.id_cat;";
+  db.query(query, (err, results) => {
+    if (err) {
+      console.error("Error ejecutando la consulta:", err);
+      res.status(500).json({ error: "Error en el servidor" });
+      return;
+    }
+    res.json(results);
+  });
+});
+
+// Ruta para eliminar una Marca
+app.post("/deleteProd", async (req, res) => {
+  const { id } = req.body;
+
+  const query = "DELETE FROM producto WHERE id_prod = ?";
+
+  db.execute(query, [id], (err, result) => {
+    if (err) {
+      return res.status(500).send("Error al eliminar el producto" + result);
+    }
+    res.status(201).send("Producto eliminado exitosamente");
+  });
+});
+
+
+
+
+
+
+
+
+
+
+
+
 
 // Iniciar el servidor
 app.listen(port, () => {
   console.log(`Servidor escuchando en http://localhost:${port}`);
 });
-
-
-

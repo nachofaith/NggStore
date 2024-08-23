@@ -1,25 +1,23 @@
 import { Button, Modal } from "flowbite-react";
-import { useState, useEffect, useCallback } from "react";
-import useRegister from "../../../hooks/Cat/useRegister";
-import { FileInput, Label, Select } from "flowbite-react";
+import { useState, useEffect } from "react";
+import useRegister from "../../../hooks/Products/useRegister";
+import { Label, Select } from "flowbite-react";
 import axios from "axios";
 import Editor from "react-simple-wysiwyg";
-import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 import DragDrop from "../../DragDrop";
 
-export default function AddProd({ modal, trigger, setTrigger, setOpenModal }) {
-  const [html, setHtml] = useState("my <b>HTML</b>");
-  function onChange(e) {
-    setHtml(e.target.value);
-  }
+const apiUrl = import.meta.env.VITE_API_URL;
 
+export default function AddProd({ modal, trigger, setTrigger, setOpenModal }) {
   const modalPlacement = "center";
-  const { handleRegister, handleRegisterSub, error } = useRegister();
+  const { handleRegister, error } = useRegister();
   const [nombreProd, setNombreProd] = useState("");
   const [precioProd, setPrecioProd] = useState("");
   const [precioProdOff, setPrecioProdOff] = useState("");
-  const [idCat, setIdCat] = useState("");
+  const [stockProd, setStockProd] = useState("");
   const [categories, setCategories] = useState([]);
+  const [marca, setMarca] = useState([]);
+  const [selectedMarca, setSelectedMarca] = useState("");
   const [subcategories, setSubcategories] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState("");
   const [selectedSubcategory, setSelectedSubcategory] = useState("");
@@ -28,11 +26,18 @@ export default function AddProd({ modal, trigger, setTrigger, setOpenModal }) {
   const [files, setFiles] = useState([]);
   const [previews, setPreviews] = useState([]);
   const [inputKey, setInputKey] = useState(0); // Key for input to force re-render
+  const [descProd, setDescProd] = useState(
+    "mi <b>Descripción del Producto</b>"
+  );
+
+  function onChange(e) {
+    setDescProd(e.target.value);
+  }
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get("http://localhost:3000/categoria");
+        const response = await axios.get(`${apiUrl}/categoria`);
         const mappedData = response.data.map((item) => ({
           id: item.id_cat,
           name: item.nombre_cat,
@@ -50,16 +55,20 @@ export default function AddProd({ modal, trigger, setTrigger, setOpenModal }) {
     if (selectedCategory) {
       const fetchData = async () => {
         try {
-          const response = await axios.post(
-            "http://localhost:3000/subCategoria",
-            { idCat }
-          );
+          const response = await axios.post(`${apiUrl}/subCategoria`, {
+            selectedCategory,
+          });
           const mappedData = response.data.map((item) => ({
             id: item.id_subCat,
             name: item.nombre_subCat,
           }));
           setSubcategories(mappedData);
           setHasSubcategories(mappedData.length > 0);
+
+          if (mappedData.length === 0) {
+            setSelectedSubcategory("0");
+          }
+
         } catch (error) {
           console.log("Error fetching data: ", error);
         }
@@ -71,105 +80,87 @@ export default function AddProd({ modal, trigger, setTrigger, setOpenModal }) {
     }
   }, [selectedCategory]);
 
-  const handleFiles = useCallback(
-    (newFiles) => {
-      const existingFileNames = new Set(
-        Array.from(files).map((file) => file.name)
-      );
-      const filesToAdd = Array.from(newFiles).filter(
-        (file) => !existingFileNames.has(file.name)
-      );
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(`${apiUrl}/marcas`);
 
-      if (filesToAdd.length === 0) return;
+        const mappedData = response.data.map((item) => ({
+          id: item.id_marca,
+          name: item.nombre_marca,
+        }));
+        setMarca(mappedData);
+      } catch (error) {
+        console.error("Error fetching data: ", error);
+      }
+    };
 
-      setFiles((prevFiles) => [...prevFiles, ...filesToAdd]);
-
-      const newPreviews = filesToAdd.map((file) => URL.createObjectURL(file));
-      setPreviews((prevPreviews) => [...prevPreviews, ...newPreviews]);
-    },
-    [files]
-  );
-
-  const handleFileChange = (event) => {
-    handleFiles(event.target.files);
-  };
-
-  const handleDragOver = (event) => {
-    event.preventDefault();
-  };
-
-  const handleDrop = (event) => {
-    event.preventDefault();
-    handleFiles(event.dataTransfer.files);
-  };
-
-  const handleRemoveFile = (indexToRemove, event) => {
-    event.stopPropagation();
-
-    const fileToRemove = files[indexToRemove];
-
-    if (!fileToRemove) return;
-
-    setFiles((prevFiles) => {
-      const updatedFiles = prevFiles.filter(
-        (_, index) => index !== indexToRemove
-      );
-      return updatedFiles;
-    });
-
-    setPreviews((prevPreviews) => {
-      const updatedPreviews = prevPreviews.filter(
-        (_, index) => index !== indexToRemove
-      );
-      return updatedPreviews;
-    });
-
-    URL.revokeObjectURL(previews[indexToRemove]);
-
-    // Reset the input only if there are no files left
-    if (files.length === 1) {
-      setInputKey((prevKey) => prevKey + 1); // Force re-render of input
-    }
-  };
+    fetchData();
+  }, [modal, trigger]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (files.length === 0) {
-      console.error("No files selected");
-      return;
-    }
+    console.log( nombreProd,
+      descProd,
+      stockProd,
+      precioProd,
+      precioProdOff,
+      selectedMarca,
+      selectedCategory,
+      selectedSubcategory)
 
-    const formData = new FormData();
-    for (const file of files) {
-      formData.append("images", file);
-    }
+    handleRegister(
+      nombreProd,
+      descProd,
+      stockProd,
+      precioProd,
+      precioProdOff,
+      selectedMarca,
+      selectedCategory,
+      selectedSubcategory
+    );
+    setTrigger(!trigger);
+    setOpenModal(false);
 
-    try {
-      const response = await axios.post(
-        "http://localhost:3000/upload",
-        formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        }
-      );
+    // if (files.length === 0) {
+    //   console.error("No files selected");
+    //   return;
+    // }
 
-      if (response.status === 200) {
-        console.log("Imágenes subidas exitosamente");
-      } else {
-        console.error("Error al subir las imágenes");
-      }
-    } catch (error) {
-      console.error("Error en la solicitud:", error);
-    }
+    // const formData = new FormData();
+    // for (const file of files) {
+    //   formData.append("images", file);
+    // }
+
+    // try {
+    //   const response = await axios.post(
+    //     "http://localhost:3000/upload",
+    //     formData,
+    //     {
+    //       headers: {
+    //         "Content-Type": "multipart/form-data",
+    //       },
+    //     }
+    //   );
+
+    //   if (response.status === 200) {
+    //     console.log("Imágenes subidas exitosamente");
+    //   } else {
+    //     console.error("Error al subir las imágenes");
+    //   }
+    // } catch (error) {
+    //   console.error("Error en la solicitud:", error);
+    // }
   };
 
   const handleCategoryChange = (e) => {
     setSelectedCategory(e.target.value);
-    setIdCat(e.target.value);
     setSelectedSubcategory("");
+  };
+
+  const handleMarcaChange = (e) => {
+    setSelectedMarca(e.target.value);
   };
 
   const handleSubcategoryChange = (e) => {
@@ -245,8 +236,45 @@ export default function AddProd({ modal, trigger, setTrigger, setOpenModal }) {
               </label>
               <Editor
                 containerProps={{ style: { resize: "vertical" } }}
-                value={html}
+                value={descProd}
                 onChange={onChange}
+              />
+            </div>
+
+            <div className="mb-5">
+              <div className="mb-2 block">
+                <Label htmlFor="marca" value="Marca" />
+              </div>
+              <Select
+                id="marca"
+                required
+                value={selectedMarca}
+                onChange={handleMarcaChange}
+              >
+                <option value="">---</option>
+                {marca.map((item) => (
+                  <option key={item.id} value={item.id}>
+                    {item.name}
+                  </option>
+                ))}
+              </Select>
+            </div>
+
+            <div className="mb-5">
+              <label
+                htmlFor="stockProd"
+                className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+              >
+                Stock
+              </label>
+              <input
+                type="text"
+                value={stockProd}
+                onChange={(e) => setStockProd(e.target.value)}
+                id="stockProd"
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 "
+                placeholder="10"
+                required
               />
             </div>
             <div className="mb-5">
@@ -323,7 +351,6 @@ export default function AddProd({ modal, trigger, setTrigger, setOpenModal }) {
                   </option>
                 ))}
               </Select>
-             
             </div>
 
             <div className="mb-5">
@@ -331,10 +358,7 @@ export default function AddProd({ modal, trigger, setTrigger, setOpenModal }) {
                 <Label htmlFor="dragDrop" value="Imagenes" />
               </div>
               <DragDrop />
-             
             </div>
-
-           
           </form>
         </div>
       </Modal.Body>
