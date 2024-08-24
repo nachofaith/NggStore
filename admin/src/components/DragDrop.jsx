@@ -4,12 +4,16 @@ import { Button, Table } from "flowbite-react";
 
 const fileTypes = ["JPG", "JPEG", "PNG", "GIF", "WEBP"];
 
-export default function DragDrop() {
+export default function DragDrop({ onChange }) {
   const [files, setFiles] = useState([]);
   const [coverImageIndex, setCoverImageIndex] = useState(null);
 
   const handleChange = (newFiles) => {
-    setFiles((prevFiles) => [...prevFiles, ...Array.from(newFiles)]);
+    const updatedFiles = [...files, ...Array.from(newFiles)];
+    setFiles(updatedFiles);
+    if (onChange) {
+      onChange(updatedFiles);
+    }
   };
 
   const handleRemove = (indexToRemove) => {
@@ -73,6 +77,7 @@ export default function DragDrop() {
     <section>
       <FileUploader
         handleChange={handleChange}
+        id="multiple-file-upload"
         name="files"
         types={fileTypes}
         multiple={true}
@@ -103,7 +108,7 @@ export default function DragDrop() {
                   <Table.Cell>
                     <a href="#" onClick={() => handleRemove(index)}>
                       <svg
-                        class="w-6 h-6 text-red-400 hover:text-red-600"
+                        className="w-6 h-6 text-red-400 hover:text-red-600"
                         aria-hidden="true"
                         xmlns="http://www.w3.org/2000/svg"
                         width="24"
@@ -112,9 +117,9 @@ export default function DragDrop() {
                         viewBox="0 0 24 24"
                       >
                         <path
-                          fill-rule="evenodd"
+                          fillRule="evenodd"
                           d="M8.586 2.586A2 2 0 0 1 10 2h4a2 2 0 0 1 2 2v2h3a1 1 0 1 1 0 2v12a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V8a1 1 0 0 1 0-2h3V4a2 2 0 0 1 .586-1.414ZM10 6h4V4h-4v2Zm1 4a1 1 0 1 0-2 0v8a1 1 0 1 0 2 0v-8Zm4 0a1 1 0 1 0-2 0v8a1 1 0 1 0 2 0v-8Z"
-                          clip-rule="evenodd"
+                          clipRule="evenodd"
                         />
                       </svg>
                     </a>
@@ -143,7 +148,7 @@ export default function DragDrop() {
                         color="gray"
                       >
                         <svg
-                          class="w-6 h-6 text-gray-800 dark:text-white"
+                          className="w-6 h-6 text-gray-800 dark:text-white"
                           aria-hidden="true"
                           xmlns="http://www.w3.org/2000/svg"
                           width="24"
@@ -153,9 +158,9 @@ export default function DragDrop() {
                         >
                           <path
                             stroke="currentColor"
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            stroke-width="2"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth="2"
                             d="m5 15 7-7 7 7"
                           />
                         </svg>
@@ -167,7 +172,7 @@ export default function DragDrop() {
                         color="gray"
                       >
                         <svg
-                          class="w-6 h-6 text-gray-800 dark:text-white"
+                          className="w-6 h-6 text-gray-800 dark:text-white"
                           aria-hidden="true"
                           xmlns="http://www.w3.org/2000/svg"
                           width="24"
@@ -177,9 +182,9 @@ export default function DragDrop() {
                         >
                           <path
                             stroke="currentColor"
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            stroke-width="2"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth="2"
                             d="m19 9-7 7-7-7"
                           />
                         </svg>

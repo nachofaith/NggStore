@@ -32,33 +32,37 @@ db.connect((err) => {
   console.log("Conectado a la base de datos MySQL");
 });
 
-// Configuración de almacenamiento
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, "uploads/"); // Carpeta donde se guardarán las imágenes
+    console.log("Destination:", file);
+    cb(null, "uploads/");
   },
   filename: function (req, file, cb) {
     const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
-    cb(
-      null,
-      file.fieldname + "-" + uniqueSuffix + path.extname(file.originalname)
-    );
+    const fileName =
+      file.fieldname + "-" + uniqueSuffix + path.extname(file.originalname);
+    console.log("Filename:", fileName);
+    cb(null, fileName);
   },
 });
 
 const upload = multer({ storage: storage });
 
-// Ruta para manejar la carga de archivos
-app.post("/upload", upload.array("images", 10), (req, res) => {
-  // 'images' es la key usada en formData.append
-  // '10' es el número máximo de archivos que se pueden subir a la vez
+app.post("/upload", (req, res) => {
+  upload.array("images", 10)(req, res, (err) => {
+    if (err instanceof multer.MulterError) {
+      // Errores específicos de Multer
 
-  try {
+      return res.status(500).json({ error: err.message });
+    } else if (err) {
+      // Otros errores
+
+      return res.status(500).json({ error: "Error al subir los archivos" });
+    }
+
     console.log(req.files);
     res.status(200).send("Archivos subidos correctamente");
-  } catch (error) {
-    res.status(400).send("Error al subir los archivos");
-  }
+  });
 });
 
 // const registerAdmin = async (username, email, password) => {
@@ -389,7 +393,6 @@ app.post("/registerProd", async (req, res) => {
     selectedSubcategory,
   } = req.body;
 
- 
   const query =
     "INSERT INTO producto (nombre_prod, desc_prod, stock_prod, precio_prod, precio_off_prod, id_marca, id_subCat, id_cat) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 
@@ -415,9 +418,9 @@ app.post("/registerProd", async (req, res) => {
   );
 });
 
-
 app.get("/products", (req, res) => {
-  const query = "SELECT p.id_prod,p.nombre_prod,p.desc_prod,p.stock_prod,p.precio_prod,p.precio_off_prod,p.id_marca,m.nombre_marca,p.id_subCat,p.id_cat,c.nombre_cat FROM producto p INNER JOIN marca m ON p.id_marca = m.id_marca INNER JOIN categoria c ON p.id_cat = c.id_cat;";
+  const query =
+    "SELECT p.id_prod,p.nombre_prod,p.desc_prod,p.stock_prod,p.precio_prod,p.precio_off_prod,p.id_marca,m.nombre_marca,p.id_subCat,p.id_cat,c.nombre_cat FROM producto p INNER JOIN marca m ON p.id_marca = m.id_marca INNER JOIN categoria c ON p.id_cat = c.id_cat;";
   db.query(query, (err, results) => {
     if (err) {
       console.error("Error ejecutando la consulta:", err);
@@ -441,18 +444,6 @@ app.post("/deleteProd", async (req, res) => {
     res.status(201).send("Producto eliminado exitosamente");
   });
 });
-
-
-
-
-
-
-
-
-
-
-
-
 
 // Iniciar el servidor
 app.listen(port, () => {

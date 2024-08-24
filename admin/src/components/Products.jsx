@@ -23,7 +23,6 @@ export default function Products() {
     const fetchData = async () => {
       try {
         const response = await axios.get(`${apiUrl}/products`); // Reemplaza con tu URL de API
-        console.log(response);
         const mappedData = response.data.map((item) => ({
           id: item.id_prod,
           name: item.nombre_prod,
@@ -101,16 +100,17 @@ export default function Products() {
           </Table.Head>
           <Table.Body className="divide-y font-bold">
             {data.map((item) => (
-              <Table.Row
-                key={item.id}
-                className="bg-white"
-              >
+              <Table.Row key={item.id} className="bg-white">
                 <Table.Cell>{item.name}</Table.Cell>
                 <Table.Cell>{item.marca}</Table.Cell>
                 <Table.Cell>{item.cat}</Table.Cell>
                 <Table.Cell>{item.stock}</Table.Cell>
-                <Table.Cell><FormatCLP precio={item.precio} /></Table.Cell>
-                <Table.Cell><FormatCLP precio={item.precio_off} /></Table.Cell>
+                <Table.Cell>
+                  <FormatCLP precio={item.precio} />
+                </Table.Cell>
+                <Table.Cell>
+                  <FormatCLP precio={item.precio_off} />
+                </Table.Cell>
                 <Table.Cell className="gap-2 flex">
                   <Link
                     onClick={(e) => handleUpdate(e, true, item.id, item.name)}

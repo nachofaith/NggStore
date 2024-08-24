@@ -23,8 +23,8 @@ export default function AddProd({ modal, trigger, setTrigger, setOpenModal }) {
   const [selectedSubcategory, setSelectedSubcategory] = useState("");
   const [hasSubcategories, setHasSubcategories] = useState(true);
   const [errorMostrar, setErrorMostrar] = useState(null);
-  const [files, setFiles] = useState([]);
   const [previews, setPreviews] = useState([]);
+  const [files, setFiles] = useState([]);
   const [inputKey, setInputKey] = useState(0); // Key for input to force re-render
   const [descProd, setDescProd] = useState(
     "mi <b>Descripción del Producto</b>"
@@ -68,7 +68,6 @@ export default function AddProd({ modal, trigger, setTrigger, setOpenModal }) {
           if (mappedData.length === 0) {
             setSelectedSubcategory("0");
           }
-
         } catch (error) {
           console.log("Error fetching data: ", error);
         }
@@ -98,60 +97,43 @@ export default function AddProd({ modal, trigger, setTrigger, setOpenModal }) {
     fetchData();
   }, [modal, trigger]);
 
+
+  const handleFileChange = (newFiles) => {
+    setFiles(newFiles);
+  };
+
+
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+    // handleRegister(
+    //   nombreProd,
+    //   descProd,
+    //   stockProd,
+    //   precioProd,
+    //   precioProdOff,
+    //   selectedMarca,
+    //   selectedCategory,
+    //   selectedSubcategory
+    // );
 
-    console.log( nombreProd,
-      descProd,
-      stockProd,
-      precioProd,
-      precioProdOff,
-      selectedMarca,
-      selectedCategory,
-      selectedSubcategory)
+  
+    const formData = new FormData();
+    files.forEach((file) => {
+      formData.append("images", file);
+    });
 
-    handleRegister(
-      nombreProd,
-      descProd,
-      stockProd,
-      precioProd,
-      precioProdOff,
-      selectedMarca,
-      selectedCategory,
-      selectedSubcategory
-    );
-    setTrigger(!trigger);
-    setOpenModal(false);
-
-    // if (files.length === 0) {
-    //   console.error("No files selected");
-    //   return;
-    // }
-
-    // const formData = new FormData();
-    // for (const file of files) {
-    //   formData.append("images", file);
-    // }
-
-    // try {
-    //   const response = await axios.post(
-    //     "http://localhost:3000/upload",
-    //     formData,
-    //     {
-    //       headers: {
-    //         "Content-Type": "multipart/form-data",
-    //       },
-    //     }
-    //   );
-
-    //   if (response.status === 200) {
-    //     console.log("Imágenes subidas exitosamente");
-    //   } else {
-    //     console.error("Error al subir las imágenes");
-    //   }
-    // } catch (error) {
-    //   console.error("Error en la solicitud:", error);
-    // }
+      try {
+      await axios.post(`${apiUrl}/upload`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+      setOpenModal(false); // Close the modal or handle success
+    } catch (error) {
+      console.error("Error uploading files: ", error);
+    }
+    
   };
 
   const handleCategoryChange = (e) => {
@@ -165,22 +147,6 @@ export default function AddProd({ modal, trigger, setTrigger, setOpenModal }) {
 
   const handleSubcategoryChange = (e) => {
     setSelectedSubcategory(e.target.value);
-  };
-
-  const onDragEnd = (result) => {
-    if (!result.destination) return;
-
-    const items = Array.from(previews);
-    const [reorderedItem] = items.splice(result.source.index, 1);
-    items.splice(result.destination.index, 0, reorderedItem);
-
-    setPreviews(items);
-    setFiles((prevFiles) => {
-      const reorderedFiles = Array.from(prevFiles);
-      const [reorderedFile] = reorderedFiles.splice(result.source.index, 1);
-      reorderedFiles.splice(result.destination.index, 0, reorderedFile);
-      return reorderedFiles;
-    });
   };
 
   return (
@@ -357,7 +323,7 @@ export default function AddProd({ modal, trigger, setTrigger, setOpenModal }) {
               <div className="mb-2 block">
                 <Label htmlFor="dragDrop" value="Imagenes" />
               </div>
-              <DragDrop />
+              <DragDrop onChange={handleFileChange}   />
             </div>
           </form>
         </div>
