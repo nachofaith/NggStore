@@ -10,22 +10,22 @@ export default function Header() {
   const [role, setRole] = useState("");
   const { isAuth } = useAuth();
 
-  useEffect(() => {
-    // Obtener el token del almacenamiento local
-    const tokenJwt = localStorage.getItem("token");
+  // useEffect(() => {
+  //   // Obtener el token del almacenamiento local
+  //   const tokenJwt = localStorage.getItem("token");
 
-    if (tokenJwt) {
-      try {
-        // Decodificar el token
-        const decoded = jwtDecode(tokenJwt);
-        setUser(decoded.username);
-        setEmail(decoded.email);
-        setRole(decoded.role);
-      } catch (error) {
-        console.error("Error al decodificar el token:", error);
-      }
-    }
-  }, [isAuth]);
+  //   if (tokenJwt) {
+  //     try {
+  //       // Decodificar el token
+  //       const decoded = jwtDecode(tokenJwt);
+  //       setUser(decoded.username);
+  //       setEmail(decoded.email);
+  //       setRole(decoded.role);
+  //     } catch (error) {
+  //       console.error("Error al decodificar el token:", error);
+  //     }
+  //   }
+  // }, [isAuth]);
 
   return (
     <div className="">

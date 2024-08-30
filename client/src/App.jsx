@@ -5,12 +5,7 @@ import Footer from "./components/Footer.jsx";
 import Register from "./Register.jsx";
 import Login from "./Login.jsx";
 import Page404 from "./components/Page404.jsx";
-import Dashboard from "./Dashboard.jsx";
-import ProtectedRoute from "./components/Dashboard/ProtectedRoute.jsx";
-import Aside from "./components/Dashboard/Aside.jsx";
-import Users from "./components/Dashboard/Users.jsx";
-import HomeDS from "./components/Dashboard/Home.jsx";
-import Products from "./components/Dashboard/Products.jsx";
+
 
 
 export default function App() {
@@ -35,43 +30,9 @@ export default function App() {
           }
         />
 
-        {/* <Route
-          path="/dashboard/*"
-          element={
-            <div>
-              <Aside />
-              <main>
-                <Routes>
-                  <Route element={<ProtectedRoute />}>
-                    <Route path="/" element={<Dashboard />} />
-                    <Route path="/home" element={<HomeDS />} />
-                    <Route path="/users" element={<Users />} />
-                  </Route>
-                </Routes>
-              </main>
-            </div>
-          }
-        /> */}
+ 
 
-        <Route element={<ProtectedRoute />}>
-          <Route
-            path="/dashboard/*"
-            element={
-              <div>
-                <Aside />
-                <main>
-                  <Routes>
-                    <Route path="/" element={<Dashboard />} />
-                    <Route path="/home" element={<HomeDS />} />
-                    <Route path="/users" element={<Users />} />
-                    <Route path="/products" element={<Products />} />
-                    <Route path="/*" element={<Page404 />} />
-                  </Routes>
-                </main>
-              </div>
-            }
-          />
-        </Route>
+    
 
 
 

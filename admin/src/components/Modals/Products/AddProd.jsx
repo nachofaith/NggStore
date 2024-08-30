@@ -97,7 +97,6 @@ export default function AddProd({ modal, trigger, setTrigger, setOpenModal }) {
     fetchData();
   }, [modal, trigger]);
 
-
   const handleFileChange = (newFiles) => {
     setFiles(newFiles);
   };
@@ -106,34 +105,38 @@ export default function AddProd({ modal, trigger, setTrigger, setOpenModal }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    // handleRegister(
-    //   nombreProd,
-    //   descProd,
-    //   stockProd,
-    //   precioProd,
-    //   precioProdOff,
-    //   selectedMarca,
-    //   selectedCategory,
-    //   selectedSubcategory
-    // );
-
+  
+    const registerResponse = await handleRegister(
+      nombreProd,
+      descProd,
+      stockProd,
+      precioProd,
+      precioProdOff,
+      selectedMarca,
+      selectedCategory,
+      selectedSubcategory
+    );
+  
+    const idProd = registerResponse.data.idProd;
   
     const formData = new FormData();
-    files.forEach((file) => {
-      formData.append("images", file);
+    files.forEach(({ file, isFront }) => {
+      formData.append("images", file); // Asegúrate de que "images" coincide con el campo en Multer
+      formData.append("frontFiles[]", isFront ? "true" : "false"); // Asegúrate de usar "frontFiles[]"
     });
-
-      try {
+    formData.append("idProd", idProd);
+  
+    try {
       await axios.post(`${apiUrl}/upload`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
       });
-      setOpenModal(false); // Close the modal or handle success
+      setTrigger(!trigger);
+      setOpenModal(false); // Cierra el modal o maneja el éxito
     } catch (error) {
       console.error("Error uploading files: ", error);
     }
-    
   };
 
   const handleCategoryChange = (e) => {
@@ -323,7 +326,7 @@ export default function AddProd({ modal, trigger, setTrigger, setOpenModal }) {
               <div className="mb-2 block">
                 <Label htmlFor="dragDrop" value="Imagenes" />
               </div>
-              <DragDrop onChange={handleFileChange}   />
+              <DragDrop onChange={handleFileChange} />
             </div>
           </form>
         </div>

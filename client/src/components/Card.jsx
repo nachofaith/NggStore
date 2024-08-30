@@ -1,15 +1,15 @@
-"use client";
-
-import { Card, Badge } from "flowbite-react";
-import { Button } from "flowbite-react";
+import FormatCLP from "./FormateadorCLP";
 
 export function Products(props) {
   const tipo = props.tipo;
+  const nombreProd = props.nombreProd
+  const precioProd = props.precioProd
+  const imageUrl = props.frontImage
+  console.log(imageUrl)
+  const apiUrl = import.meta.env.VITE_API_URL;
 
   return (
-  
-
-    <div className="text-center max-w-sm border  rounded-lg shadow pt-2">
+    <div className="text-center flex flex-col align-middle max-w-sm border rounded-lg shadow pt-2">
       {tipo === "news" && (
         <div>
           <span className="bg-green-600 text-white text-xs font-semibold me-2 px-2.5 py-0.5 rounded-full dark:bg-yellow-900 dark:text-yellow-300">
@@ -24,15 +24,23 @@ export function Products(props) {
           </span>
         </div>
       )}
-      <a href="#">
-        <img className="rounded-t-lg" src="/src/assets/a50.png" alt="" />
+      <div className="flex-grow">
+      <a href="#" className=" min-h-80 flex flex-col justify-center">
+        {/* <img className="rounded-t-lg" src="/src/assets/a50.png" alt="" /> */}
+        <img className="rounded-t-lg" width={400} src={`${apiUrl}/uploads/${imageUrl}`} alt=""   />
+      
+      
       </a>
-      <div className="p-5 flex flex-col">
+
+      </div>
+      
+     
+      <div className="p-5 flex-col flex">
         <h5 className="mb-2 text-2xl font-semibold tracking-tight text-gray-800">
-          Audífonos Astro A50
+          {nombreProd}
         </h5>
 
-        <div className="flex items-center space-x-1 rtl:space-x-reverse mx-auto">
+        <div className="flex items-center space-x-1 rtl:space-x-reverse mx-auto ">
           <svg
             className="w-4 h-4 text-yellow-300"
             aria-hidden="true"
@@ -80,15 +88,13 @@ export function Products(props) {
           </svg>
         </div>
         <div className="flex flex-row mx-auto py-4">
-        <span className="text-lg font-normal text-gray-400 line-through dark:text-white">
-          $14.990
-        </span>
-        <span className="ms-3 text-xl font-semibold text-gray-800 dark:text-white">
-          $9.990
-        </span>
-
+          <span className="text-lg font-normal text-gray-400 line-through dark:text-white">
+            $14.990
+          </span>
+          <span className="ms-3 text-xl font-semibold text-gray-800 dark:text-white">
+            {<FormatCLP precio={precioProd} />}
+          </span>
         </div>
-      
 
         <div>
           <a

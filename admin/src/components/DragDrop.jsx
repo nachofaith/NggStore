@@ -8,11 +8,23 @@ export default function DragDrop({ onChange }) {
   const [files, setFiles] = useState([]);
   const [coverImageIndex, setCoverImageIndex] = useState(null);
 
+  // const handleChange = (newFiles) => {
+  //   const updatedFiles = [...files, ...Array.from(newFiles)];
+  //   setFiles(updatedFiles);
+  //   if (onChange) {
+  //     onChange(updatedFiles);
+  //   }
+  // };
+
+
   const handleChange = (newFiles) => {
     const updatedFiles = [...files, ...Array.from(newFiles)];
     setFiles(updatedFiles);
     if (onChange) {
-      onChange(updatedFiles);
+      onChange(updatedFiles.map((file, index) => ({
+        file,
+        isFront: index === coverImageIndex, // Indica si el archivo es la portada
+      })));
     }
   };
 
@@ -21,16 +33,31 @@ export default function DragDrop({ onChange }) {
       prevFiles.filter((_, index) => index !== indexToRemove)
     );
     if (indexToRemove === coverImageIndex) {
-      setCoverImageIndex(null);
-    } else if (indexToRemove < coverImageIndex) {
-      setCoverImageIndex((prevIndex) => prevIndex - 1);
+      setCoverImageIndex(null); // Reset coverImageIndex if the removed file was the cover
+    } else if (indexToRemove < coverImageIndex && coverImageIndex !== null) {
+      setCoverImageIndex((prevIndex) => prevIndex - 1); // Adjust coverImageIndex if necessary
     }
   };
 
+  // const handleSetCover = (index) => {
+  //   setCoverImageIndex(index);
+  //   console.log("Cover image index set to:", index);
+  // };
+
+
   const handleSetCover = (index) => {
     setCoverImageIndex(index);
+    console.log("Cover image index set to:", index);
+  
+    // Actualizar la información de archivos al cambiar la portada
+    if (onChange) {
+      onChange(files.map((file, i) => ({
+        file,
+        isFront: i === index,
+      })));
+    }
   };
-
+  
   const moveUp = (index) => {
     if (index === 0) return; // Already at the top
     const newFiles = [...files];

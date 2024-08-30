@@ -14,6 +14,7 @@ const jwtSecret =
 
 app.use(cors());
 app.use(express.json());
+app.use("/uploads", express.static("uploads"));
 
 // Configuración de la conexión a la base de datos
 const db = mysql.createConnection({
@@ -49,21 +50,56 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage });
 
 app.post("/upload", (req, res) => {
-  upload.array("images", 10)(req, res, (err) => {
+  console.log("Files:", req.files);
+  console.log("Body:", req.body);
+  upload.array("images", 10)(req, res, async (err) => {
     if (err instanceof multer.MulterError) {
-      // Errores específicos de Multer
-
       return res.status(500).json({ error: err.message });
     } else if (err) {
-      // Otros errores
-
       return res.status(500).json({ error: "Error al subir los archivos" });
     }
 
-    console.log(req.files);
-    res.status(200).send("Archivos subidos correctamente");
+    const files = req.files;
+    const { frontFiles = [], idProd } = req.body; // Obtener el array de "front" e "idProd"
+
+    if (files && files.length > 0) {
+      try {
+        await Promise.all(files.map((file, index) => {
+          const fileName = file.filename;
+          const isFront = frontFiles[index] === "true" ? 1 : 0;
+
+          return new Promise((resolve, reject) => {
+            const query = "INSERT INTO images (url_img, front) VALUES (?, ?)";
+            db.query(query, [fileName, isFront], (err, result) => {
+              if (err) {
+                console.error("Error al insertar en la base de datos:", err);
+                return reject("Error al guardar la información en la base de datos");
+              }
+
+              const idImg = result.insertId;
+
+              const hasImagesQuery = "INSERT INTO has_images (id_prod, id_img) VALUES (?, ?)";
+              db.query(hasImagesQuery, [idProd, idImg], (err, result) => {
+                if (err) {
+                  console.error("Error al insertar en la tabla has_images:", err);
+                  return reject("Error al guardar la relación en has_images");
+                }
+                resolve();
+              });
+            });
+          });
+        }));
+
+        res.status(200).send("Archivos subidos y nombres insertados en la base de datos correctamente");
+      } catch (error) {
+        res.status(500).json({ error });
+      }
+    } else {
+      res.status(400).json({ error: "No se subieron archivos" });
+    }
   });
 });
+
 
 // const registerAdmin = async (username, email, password) => {
 //   try {
@@ -413,22 +449,85 @@ app.post("/registerProd", async (req, res) => {
         console.log("Error al ingresar el Producto" + result + err);
         return res.status(500).send("Error al ingresar el Producto" + result);
       }
-      res.status(201).send("Producto registrado exitosamente");
+      const idProd = result.insertId;
+      res
+        .status(201)
+        .json({ message: "Producto registrado exitosamente", idProd });
     }
   );
 });
 
-app.get("/products", (req, res) => {
-  const query =
-    "SELECT p.id_prod,p.nombre_prod,p.desc_prod,p.stock_prod,p.precio_prod,p.precio_off_prod,p.id_marca,m.nombre_marca,p.id_subCat,p.id_cat,c.nombre_cat FROM producto p INNER JOIN marca m ON p.id_marca = m.id_marca INNER JOIN categoria c ON p.id_cat = c.id_cat;";
-  db.query(query, (err, results) => {
-    if (err) {
-      console.error("Error ejecutando la consulta:", err);
-      res.status(500).json({ error: "Error en el servidor" });
-      return;
-    }
-    res.json(results);
-  });
+app.get("/products", async (req, res) => {
+  // Consulta para obtener todos los productos
+  const getProducts = () => {
+    return new Promise((resolve, reject) => {
+      const query = `
+        SELECT 
+          p.id_prod,
+          p.nombre_prod,
+          p.desc_prod,
+          p.stock_prod,
+          p.precio_prod,
+          p.precio_off_prod,
+          p.id_marca,
+          m.nombre_marca,
+          p.id_subCat,
+          p.id_cat,
+          c.nombre_cat
+        FROM producto p
+        INNER JOIN marca m ON p.id_marca = m.id_marca
+        INNER JOIN categoria c ON p.id_cat = c.id_cat;
+      `;
+      db.query(query, (err, result) => {
+        if (err) return reject(err);
+        resolve(result);
+      });
+    });
+  };
+
+  // Consulta para obtener las imágenes de todos los productos
+  const getProductImages = () => {
+    return new Promise((resolve, reject) => {
+      const query = `
+        SELECT 
+          hi.id_prod,
+          i.url_img,
+          i.front
+        FROM images i
+        INNER JOIN has_images hi ON i.id_img = hi.id_img;
+      `;
+      db.query(query, (err, result) => {
+        if (err) return reject(err);
+        resolve(result);
+      });
+    });
+  };
+
+  try {
+    const [products, images] = await Promise.all([
+      getProducts(),
+      getProductImages(),
+    ]);
+
+    // Organizar las imágenes por producto
+    const productsWithImages = products.map((product) => {
+      return {
+        ...product,
+        images: images
+          .filter((image) => image.id_prod === product.id_prod)
+          .map((image) => ({
+            url_img: image.url_img,
+            front: image.front,
+          })),
+      };
+    });
+
+    // Enviar la respuesta con los productos y sus imágenes
+    res.json(productsWithImages);
+  } catch (error) {
+    console.error("Error fetching products data:", error);
+    res.status(500).json({ error: "Error en el servidor" });
+  }
 });
 
 // Ruta para eliminar una Marca

@@ -7,8 +7,6 @@ const useRegister = () => {
   const apiUrl = import.meta.env.VITE_API_URL;
 
   const handleRegister = async (nombreProd, descProd, stockProd, precioProd, precioProdOff, selectedMarca, selectedCategory, selectedSubcategory) => {
-
-
     try {
       const response = await axios.post(`${apiUrl}/registerProd`, {
         nombreProd, 
@@ -20,9 +18,15 @@ const useRegister = () => {
         selectedCategory, 
         selectedSubcategory,
       });
+  
       console.log("Respuesta del servidor:", response.data);
+  
+      // Retornar la respuesta para poder usarla en handleSubmit
+      return response;
     } catch (error) {
-      setError("datos incorrectos" + error);
+      setError("Datos incorrectos: " + error.message);
+      // También podrías relanzar el error si necesitas manejarlo más arriba
+      throw error;
     }
   };
 
