@@ -2,10 +2,10 @@ import FormatCLP from "./FormateadorCLP";
 
 export function Products(props) {
   const tipo = props.tipo;
-  const nombreProd = props.nombreProd
-  const precioProd = props.precioProd
-  const imageUrl = props.frontImage
-  console.log(imageUrl)
+  const nombreProd = props.nombreProd;
+  const precioProd = props.precioProd;
+  const imageUrl = props.frontImage;
+  console.log(imageUrl);
   const apiUrl = import.meta.env.VITE_API_URL;
 
   return (
@@ -24,17 +24,18 @@ export function Products(props) {
           </span>
         </div>
       )}
-      <div className="flex-grow">
-      <a href="#" className=" min-h-80 flex flex-col justify-center">
-        {/* <img className="rounded-t-lg" src="/src/assets/a50.png" alt="" /> */}
-        <img className="rounded-t-lg" width={400} src={`${apiUrl}/uploads/${imageUrl}`} alt=""   />
-      
-      
-      </a>
-
+      <div className="flex-grow mx-auto ">
+        <a href="#">
+          {/* <img className="rounded-t-lg" src="/src/assets/a50.png" alt="" /> */}
+          <img
+            className="rounded-t-lg"
+            src={`${apiUrl}/uploads/${imageUrl}`}
+            alt=""
+            width={300}
+          />
+        </a>
       </div>
-      
-     
+
       <div className="p-5 flex-col flex">
         <h5 className="mb-2 text-2xl font-semibold tracking-tight text-gray-800">
           {nombreProd}
