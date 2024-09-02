@@ -530,6 +530,83 @@ app.get("/products", async (req, res) => {
   }
 });
 
+
+
+app.get("/producto/:idProd", async (req, res) => {
+  const { idProd } = req.params;
+
+  // Consulta para obtener un producto específico
+  const getProduct = () => {
+    return new Promise((resolve, reject) => {
+      const query = `
+        SELECT 
+          p.id_prod,
+          p.nombre_prod,
+          p.desc_prod,
+          p.stock_prod,
+          p.precio_prod,
+          p.precio_off_prod,
+          p.id_marca,
+          m.nombre_marca,
+          p.id_subCat,
+          p.id_cat,
+          c.nombre_cat
+        FROM producto p
+        INNER JOIN marca m ON p.id_marca = m.id_marca
+        INNER JOIN categoria c ON p.id_cat = c.id_cat
+        WHERE p.id_prod = ?;
+      `;
+      db.query(query, [idProd], (err, result) => {
+        if (err) return reject(err);
+        resolve(result[0]); // Devolver solo un producto
+      });
+    });
+  };
+
+  // Consulta para obtener las imágenes del producto específico
+  const getProductImages = () => {
+    return new Promise((resolve, reject) => {
+      const query = `
+        SELECT 
+          i.url_img,
+          i.front
+        FROM images i
+        INNER JOIN has_images hi ON i.id_img = hi.id_img
+        WHERE hi.id_prod = ?;
+      `;
+      db.query(query, [idProd], (err, result) => {
+        if (err) return reject(err);
+        resolve(result);
+      });
+    });
+  };
+
+  try {
+    const [product, images] = await Promise.all([
+      getProduct(),
+      getProductImages(),
+    ]);
+
+    if (!product) {
+      return res.status(404).json({ error: "Producto no encontrado" });
+    }
+
+    const productWithImages = {
+      ...product,
+      images: images.map((image) => ({
+        url_img: image.url_img,
+        front: image.front,
+      })),
+    };
+
+    res.json(productWithImages);
+  } catch (error) {
+    console.error("Error fetching product data:", error);
+    res.status(500).json({ error: "Error en el servidor" });
+  }
+});
+
+
 // Ruta para eliminar una Marca
 app.post("/deleteProd", async (req, res) => {
   const { id } = req.body;

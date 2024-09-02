@@ -37,7 +37,7 @@ export function Products(props) {
       </div>
 
       <div className="p-5 flex-col flex">
-        <h5 className="mb-2 text-2xl font-semibold tracking-tight text-gray-800">
+        <h5 className=" uppercase mb-2 text-2xl font-semibold tracking-tight text-gray-800">
           {nombreProd}
         </h5>
 

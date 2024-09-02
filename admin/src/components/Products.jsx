@@ -6,7 +6,7 @@ import useDelete from "../hooks/Products/useDelete.jsx";
 import FormatCLP from "./FormateadorCLP.jsx";
 import { Table } from "flowbite-react";
 import AddProd from "./Modals/Products/AddProd.jsx";
-import UpdMarca from "./Modals/Marca/UpdMarca.jsx";
+import UpdProd from "./Modals/Products/UpdProd.jsx";
 
 const apiUrl = import.meta.env.VITE_API_URL;
 
@@ -49,16 +49,16 @@ export default function Products() {
 
   const handleUpdate = (e, modal, id, nombre) => {
     e.preventDefault();
-    // setOpenModalUpd(modal);
-    // setNombreMarca(nombre);
-    // setIdMarca(id);
+    setOpenModalUpd(modal);
+    setNombreMarca(nombre);
+    setIdMarca(id);
 
     console.log(modal, id, nombre);
   };
 
   return (
     <div className="p-4 flex flex-col sm:ml-64">
-      <UpdMarca
+      <UpdProd
         modal={openModalUpd}
         trigger={trigger}
         setTrigger={setTrigger}
