@@ -52,8 +52,6 @@ export default function Products() {
     setOpenModalUpd(modal);
     setNombreMarca(nombre);
     setIdMarca(id);
-
-    console.log(modal, id, nombre);
   };
 
   return (
