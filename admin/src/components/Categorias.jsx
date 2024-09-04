@@ -8,6 +8,8 @@ import useDelete from "../hooks/Cat/useDelete.jsx";
 import AddCat from "./Modals/Cat/AddCat.jsx";
 import UpdCat from "./Modals/Cat/UpdCat.jsx";
 
+const apiUrl = import.meta.env.VITE_API_URL;
+
 export default function Categoria() {
   const [data, setData] = useState([]);
   const [openModal, setOpenModal] = useState(false);
@@ -20,7 +22,7 @@ export default function Categoria() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get("http://localhost:3000/categoria");
+        const response = await axios.get(`${apiUrl}/categoria`);
         const mappedData = response.data.map((item) => ({
           id: item.id_cat,
           name: item.nombre_cat,
@@ -43,9 +45,10 @@ export default function Categoria() {
 
   const handleUpdate = (e, modal, id, name) => {
     e.preventDefault();
-    setOpenModalUpd(modal);
+    
     setNombreCat(name);
     setIdCat(id);
+    setOpenModalUpd(modal);
   };
 
   return (

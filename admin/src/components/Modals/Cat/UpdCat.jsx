@@ -21,52 +21,68 @@ export default function UpdCat({
   const [data, setData] = useState([]);
   const [nombreCat, setnombreCat] = useState("");
   const [nombreSubCat, setnombreSubCat] = useState("");
-  const [idCat, setidCat] = useState("");
+
   const [errorMostrar, setErrorMostrar] = useState(null);
   const [triggerSub, setTriggerSub] = useState(false)
-  
+  const [selectedCategory, setSelectedCategory] = useState("");
   const { handleDeleteSub } = useDelete();
   const { handleRegisterSub } = useRegister();
   const { handleUpdate } = useUpdate();
 
-  useEffect(() => {
-    setidCat(id);
-    setnombreCat(name);
-  }, [id, name]);
+ 
 
   useEffect(() => {
     const fetchData = async () => {
+      // Asegúrate de que 'selectedCategory' esté configurado correctamente
+      setSelectedCategory(id);
+      setnombreCat(name)
+      console.log(selectedCategory);
+      
       try {
-        const response = await axios.post(
-          "http://localhost:3000/subCategoria",
-          {
-            idCat,
-          }
-        );
+        const response = await axios.post("http://localhost:3000/subCategoria", {
+          selectedCategory: id // Asegúrate de enviar el ID directamente
+        });
+  
+        console.log("Respuesta del servidor:", response.data);
+  
         const mappedData = response.data.map((item) => ({
           id: item.id_subCat,
           name: item.nombre_subCat,
         }));
-        setData(mappedData); // También puedes guardar el objeto completo si lo necesitas
+  
+        setData(mappedData); // Almacena los datos mapeados en el estado
       } catch (error) {
-        setErrorMostrar("Error fetching data: ", error);
+        console.log("Error fetching data:", error.message);
+        setErrorMostrar("Error fetching data: " + error.message);
       }
     };
-    fetchData();
-  }, [triggerSub, idCat, trigger]);
+  
+    // Llamar fetchData solo si hay un ID seleccionado
+    if (id) {
+      fetchData();
+    }
+  }, [id, trigger]); // Asegúrate de que 'id' sea parte de las dependencias
+  
+
+  useEffect(() => {
+
+
+  },[])
 
   const handleSubmitDel = (id, e) => {
     e.preventDefault();
     handleDeleteSub(id);
+    setTrigger(!trigger)
     setTriggerSub(!triggerSub);
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    handleUpdate(idCat, nombreCat);
+ 
+    handleUpdate(selectedCategory, nombreCat);
 
-    if (nombreSubCat != "" && nombreSubCat.length > 2){
-      handleRegisterSub(idCat, nombreSubCat)
+    if (nombreSubCat != "" && nombreSubCat.length > 2) {
+      handleRegisterSub(selectedCategory, nombreSubCat)
     }
 
     setTrigger(!trigger);
@@ -99,7 +115,7 @@ export default function UpdCat({
               </label>
               <input
                 type="text"
-                value={idCat}
+                value={selectedCategory}
                 id="idCat"
                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 "
                 required

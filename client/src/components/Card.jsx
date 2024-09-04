@@ -9,7 +9,7 @@ export function Products(props) {
   const apiUrl = import.meta.env.VITE_API_URL;
 
   return (
-    <div className="text-center flex flex-col align-middle max-w-sm border rounded-lg shadow pt-2">
+    <div className="transition duration-200 delay-150 hover:delay-300 ease-in-out  hover:shadow-blue-500/50 hover:shadow-xl text-center flex flex-col align-middle max-w-sm border rounded-lg shadow pt-2">
       {tipo === "news" && (
         <div>
           <span className="bg-green-600 text-white text-xs font-semibold me-2 px-2.5 py-0.5 rounded-full dark:bg-yellow-900 dark:text-yellow-300">

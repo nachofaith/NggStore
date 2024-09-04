@@ -1,9 +1,9 @@
 import { Button, Modal } from "flowbite-react";
 import { useEffect, useState } from "react";
-import useUpdate from "../../../hooks/Marca/useUpdate";
 import axios from "axios";
 import Editor from "react-simple-wysiwyg";
 import { Label, Select } from "flowbite-react";
+import useUpdate from "../../../hooks/Products/useUpdate";
 
 const apiUrl = import.meta.env.VITE_API_URL;
 
@@ -30,6 +30,8 @@ export default function UpdProd({
   const [selectedSubcategory, setSelectedSubcategory] = useState("");
   const [hasSubcategories, setHasSubcategories] = useState(true);
   const [categories, setCategories] = useState([]);
+  const [errorMostrar, setErrorMostrar] = useState("")
+ 
 
   function onChange(e) {
     setDescProd(e.target.value);
@@ -40,7 +42,6 @@ export default function UpdProd({
     const fetchData = async () => {
       try {
         const response = await axios.get(`${apiUrl}/producto/${id}`);
-        console.log(`${apiUrl}/producto/${id}`)
         const product = response.data;
         setData(product); // Guardar el producto directamente
         setIdProd(product.id_prod)
@@ -95,10 +96,11 @@ export default function UpdProd({
     };
 
     fetchData();
-  }, [modal, trigger]);
+  }, [selectedCategory]);
 
   useEffect(() => {
     if (selectedCategory) {
+      setErrorMostrar("")
       const fetchData = async () => {
         try {
           const response = await axios.post(`${apiUrl}/subCategoria`, {
@@ -139,7 +141,14 @@ export default function UpdProd({
   };
   const handleSubmit = (e) => {
     e.preventDefault();
-    handleUpdate(idProd);
+ 
+    if (selectedSubcategory === "") {
+      setErrorMostrar("Debe elegir una SubCategoría");
+      return;
+  }
+  
+
+    handleUpdate(idProd, nombreProd, descProd, selectedMarca, stock, precioProd, precioProdOff, selectedCategory, selectedSubcategory);
     setTrigger(!trigger);
     setOpenModalUpd(false);
   };
@@ -149,17 +158,18 @@ export default function UpdProd({
       show={modal}
       position={modalPlacement}
       onClose={() => setOpenModalUpd(false)}
+      size="6xl"
     >
       <Modal.Header>Editar Producto</Modal.Header>
       <Modal.Body>
         <div className="space-y-6 p-6">
-          <form className="max-w-sm mx-auto" onSubmit={handleSubmit}>
-            {error && (
+          <form className="max-w-2xl mx-auto" onSubmit={handleSubmit}>
+            {errorMostrar && (
               <div
                 className="p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50"
                 role="alert"
               >
-                <span className="font-medium">Error!</span> {error}
+                <span className="font-medium">Error!</span> {errorMostrar}
               </div>
             )}
 

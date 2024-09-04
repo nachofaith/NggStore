@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Products } from "./Card";
+import { motion } from "framer-motion"
 import axios from "axios";
 
 const apiUrl = import.meta.env.VITE_API_URL;

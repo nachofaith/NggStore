@@ -334,19 +334,22 @@ app.get("/categoria", (req, res) => {
   });
 });
 
-//Ruta para mostrar Categorias
-app.post("/subCategoria", (req, res) => {
+
+//Ruta para mostrar SubCategorias
+app.post("/subCategoria", async (req, res) => {
   const { selectedCategory } = req.body;
   const query = "SELECT * FROM sub_categoria WHERE categoria_id_cat = ?";
-  db.query(query, [selectedCategory], (err, results) => {
+
+  db.execute(query, [selectedCategory], (err, result) => {
     if (err) {
-      console.error("Error ejecutando la consulta:", err);
-      res.status(500).json({ error: "Error en el servidor" });
-      return;
+      return res.status(500).send("Error al consultar: " + err.message);
     }
-    res.json(results);
+
+    // Envía los resultados en formato JSON
+    res.status(200).json(result);
   });
 });
+
 
 // Ruta para registrar una nueva Categoria
 app.post("/catRegister", async (req, res) => {
@@ -374,19 +377,30 @@ app.post("/catUpdate", async (req, res) => {
   });
 });
 
-// Ruta para eliminar una Marca
+// Ruta para eliminar una Categoria
 app.post("/catDelete", async (req, res) => {
   const { id } = req.body;
 
-  const query = "DELETE FROM categoria WHERE id_cat = ?";
+  const deleteSubCategoriesQuery = "DELETE FROM sub_categoria WHERE categoria_id_cat = ?";
+  const deleteCategoryQuery = "DELETE FROM categoria WHERE id_cat = ?";
 
-  db.execute(query, [id], (err, result) => {
+  // Primero eliminamos las subcategorías asociadas
+  db.execute(deleteSubCategoriesQuery, [id], (err, result) => {
     if (err) {
-      return res.status(500).send("Error al reliminar la categoria" + result);
+      return res.status(500).send("Error al eliminar las subcategorías: " + err.message);
     }
-    res.status(201).send("Categoria eliminada exitosamente");
+
+    // Después eliminamos la categoría
+    db.execute(deleteCategoryQuery, [id], (err, result) => {
+      if (err) {
+        return res.status(500).send("Error al eliminar la categoría: " + err.message);
+      }
+
+      res.status(201).send("Categoría y subcategorías eliminadas exitosamente");
+    });
   });
 });
+
 
 // Ruta para registrar una nueva Categoria
 app.post("/subCatRegister", async (req, res) => {
@@ -604,6 +618,21 @@ app.get("/producto/:idProd", async (req, res) => {
     console.error("Error fetching product data:", error);
     res.status(500).json({ error: "Error en el servidor" });
   }
+});
+
+
+// Ruta para actualizar una nueva Marca
+app.post("/productoUpdate", async (req, res) => {
+  const { idProd, nombreProd, descProd, selectedMarca, stock, precioProd, precioProdOff, selectedCategory, selectedSubcategory } = req.body;
+  const query = "UPDATE producto SET nombre_prod = ?, desc_prod = ?, stock_prod = ?, precio_prod = ?, precio_off_prod = ?, id_marca = ?, id_subCat = ?, id_cat = ? WHERE id_prod = ?";
+
+  db.execute(query, [nombreProd, descProd, stock, precioProd, precioProdOff, selectedMarca, selectedSubcategory, selectedCategory, idProd], (err, result) => {
+    if (err) {
+      console.log(err)
+      return res.status(500).send("Error al registrar la marca" + result);
+    }
+    res.status(201).send("Marca registrada correctamente");
+  });
 });
 
 
