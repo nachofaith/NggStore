@@ -16,10 +16,24 @@ const useDelete = () => {
     }
   };
 
+  const handleDeleteImg = async (id) => {
+    try {
+      const response = await axios.post(`${apiUrl}/deleteImg`, {
+        id,
+      });
+      console.log("Respuesta del servidor:", response.data);
+    } catch (error) {
+      setErrorDel("datos incorrectos" + error);
+    }
+  };
+
   return {
+    handleDeleteImg,
     handleDelete,
     errorDel,
   };
 };
+
+
 
 export default useDelete;

@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { Products } from "./Card";
-import { motion } from "framer-motion"
 import axios from "axios";
 
 const apiUrl = import.meta.env.VITE_API_URL;
@@ -10,27 +9,53 @@ export default function Section(props) {
   const tipo = props.tipo;
   const [products, setProducts] = useState([]);
 
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     try {
+  //       const response = await axios.get(`${apiUrl}/products`);
+  //       const mappedData = response.data.map((item) => {
+  //         // Encuentra la URL de la imagen frontal
+  //         const frontImage = item.images.find(image => image.front === 1);
+  //         return {
+  //           id: item.id_prod,
+  //           name: item.nombre_prod,
+  //           price: item.precio_prod,
+  //           priceOff: item.precio_off_prod,
+  //           frontImageUrl: frontImage ? frontImage.url_img : null, // URL de la imagen frontal
+  //         };
+  //       });
+  //       setProducts(mappedData);
+  //     } catch (error) {
+  //       console.error("Error fetching data: ", error);
+  //     }
+  //   };
+
+  //   fetchData();
+  // }, []);
+
   useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await axios.get(`${apiUrl}/products`);
-        const mappedData = response.data.map((item) => {
-          // Encuentra la URL de la imagen frontal
-          const frontImage = item.images.find(image => image.front === 1);
-          return {
-            id: item.id_prod,
-            name: item.nombre_prod,
-            price: item.precio_prod,
-            priceOff: item.precio_off_prod,
-            frontImageUrl: frontImage ? frontImage.url_img : null, // URL de la imagen frontal
-          };
-        });
+        const mappedData = response.data
+          .slice(0, 4) // Limita a los primeros 4 resultados
+          .map((item) => {
+            // Encuentra la URL de la imagen frontal
+            const frontImage = item.images.find(image => image.front === 1);
+            return {
+              id: item.id_prod,
+              name: item.nombre_prod,
+              price: item.precio_prod,
+              priceOff: item.precio_off_prod,
+              frontImageUrl: frontImage ? frontImage.url_img : null, // URL de la imagen frontal
+            };
+          });
         setProducts(mappedData);
       } catch (error) {
         console.error("Error fetching data: ", error);
       }
     };
-
+  
     fetchData();
   }, []);
 
@@ -44,9 +69,12 @@ export default function Section(props) {
         {products.map((item) => (
           <Products
             key={item.id}
+            id={item.id}
             tipo={tipo}
             nombreProd={item.name}
-            precioProd={item.price} frontImage={item.frontImageUrl}
+            precioProd={item.price} 
+            precioProdOff={item.priceOff}
+            frontImage={item.frontImageUrl}
           />
         ))}
 {/* 

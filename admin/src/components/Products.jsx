@@ -33,7 +33,6 @@ export default function Products() {
           precio_off: item.precio_off_prod,
         }));
         setData(mappedData); // Asigna los datos recibidos al estado
-        console.log("consulta correcta")
       } catch (error) {
 
         console.error("Error fetching data: ", error);

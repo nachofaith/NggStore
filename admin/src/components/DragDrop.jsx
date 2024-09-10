@@ -4,27 +4,20 @@ import { Button, Table } from "flowbite-react";
 
 const fileTypes = ["JPG", "JPEG", "PNG", "GIF", "WEBP"];
 
-export default function DragDrop({ onChange }) {
+export default function DragDrop({ onChange, update }) {
   const [files, setFiles] = useState([]);
   const [coverImageIndex, setCoverImageIndex] = useState(null);
-
-  // const handleChange = (newFiles) => {
-  //   const updatedFiles = [...files, ...Array.from(newFiles)];
-  //   setFiles(updatedFiles);
-  //   if (onChange) {
-  //     onChange(updatedFiles);
-  //   }
-  // };
-
 
   const handleChange = (newFiles) => {
     const updatedFiles = [...files, ...Array.from(newFiles)];
     setFiles(updatedFiles);
     if (onChange) {
-      onChange(updatedFiles.map((file, index) => ({
-        file,
-        isFront: index === coverImageIndex, // Indica si el archivo es la portada
-      })));
+      onChange(
+        updatedFiles.map((file, index) => ({
+          file,
+          isFront: index === coverImageIndex, // Indica si el archivo es la portada
+        }))
+      );
     }
   };
 
@@ -39,25 +32,21 @@ export default function DragDrop({ onChange }) {
     }
   };
 
-  // const handleSetCover = (index) => {
-  //   setCoverImageIndex(index);
-  //   console.log("Cover image index set to:", index);
-  // };
-
-
   const handleSetCover = (index) => {
     setCoverImageIndex(index);
     console.log("Cover image index set to:", index);
-  
+
     // Actualizar la información de archivos al cambiar la portada
     if (onChange) {
-      onChange(files.map((file, i) => ({
-        file,
-        isFront: i === index,
-      })));
+      onChange(
+        files.map((file, i) => ({
+          file,
+          isFront: i === index,
+        }))
+      );
     }
   };
-  
+
   const moveUp = (index) => {
     if (index === 0) return; // Already at the top
     const newFiles = [...files];
@@ -116,8 +105,7 @@ export default function DragDrop({ onChange }) {
               <Table.HeadCell>Preview</Table.HeadCell>
               <Table.HeadCell>Nombre Imagen</Table.HeadCell>
               <Table.HeadCell>Acción</Table.HeadCell>
-              <Table.HeadCell>Portada</Table.HeadCell>
-              <Table.HeadCell>Orden</Table.HeadCell>
+              {!update && <Table.HeadCell>Portada</Table.HeadCell>}
             </Table.Head>
             <Table.Body className="divide-y">
               {files.map((file, index) => (
@@ -132,7 +120,7 @@ export default function DragDrop({ onChange }) {
                   <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
                     {truncateFileName(file.name)}
                   </Table.Cell>
-                  <Table.Cell>
+                  <Table.Cell className="items-center">
                     <a href="#" onClick={() => handleRemove(index)}>
                       <svg
                         className="w-6 h-6 text-red-400 hover:text-red-600"
@@ -151,73 +139,24 @@ export default function DragDrop({ onChange }) {
                       </svg>
                     </a>
                   </Table.Cell>
-                  <Table.Cell>
-                    <a
-                      href="#"
-                      onClick={() => handleSetCover(index)}
-                      className={
-                        coverImageIndex === index
-                          ? "text-green-600 font-bold"
-                          : "text-gray-600"
-                      }
-                    >
-                      {coverImageIndex === index
-                        ? "Portada"
-                        : "Seleccionar como portada"}
-                    </a>
-                  </Table.Cell>
-                  <Table.Cell>
-                    <div className="flex space-x-2">
-                      <Button
-                        onClick={() => moveUp(index)}
-                        disabled={index === 0}
-                        size="sm"
-                        color="gray"
+
+                  {!update && (
+                    <Table.Cell>
+                      <a
+                        href="#"
+                        onClick={() => handleSetCover(index)}
+                        className={
+                          coverImageIndex === index
+                            ? "text-green-600 font-bold"
+                            : "text-gray-600"
+                        }
                       >
-                        <svg
-                          className="w-6 h-6 text-gray-800 dark:text-white"
-                          aria-hidden="true"
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="24"
-                          height="24"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                        >
-                          <path
-                            stroke="currentColor"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth="2"
-                            d="m5 15 7-7 7 7"
-                          />
-                        </svg>
-                      </Button>
-                      <Button
-                        onClick={() => moveDown(index)}
-                        disabled={index === files.length - 1}
-                        size="sm"
-                        color="gray"
-                      >
-                        <svg
-                          className="w-6 h-6 text-gray-800 dark:text-white"
-                          aria-hidden="true"
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="24"
-                          height="24"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                        >
-                          <path
-                            stroke="currentColor"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth="2"
-                            d="m19 9-7 7-7-7"
-                          />
-                        </svg>
-                      </Button>
-                    </div>
-                  </Table.Cell>
+                        {coverImageIndex === index
+                          ? "Portada"
+                          : "Seleccionar como portada"}
+                      </a>
+                    </Table.Cell>
+                  )}
                 </Table.Row>
               ))}
             </Table.Body>

@@ -1,7 +1,3 @@
-// React
-import { motion } from "framer-motion"
-
-
 export default function CategoriesCard(props) {
   const title = props.title;
   const img = props.img;
@@ -20,6 +16,3 @@ export default function CategoriesCard(props) {
     </section>
   );
 }
-
-
-

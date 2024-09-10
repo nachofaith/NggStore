@@ -1,6 +1,6 @@
-import Hero from "./components/Hero.jsx";
-import Categories from "./components/Categories.jsx";
-import Section from "./components/Section.jsx";
+import Hero from "../components/Hero.jsx";
+import Categories from "../components/Categories.jsx";
+import Section from "../components/Section.jsx";
 
 export default function Home() {
 

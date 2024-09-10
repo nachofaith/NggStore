@@ -64,33 +64,45 @@ app.post("/upload", (req, res) => {
 
     if (files && files.length > 0) {
       try {
-        await Promise.all(files.map((file, index) => {
-          const fileName = file.filename;
-          const isFront = frontFiles[index] === "true" ? 1 : 0;
+        await Promise.all(
+          files.map((file, index) => {
+            const fileName = file.filename;
+            const isFront = frontFiles[index] === "true" ? 1 : 0;
 
-          return new Promise((resolve, reject) => {
-            const query = "INSERT INTO images (url_img, front) VALUES (?, ?)";
-            db.query(query, [fileName, isFront], (err, result) => {
-              if (err) {
-                console.error("Error al insertar en la base de datos:", err);
-                return reject("Error al guardar la información en la base de datos");
-              }
-
-              const idImg = result.insertId;
-
-              const hasImagesQuery = "INSERT INTO has_images (id_prod, id_img) VALUES (?, ?)";
-              db.query(hasImagesQuery, [idProd, idImg], (err, result) => {
+            return new Promise((resolve, reject) => {
+              const query = "INSERT INTO images (url_img, front) VALUES (?, ?)";
+              db.query(query, [fileName, isFront], (err, result) => {
                 if (err) {
-                  console.error("Error al insertar en la tabla has_images:", err);
-                  return reject("Error al guardar la relación en has_images");
+                  console.error("Error al insertar en la base de datos:", err);
+                  return reject(
+                    "Error al guardar la información en la base de datos"
+                  );
                 }
-                resolve();
+
+                const idImg = result.insertId;
+
+                const hasImagesQuery =
+                  "INSERT INTO has_images (id_prod, id_img) VALUES (?, ?)";
+                db.query(hasImagesQuery, [idProd, idImg], (err, result) => {
+                  if (err) {
+                    console.error(
+                      "Error al insertar en la tabla has_images:",
+                      err
+                    );
+                    return reject("Error al guardar la relación en has_images");
+                  }
+                  resolve();
+                });
               });
             });
-          });
-        }));
+          })
+        );
 
-        res.status(200).send("Archivos subidos y nombres insertados en la base de datos correctamente");
+        res
+          .status(200)
+          .send(
+            "Archivos subidos y nombres insertados en la base de datos correctamente"
+          );
       } catch (error) {
         res.status(500).json({ error });
       }
@@ -99,7 +111,6 @@ app.post("/upload", (req, res) => {
     }
   });
 });
-
 
 // const registerAdmin = async (username, email, password) => {
 //   try {
@@ -334,7 +345,6 @@ app.get("/categoria", (req, res) => {
   });
 });
 
-
 //Ruta para mostrar SubCategorias
 app.post("/subCategoria", async (req, res) => {
   const { selectedCategory } = req.body;
@@ -349,7 +359,6 @@ app.post("/subCategoria", async (req, res) => {
     res.status(200).json(result);
   });
 });
-
 
 // Ruta para registrar una nueva Categoria
 app.post("/catRegister", async (req, res) => {
@@ -381,26 +390,30 @@ app.post("/catUpdate", async (req, res) => {
 app.post("/catDelete", async (req, res) => {
   const { id } = req.body;
 
-  const deleteSubCategoriesQuery = "DELETE FROM sub_categoria WHERE categoria_id_cat = ?";
+  const deleteSubCategoriesQuery =
+    "DELETE FROM sub_categoria WHERE categoria_id_cat = ?";
   const deleteCategoryQuery = "DELETE FROM categoria WHERE id_cat = ?";
 
   // Primero eliminamos las subcategorías asociadas
   db.execute(deleteSubCategoriesQuery, [id], (err, result) => {
     if (err) {
-      return res.status(500).send("Error al eliminar las subcategorías: " + err.message);
+      return res
+        .status(500)
+        .send("Error al eliminar las subcategorías: " + err.message);
     }
 
     // Después eliminamos la categoría
     db.execute(deleteCategoryQuery, [id], (err, result) => {
       if (err) {
-        return res.status(500).send("Error al eliminar la categoría: " + err.message);
+        return res
+          .status(500)
+          .send("Error al eliminar la categoría: " + err.message);
       }
 
       res.status(201).send("Categoría y subcategorías eliminadas exitosamente");
     });
   });
 });
-
 
 // Ruta para registrar una nueva Categoria
 app.post("/subCatRegister", async (req, res) => {
@@ -544,8 +557,6 @@ app.get("/products", async (req, res) => {
   }
 });
 
-
-
 app.get("/producto/:idProd", async (req, res) => {
   const { idProd } = req.params;
 
@@ -581,7 +592,8 @@ app.get("/producto/:idProd", async (req, res) => {
   const getProductImages = () => {
     return new Promise((resolve, reject) => {
       const query = `
-        SELECT 
+        SELECT
+          i.id_img,
           i.url_img,
           i.front
         FROM images i
@@ -608,6 +620,7 @@ app.get("/producto/:idProd", async (req, res) => {
     const productWithImages = {
       ...product,
       images: images.map((image) => ({
+        id_img: image.id_img,
         url_img: image.url_img,
         front: image.front,
       })),
@@ -620,21 +633,69 @@ app.get("/producto/:idProd", async (req, res) => {
   }
 });
 
-
 // Ruta para actualizar una nueva Marca
 app.post("/productoUpdate", async (req, res) => {
-  const { idProd, nombreProd, descProd, selectedMarca, stock, precioProd, precioProdOff, selectedCategory, selectedSubcategory } = req.body;
-  const query = "UPDATE producto SET nombre_prod = ?, desc_prod = ?, stock_prod = ?, precio_prod = ?, precio_off_prod = ?, id_marca = ?, id_subCat = ?, id_cat = ? WHERE id_prod = ?";
+  const {
+    idProd,
+    nombreProd,
+    descProd,
+    selectedMarca,
+    stock,
+    precioProd,
+    precioProdOff,
+    selectedCategory,
+    selectedSubcategory,
+  } = req.body;
+  const query =
+    "UPDATE producto SET nombre_prod = ?, desc_prod = ?, stock_prod = ?, precio_prod = ?, precio_off_prod = ?, id_marca = ?, id_subCat = ?, id_cat = ? WHERE id_prod = ?";
 
-  db.execute(query, [nombreProd, descProd, stock, precioProd, precioProdOff, selectedMarca, selectedSubcategory, selectedCategory, idProd], (err, result) => {
-    if (err) {
-      console.log(err)
-      return res.status(500).send("Error al registrar la marca" + result);
+  db.execute(
+    query,
+    [
+      nombreProd,
+      descProd,
+      stock,
+      precioProd,
+      precioProdOff,
+      selectedMarca,
+      selectedSubcategory,
+      selectedCategory,
+      idProd,
+    ],
+    (err, result) => {
+      if (err) {
+        console.log(err);
+        return res
+          .status(500)
+          .send("Error al actualizar los datos de producto" + result);
+      }
+      res.status(201).send("Datos actualizados");
     }
-    res.status(201).send("Marca registrada correctamente");
-  });
+  );
 });
 
+// Ruta para actualizar una nueva Marca
+app.post("/updateImageFront", async (req, res) => {
+  const { cover, idProd } = req.body;
+
+
+  const vaciarFront =
+    "UPDATE images SET front = 0 WHERE id_img in (SELECT id_img FROM has_images WHERE id_prod = ?)";
+
+  const query2 = "UPDATE images SET front = 1 WHERE id_img = ?";
+
+  db.execute(vaciarFront, [idProd], (err, result) => {
+    if (err) {
+      return res.status(500).send("Error al actualizar la portada" + result);
+    }
+    db.execute(query2, [cover], (err, result) => {
+      if (err) {
+        return res.status(500).send("Error al actualizar la portada" + result);
+      }
+      res.status(200).send("Datos actualizados");
+    });
+  });
+});
 
 // Ruta para eliminar una Marca
 app.post("/deleteProd", async (req, res) => {
@@ -647,6 +708,47 @@ app.post("/deleteProd", async (req, res) => {
       return res.status(500).send("Error al eliminar el producto" + result);
     }
     res.status(201).send("Producto eliminado exitosamente");
+  });
+});
+
+// Ruta para eliminar una imagen y su relación en has_images
+app.post("/deleteImg", async (req, res) => {
+  const { id } = req.body;
+  console.log(id);
+
+  if (!id) {
+    return res.status(400).send("Falta el ID de la imagen.");
+  }
+
+  const deleteImageQuery = "DELETE FROM images WHERE id_img = ?";
+  const deleteHasImageQuery = "DELETE FROM has_images WHERE id_img = ?";
+
+  // Eliminar la imagen
+  db.execute(deleteImageQuery, [id], (err, result) => {
+    if (err) {
+      return res.status(500).send("Error al eliminar imagen: " + err.message);
+    }
+
+    // Verificar si se eliminó alguna fila
+    if (result.affectedRows === 0) {
+      return res
+        .status(404)
+        .send("No se encontró la imagen con el ID proporcionado.");
+    }
+
+    // Eliminar la relación en has_images
+    db.execute(deleteHasImageQuery, [id], (err, result) => {
+      if (err) {
+        return res
+          .status(500)
+          .send(
+            "Error al eliminar relación de imagen-producto: " + err.message
+          );
+      }
+
+      // Enviar la respuesta solo una vez, después de que ambas operaciones hayan tenido éxito
+      res.status(200).send("Imagen y relación eliminadas correctamente.");
+    });
   });
 });
 

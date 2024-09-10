@@ -4,8 +4,10 @@ export function Products(props) {
   const tipo = props.tipo;
   const nombreProd = props.nombreProd;
   const precioProd = props.precioProd;
+  const precioProdOff = props.precioProdOff;
   const imageUrl = props.frontImage;
-  console.log(imageUrl);
+  const idProd = props.id;
+
   const apiUrl = import.meta.env.VITE_API_URL;
 
   return (
@@ -25,13 +27,11 @@ export function Products(props) {
         </div>
       )}
       <div className="flex-grow mx-auto ">
-        <a href="#">
-          {/* <img className="rounded-t-lg" src="/src/assets/a50.png" alt="" /> */}
+        <a href="#" className="block overflow-hidden rounded-lg">
           <img
-            className="rounded-t-lg"
+            className="w-[300px] h-[300px] object-contain rounded-t-lg"
             src={`${apiUrl}/uploads/${imageUrl}`}
-            alt=""
-            width={300}
+            alt="Product Image"
           />
         </a>
       </div>
@@ -90,7 +90,7 @@ export function Products(props) {
         </div>
         <div className="flex flex-row mx-auto py-4">
           <span className="text-lg font-normal text-gray-400 line-through dark:text-white">
-            $14.990
+            {<FormatCLP precio={precioProdOff} />}
           </span>
           <span className="ms-3 text-xl font-semibold text-gray-800 dark:text-white">
             {<FormatCLP precio={precioProd} />}
@@ -99,7 +99,7 @@ export function Products(props) {
 
         <div>
           <a
-            href="#"
+            href={`/producto/${idProd}`}
             className="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
           >
             Read more
