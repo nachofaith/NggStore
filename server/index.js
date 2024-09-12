@@ -319,21 +319,24 @@ app.post("/marcaDelete", async (req, res) => {
 // });
 
 app.get("/categoria", (req, res) => {
-  // Consulta para obtener categorías con el conteo de subcategorías
+  // Consulta para obtener categorías con el conteo de subcategorías y sus nombres
   const query = `
-    SELECT 
-      c.id_cat, 
-      c.nombre_cat, 
-      COUNT(sc.id_subCat) AS subCategoriaCount
-    FROM 
-      categoria c
-    LEFT JOIN 
-      sub_categoria sc
-    ON 
-      c.id_cat = sc.categoria_id_cat
-    GROUP BY 
-      c.id_cat, c.nombre_cat
-  `;
+  SELECT 
+    c.id_cat, 
+    c.nombre_cat, 
+    COUNT(sc.id_subCat) AS subCategoriaCount,
+    GROUP_CONCAT(sc.id_subCat ORDER BY sc.nombre_subCat ASC SEPARATOR ', ') AS subCategoriaIds,
+    GROUP_CONCAT(sc.nombre_subCat ORDER BY sc.nombre_subCat ASC SEPARATOR ', ') AS subCategorias
+  FROM 
+    categoria c
+  LEFT JOIN 
+    sub_categoria sc
+  ON 
+    c.id_cat = sc.categoria_id_cat
+  GROUP BY 
+    c.id_cat, c.nombre_cat
+`;
+
 
   db.query(query, (err, results) => {
     if (err) {
@@ -344,6 +347,48 @@ app.get("/categoria", (req, res) => {
     res.json(results);
   });
 });
+
+
+app.post("/readCategoria", (req, res) => {
+  const { id } = req.body;
+  console.log(`id: ${id}`);
+  
+  const query = `
+    SELECT 
+      c.id_cat, 
+      c.nombre_cat, 
+      COUNT(sc.id_subCat) AS subCategoriaCount,
+      GROUP_CONCAT(sc.nombre_subCat ORDER BY sc.nombre_subCat ASC SEPARATOR ', ') AS subCategorias,
+      GROUP_CONCAT(sc.id_subCat ORDER BY sc.nombre_subCat ASC SEPARATOR ', ') AS subCategoriasIds
+    FROM 
+      categoria c
+    LEFT JOIN 
+      sub_categoria sc
+    ON 
+      c.id_cat = sc.categoria_id_cat
+    WHERE 
+      c.id_cat = ?
+    GROUP BY 
+      c.id_cat, c.nombre_cat
+  `;
+
+  db.query(query, [id], (err, results) => {
+    if (err) {
+      console.error("Error ejecutando la consulta:", err);
+      res.status(500).json({ error: "Error en el servidor" });
+      return;
+    }
+
+    if (results.length === 0) {
+      res.status(404).json({ message: "Categoría no encontrada" });
+      return;
+    }
+
+    res.json(results[0]); // Devolver el resultado como un objeto, ya que solo esperamos un resultado
+  });
+});
+
+
 
 //Ruta para mostrar SubCategorias
 app.post("/subCategoria", async (req, res) => {
@@ -632,6 +677,90 @@ app.get("/producto/:idProd", async (req, res) => {
     res.status(500).json({ error: "Error en el servidor" });
   }
 });
+
+
+
+
+app.get("/category/:idCat", async (req, res) => {
+  const { idCat } = req.params;
+
+  // Consulta para obtener todos los productos de una categoría específica
+  const getProductsByCategory = () => {
+    return new Promise((resolve, reject) => {
+      const query = `
+        SELECT 
+          p.id_prod,
+          p.nombre_prod,
+          p.desc_prod,
+          p.stock_prod,
+          p.precio_prod,
+          p.precio_off_prod,
+          p.id_marca,
+          m.nombre_marca,
+          p.id_subCat,
+          p.id_cat,
+          c.nombre_cat
+        FROM producto p
+        INNER JOIN marca m ON p.id_marca = m.id_marca
+        INNER JOIN categoria c ON p.id_cat = c.id_cat
+        WHERE p.id_cat = ?;
+      `;
+      db.query(query, [idCat], (err, result) => {
+        if (err) return reject(err);
+        resolve(result); // Devolver todos los productos de la categoría
+      });
+    });
+  };
+
+  // Consulta para obtener las imágenes de los productos específicos
+  const getProductImages = (productIds) => {
+    return new Promise((resolve, reject) => {
+      const query = `
+        SELECT
+          i.id_img,
+          i.url_img,
+          i.front,
+          hi.id_prod
+        FROM images i
+        INNER JOIN has_images hi ON i.id_img = hi.id_img
+        WHERE hi.id_prod IN (?);
+      `;
+      db.query(query, [productIds], (err, result) => {
+        if (err) return reject(err);
+        resolve(result);
+      });
+    });
+  };
+
+  try {
+    const products = await getProductsByCategory();
+
+    if (products.length === 0) {
+      return res.status(404).json({ error: "No se encontraron productos para esta categoría" });
+    }
+
+    const productIds = products.map(product => product.id_prod);
+    const images = await getProductImages(productIds);
+
+    // Asignar las imágenes a los productos correspondientes
+    const productsWithImages = products.map(product => ({
+      ...product,
+      images: images
+        .filter(image => image.id_prod === product.id_prod)
+        .map(image => ({
+          id_img: image.id_img,
+          url_img: image.url_img,
+          front: image.front,
+        })),
+    }));
+
+    res.json(productsWithImages);
+  } catch (error) {
+    console.error("Error fetching product data:", error);
+    res.status(500).json({ error: "Error en el servidor" });
+  }
+});
+
 
 // Ruta para actualizar una nueva Marca
 app.post("/productoUpdate", async (req, res) => {

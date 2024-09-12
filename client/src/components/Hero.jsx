@@ -1,9 +1,9 @@
 export default function Hero() {
   return (
     <section id="hero" className="container mx-auto mt-20">
-      <div className="md:container md:mx-auto flex flex-row gap-8 items-center">
-        <div className="basis-1/2 flex flex-col text-grey-600 gap-8">
-          <h1 className="text-6xl font-normal tracking-wide">
+      <div className="md:container md:mx-auto flex flex-row lg:flex-row md:flex-col sm:flex-col gap-8 items-center">
+        <div className="basis-1/2 flex flex-col text-grey-600 gap-8 lg:text-left md:text-center">
+          <h1 className="text-6xl font-normal tracking-wide  ">
             Diseñado para
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-500 to-blue-500">
               {" "}
@@ -23,7 +23,7 @@ export default function Hero() {
             hasta tarjetas gráficas y sistemas de enfriamiento avanzados,
             tenemos todo lo que necesitas para mejorar tu setup.
           </p>
-          <div>
+          <div className="flex lg:mx-0 md:mx-auto">
             {" "}
             <a
               href="#"

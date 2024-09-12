@@ -1,63 +1,8 @@
-import { useEffect, useState } from "react";
 import { Products } from "./Card";
-import axios from "axios";
 
-const apiUrl = import.meta.env.VITE_API_URL;
-
-export default function Section(props) {
-  const text = props.texto;
-  const tipo = props.tipo;
-  const [products, setProducts] = useState([]);
-
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     try {
-  //       const response = await axios.get(`${apiUrl}/products`);
-  //       const mappedData = response.data.map((item) => {
-  //         // Encuentra la URL de la imagen frontal
-  //         const frontImage = item.images.find(image => image.front === 1);
-  //         return {
-  //           id: item.id_prod,
-  //           name: item.nombre_prod,
-  //           price: item.precio_prod,
-  //           priceOff: item.precio_off_prod,
-  //           frontImageUrl: frontImage ? frontImage.url_img : null, // URL de la imagen frontal
-  //         };
-  //       });
-  //       setProducts(mappedData);
-  //     } catch (error) {
-  //       console.error("Error fetching data: ", error);
-  //     }
-  //   };
-
-  //   fetchData();
-  // }, []);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get(`${apiUrl}/products`);
-        const mappedData = response.data
-          .slice(0, 4) // Limita a los primeros 4 resultados
-          .map((item) => {
-            // Encuentra la URL de la imagen frontal
-            const frontImage = item.images.find(image => image.front === 1);
-            return {
-              id: item.id_prod,
-              name: item.nombre_prod,
-              price: item.precio_prod,
-              priceOff: item.precio_off_prod,
-              frontImageUrl: frontImage ? frontImage.url_img : null, // URL de la imagen frontal
-            };
-          });
-        setProducts(mappedData);
-      } catch (error) {
-        console.error("Error fetching data: ", error);
-      }
-    };
-  
-    fetchData();
-  }, []);
+export default function Section({ data, text, tipo, limit }) {
+  // Si `limit` está definido, limita los datos, de lo contrario, muestra todos
+  const limitedData = limit ? data.slice(0, limit) : data;
 
   return (
     <div className="container mx-auto pt-10">
@@ -66,21 +11,22 @@ export default function Section(props) {
       </h1>
 
       <div className="inline-grid grid-cols-4 gap-4">
-        {products.map((item) => (
-          <Products
-            key={item.id}
-            id={item.id}
-            tipo={tipo}
-            nombreProd={item.name}
-            precioProd={item.price} 
-            precioProdOff={item.priceOff}
-            frontImage={item.frontImageUrl}
-          />
-        ))}
-{/* 
-        <Products tipo={tipo} />
-        <Products tipo={tipo} />
-        <Products tipo={tipo} /> */}
+        {limitedData.map((item) => {
+          // Filtra las imágenes para obtener solo la que tiene front: 1
+          const frontImage = item.images.find(img => img.front === 1)?.url_img || "";
+
+          return (
+            <Products
+              key={item.id_prod}
+              id={item.id_prod}
+              tipo={tipo}
+              nombreProd={item.nombre_prod}
+              precioProd={item.precio_prod}
+              precioProdOff={item.precio_off_prod}
+              frontImage={frontImage} // Pasa la imagen filtrada al componente Products
+            />
+          );
+        })}
       </div>
     </div>
   );
