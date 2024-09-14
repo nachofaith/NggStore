@@ -97,7 +97,7 @@ export default function Header() {
                         <div className="text-xl uppercase p-2 text-gray-800 hover:text-sky-400 hover:bg-white">
                           <a
                             href={`/category/${category.id_cat}`}
-                            target="_blank"
+                          
                           >
                             {category.nombre_cat}
                           </a>

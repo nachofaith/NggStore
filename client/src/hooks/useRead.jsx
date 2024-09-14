@@ -11,6 +11,24 @@ const useRead = () => {
   const [imageUrls, setImageUrls] = useState([]);
   const [error, setError] = useState(null);
 
+  const readCategories = () => {
+    useEffect(() => {
+      const fetchData = async () => {
+        try {
+          const response = await axios.get(`${apiUrl}/categoria`);
+          const product = response.data;
+          setData(product);
+         
+        } catch (error) {
+          console.error("Error fetching data: ", error);
+        }
+      };
+    
+      fetchData();
+    }, []);
+
+  }
+
 
   const readProducts = () => {
     useEffect(() => {
@@ -100,6 +118,9 @@ const useRead = () => {
     }, [id]);
   };
 
+
+
+
   // Handle click function
   const handleClick = (item) => {
     setCover(item);
@@ -116,6 +137,7 @@ const useRead = () => {
     prodCat,
     readSingleProduct,
     readProducts,
+    readCategories
   };
 };
 

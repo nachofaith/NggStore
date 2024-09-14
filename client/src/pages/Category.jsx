@@ -3,6 +3,7 @@ import useRead from "../hooks/useRead";
 import { useEffect, useState } from "react";
 import { Spinner } from "flowbite-react"; // Asegúrate de importar el Spinner si lo estás usando
 import Section from "../components/Section";
+import Breadcrumb from "../components/BreadCrumb"
 
 export default function Category() {
   const { idCat } = useParams();
@@ -34,6 +35,7 @@ export default function Category() {
         </div>
       ) : (
         <div className="h-screen pt-20">
+          <Breadcrumb data={data} type="category" />
           <Section data={data}  text={`Categoría: ${categoryName}`}/>
         </div>
       )}

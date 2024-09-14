@@ -74,29 +74,53 @@ export default function SingleProduct() {
                     className="pt-10 text-xl"
                     dangerouslySetInnerHTML={{ __html: data.desc_prod }}
                   />
-                  <div id="precios" className="text-lg pt-4">
-                    <div className="font-normal flex flex-row gap-2 items-center">
-                      <span className="">Precio Efectivo o Transferencia:</span>
-                      <span className="font-normal text-gray-400 line-through">
-                        <FormatCLP precio={data.precio_prod} />
-                      </span>
-                      <span className="text-xl font-semibold text-gray-800">
-                        {" "}
-                        <FormatCLP precio={data.precio_off_prod} />
-                      </span>
-                    </div>
+                  {data.precio_off_prod == 0 ? (
+                    <div id="precios" className="text-lg pt-4">
+                      <div className="font-normal flex flex-row gap-2 items-center">
+                        <span className="">
+                          Precio Efectivo o Transferencia:
+                        </span>
+                        <span className="text-xl font-semibold text-gray-800">
+                          {" "}
+                          <FormatCLP precio={data.precio_prod} />
+                        </span>
+                      </div>
 
-                    <div className="font-normal flex flex-row gap-2 items-center">
-                      <span>Precio Pago con Tarjetas</span>
-                      <span className="font-normal text-gray-400 line-through">
-                        <FormatCLP precio={data.precio_prod} />
-                      </span>
-                      <span className="text-xl font-semibold text-gray-800">
-                        {" "}
-                        <FormatCLP precio={data.precio_off_prod} />
-                      </span>
+                      <div className="font-normal flex flex-row gap-2 items-center">
+                        <span>Precio Pago con Tarjetas</span>
+                        <span className="text-xl font-semibold text-gray-800">
+                          {" "}
+                          <FormatCLP precio={data.precio_prod} />
+                        </span>
+                      </div>
                     </div>
-                  </div>
+                  ) : (
+                    <div id="precios" className="text-lg pt-4">
+                      <div className="font-normal flex flex-row gap-2 items-center">
+                        <span className="">
+                          Precio Efectivo o Transferencia:
+                        </span>
+                        <span className="font-normal text-gray-400 line-through">
+                          <FormatCLP precio={data.precio_prod} />
+                        </span>
+                        <span className="text-xl font-semibold text-gray-800">
+                          {" "}
+                          <FormatCLP precio={data.precio_off_prod} />
+                        </span>
+                      </div>
+
+                      <div className="font-normal flex flex-row gap-2 items-center">
+                        <span>Precio Pago con Tarjetas</span>
+                        <span className="font-normal text-gray-400 line-through">
+                          <FormatCLP precio={data.precio_prod} />
+                        </span>
+                        <span className="text-xl font-semibold text-gray-800">
+                          {" "}
+                          <FormatCLP precio={data.precio_off_prod} />
+                        </span>
+                      </div>
+                    </div>
+                  )}
                 </div>
               )}
             </div>

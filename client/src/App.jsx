@@ -7,7 +7,7 @@ import Login from "./pages/Login.jsx";
 import Page404 from "./components/Page404.jsx";
 import SingleProduct from "./pages/SingleProduct.jsx";
 import Category from "./pages/Category.jsx";
-
+import Categories from "./pages/Categories.jsx";
 
 
 export default function App() {
@@ -26,6 +26,7 @@ export default function App() {
                   <Route path="/register" element={<Register />} />
                   <Route path="/producto/:idProd" element={<SingleProduct />} />
                   <Route path="/category/:idCat" element={<Category />} />
+                  <Route path="/categories" element={<Categories />} />
                   <Route path="/*" element={<Page404 />} />
                 </Routes>
               </main>
