@@ -6,7 +6,6 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Spinner } from "flowbite-react"; // Asegúrate de importar el Spinner si lo estás usando
 
-
 export default function Home() {
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
@@ -25,7 +24,6 @@ export default function Home() {
 
   return (
     <div>
-      
       {loading ? (
         <div className="h-screen pt-20 container mx-auto ">
           <div className="text-center">
@@ -33,9 +31,11 @@ export default function Home() {
           </div>
         </div>
       ) : (
-        <div>
+        <div className="container mx-auto px-10">
           <Hero />
+          <hr className="h-px bg-gray-200 border-0 dark:bg-gray-700" />
           <Categories />
+          <hr className="h-px bg-gray-200 border-0 dark:bg-gray-700" />
           <Section data={data} text="Recién llegados" tipo="news" limit={4} />
           <Section data={data} text="Ultimas ofertas" tipo="off" limit={4} />
         </div>

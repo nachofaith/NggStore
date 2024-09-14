@@ -34,9 +34,9 @@ export default function Category() {
       </div>
         </div>
       ) : (
-        <div className="h-screen pt-20">
+        <div className="h-screen container mx-auto">
           <Breadcrumb data={data} type="category" />
-          <Section data={data}  text={`Categoría: ${categoryName}`}/>
+          <Section data={data}  text={categoryName} tipo="cat"/>
         </div>
       )}
     </>

@@ -1,9 +1,9 @@
 export default function Hero() {
   return (
-    <section id="hero" className="container mx-auto mt-20">
+    <section id="hero" className="container mx-auto">
       <div className="md:container md:mx-auto flex flex-row lg:flex-row md:flex-col sm:flex-col gap-8 items-center">
         <div className="basis-1/2 flex flex-col text-grey-600 gap-8 lg:text-left md:text-center">
-          <h1 className="text-6xl font-normal tracking-wide  ">
+          <h1 className="text-6xl font-normal tracking-wide font-anton ">
             Diseñado para
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-500 to-blue-500">
               {" "}
@@ -59,7 +59,7 @@ export default function Hero() {
       <div id="brands">
         <section className="bg-white">
           <div className="py-8 lg:py-16 mx-auto max-w-screen-xl px-4">
-            <h1 className="mb-8 lg:mb-16 text-3xl font-normal tracking-tight leading-tight text-center text-gray-800 md:text-4xl">
+            <h1 className="font-anton mb-8 lg:mb-16 text-3xl tracking-tight leading-tight text-center text-gray-800 md:text-4xl">
               Trabajamos con las mejores marcas
             </h1>
             <div className="grid grid-cols-2 gap-8 text-gray-500 sm:gap-12 md:grid-cols-3 lg:grid-cols-6">
@@ -295,7 +295,7 @@ export default function Hero() {
           </div>
         </section>
       </div>
-      <hr className="h-px my-8 bg-gray-200 border-0 dark:bg-gray-700" />
+    
     </section>
   );
 }

@@ -5,12 +5,18 @@ export default function Section({ data, text, tipo, limit }) {
   const limitedData = limit ? data.slice(0, limit) : data;
 
   return (
-    <div className="container mx-auto pt-10">
-      <h1 className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-500 to-blue-500 text-6xl py-8 text-center">
-        {text}
-      </h1>
+    <div className="container mx-auto my-20">
+      {
+        tipo === "cat" ? (null) : ( <h1 className="pb-8 sm:text-center">
+          <span className="uppercase font-anton text-transparent bg-clip-text bg-gradient-to-r from-cyan-500 to-blue-500 text-6xl text-left">
+          {text}
+          </span>
+        </h1>) 
 
-      <div className="inline-grid grid-cols-4 gap-4">
+      }
+     
+
+      <div className="inline-grid lg:grid-cols-4 md:grid-cols-2 sm:grid-cols-1 gap-4">
         {limitedData.map((item) => {
           // Filtra las imágenes para obtener solo la que tiene front: 1
           const frontImage = item.images.find(img => img.front === 1)?.url_img || "";

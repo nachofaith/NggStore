@@ -7,7 +7,12 @@ export default {
     flowbite.content(),
   ],
   theme: {
-    extend: {},
+    extend: {
+      fontFamily: {
+        'anton': ['Anton SC', 'sans-serif'],
+
+      }
+    },
   },
   plugins: [
     flowbite.plugin(),

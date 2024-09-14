@@ -19,12 +19,12 @@ export default function Header() {
 
   return (
     <div className="">
-      <div className="container mx-auto">
-        <nav className="text-gray-600 flex lg:flex-row md:flex-col md:items-center mx-auto p-4 justify-between">
+      <div className="container mx-auto px-10">
+        <nav className="text-gray-600 flex lg:flex-row md:flex-col md:items-center mx-auto p-4 justify-between pb-20">
           <div id="logo" className="flex flex-row items-end gap-2 md:pb-4">
             <img className="h-20" src="/src/assets/logo.webp" alt="NGG Store Logo" />
-            <h1 className="text-6xl text-gray-400">
-              <span className="text-gray-800">NGG</span>STORE
+            <h1 className="text-6xl">
+              <span className="text-gray-800 font-anton">NGG</span><span className="font-anton text-gray-400">STORE</span>
             </h1>
           </div>
 

@@ -20,6 +20,10 @@ export default function SingleProduct() {
     }
   }, [data]);
 
+  useEffect(() => {
+    window.scrollTo(0, 0)
+  }, [])
+
   return (
     <>
       {loading ? (
@@ -29,10 +33,10 @@ export default function SingleProduct() {
           </div>
         </div>
       ) : (
-        <div className="min-h-screen pt-20 container mx-auto ">
+        <div className="min-h-screen container mx-auto px-10">
           <Breadcrumb data={data} />
           {error && <p className="">{error}</p>}
-          <div className="columns-2 gap-8 flex flex-row">
+          <div className="columns-2 gap-8 flex flex-row pt-20">
             <div
               id="imagenes"
               className="w-1/2 h-full flex flex-row gap-4 columns-2"
@@ -67,7 +71,7 @@ export default function SingleProduct() {
               {data && (
                 <div className="">
                   <span className="text-lg uppercase">{data.nombre_marca}</span>
-                  <h1 className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-500 to-blue-500 text-6xl">
+                  <h1 className="uppercase font-anton text-transparent bg-clip-text bg-gradient-to-r from-cyan-500 to-blue-500 text-6xl">
                     {data.nombre_prod}
                   </h1>
                   <p
