@@ -1,7 +1,7 @@
 import useRead from "../hooks/useRead";
 import { useState, useEffect } from "react";
 import { Spinner } from "flowbite-react";
-import { Card, Button } from "flowbite-react";
+import Title from "../components/Title";
 
 export default function Categories() {
   const [loading, setLoading] = useState(true);
@@ -26,13 +26,8 @@ export default function Categories() {
         </div>
       ) : (
         <div className="container mx-auto h-screen bg-re">
-          <h1 className="py-8 text-center">
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-500 to-blue-500 text-6xl ">
-            Categorías
-            </span>
-          
-          </h1>
-
+          <Title text="Categorías" align="left" />
+        
           <section class="py-8 antialiased md:py-16">
             <div class="grid gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
               {data.map((item) => {

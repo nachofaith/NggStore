@@ -5,6 +5,7 @@ import useRead from "../hooks/useRead.jsx";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Spinner } from "flowbite-react"; // Asegúrate de importar el Spinner si lo estás usando
+import React from "react";
 
 export default function Home() {
   const [loading, setLoading] = useState(true);

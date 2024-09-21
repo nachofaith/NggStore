@@ -1,21 +1,47 @@
+import { TypewriterEffect } from "./TypeWriter";
+
 export default function Hero() {
+  const words = [
+    {
+      text: "Diseñado",
+      className: "uppercase font-light font-anton text-6xl text-left",
+    },
+    {
+      text: "Para",
+      className: "uppercase font-light font-anton text-6xl text-left",
+    },
+    {
+      text: "Gamers",
+      className:
+        "uppercase font-light font-anton text-transparent bg-clip-text bg-gradient-to-r from-cyan-500 to-blue-500 text-6xl text-left",
+    },
+    {
+      text: "Creado",
+      className: "uppercase font-light font-anton text-6xl text-left",
+    },
+    {
+      text: "Para",
+      className: "uppercase font-light font-anton text-6xl text-left",
+    },
+    {
+      text: "Ganadores",
+      className:
+        "uppercase font-light font-anton text-transparent bg-clip-text bg-gradient-to-r from-cyan-500 to-blue-500 text-6xl text-left",
+    },
+    {
+      text: ".",
+      className: "uppercase font-light font-anton text-6xl text-left",
+    },
+  ];
+
   return (
     <section id="hero" className="container mx-auto">
       <div className="md:container md:mx-auto flex flex-row lg:flex-row md:flex-col sm:flex-col gap-8 items-center">
         <div className="basis-1/2 flex flex-col text-grey-600 gap-8 lg:text-left md:text-center">
-          <h1 className="text-6xl font-normal tracking-wide font-anton ">
-            Diseñado para
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-500 to-blue-500">
-              {" "}
-              Gamers
-            </span>
-            , creado para{" "}
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-500 to-blue-500">
-              {" "}
-              Ganadores
-            </span>
-            .
-          </h1>
+          <div className="">
+            <TypewriterEffect words={words} />
+          </div>
+
           <p className="">
             En nuestra tienda online, ofrecemos una amplia gama de productos
             diseñados para satisfacer las necesidades de los gamers más
@@ -295,7 +321,6 @@ export default function Hero() {
           </div>
         </section>
       </div>
-    
     </section>
   );
 }

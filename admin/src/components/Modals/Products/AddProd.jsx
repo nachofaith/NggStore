@@ -13,7 +13,7 @@ export default function AddProd({ modal, trigger, setTrigger, setOpenModal }) {
   const { handleRegister, error } = useRegister();
   const [nombreProd, setNombreProd] = useState("");
   const [precioProd, setPrecioProd] = useState("");
-  const [precioProdOff, setPrecioProdOff] = useState("");
+  const [precioProdOff, setPrecioProdOff] = useState("0");
   const [stockProd, setStockProd] = useState("");
   const [categories, setCategories] = useState([]);
   const [marca, setMarca] = useState([]);
@@ -23,11 +23,9 @@ export default function AddProd({ modal, trigger, setTrigger, setOpenModal }) {
   const [selectedSubcategory, setSelectedSubcategory] = useState("");
   const [hasSubcategories, setHasSubcategories] = useState(true);
   const [errorMostrar, setErrorMostrar] = useState(null);
-  const [previews, setPreviews] = useState([]);
   const [files, setFiles] = useState([]);
-  const [inputKey, setInputKey] = useState(0); // Key for input to force re-render
   const [descProd, setDescProd] = useState(
-    "mi <b>Descripción del Producto</b>"
+    "Descripcion del Producto"
   );
 
   function onChange(e) {

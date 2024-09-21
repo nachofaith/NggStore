@@ -5,6 +5,7 @@ const jwt = require("jsonwebtoken");
 const app = express();
 const port = 3000;
 const cors = require("cors");
+require('dotenv').config();
 // const crypto = require("crypto");
 const multer = require("multer");
 const path = require("path");
@@ -18,10 +19,10 @@ app.use("/uploads", express.static("uploads"));
 
 // Configuración de la conexión a la base de datos
 const db = mysql.createConnection({
-  host: "localhost",
-  user: "ngguser",
-  password: "3A49CD5A3D3475E4D16778B7E69D44A81C795B86F",
-  database: "ngg",
+  host: process.env.DB_HOST,
+  user: process.env.DB_USER,
+  password: process.env.DB_PASSWORD,
+  database: process.env.DB_NAME
 });
 
 // Conectar a la base de datos
@@ -670,7 +671,7 @@ app.get("/producto/:idProd", async (req, res) => {
         front: image.front,
       })),
     };
-
+    res.setHeader('Content-Type', 'application/json; charset=utf-8');
     res.json(productWithImages);
   } catch (error) {
     console.error("Error fetching product data:", error);

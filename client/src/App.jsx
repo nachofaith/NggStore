@@ -8,40 +8,30 @@ import Page404 from "./components/Page404.jsx";
 import SingleProduct from "./pages/SingleProduct.jsx";
 import Category from "./pages/Category.jsx";
 import Categories from "./pages/Categories.jsx";
-
+import { CartProvider } from "./context/cart.jsx";
+import Carrito from "./pages/Cart.jsx";
 
 export default function App() {
   return (
     <BrowserRouter>
-      <Routes>
-        <Route
-          path="*"
-          element={
-            <div>
-              <Header />
-              <main>
-                <Routes>
-                  <Route path="/" element={<Home />} />
-                  <Route path="/login" element={<Login />} />
-                  <Route path="/register" element={<Register />} />
-                  <Route path="/producto/:idProd" element={<SingleProduct />} />
-                  <Route path="/category/:idCat" element={<Category />} />
-                  <Route path="/categories" element={<Categories />} />
-                  <Route path="/*" element={<Page404 />} />
-                </Routes>
-              </main>
-              <Footer />
-            </div>
-          }
-        />
-
- 
-
-    
-
-
-
-      </Routes>
+      <CartProvider>
+        <div>
+          <Header />
+          <main>
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/login" element={<Login />} />
+              <Route path="/register" element={<Register />} />
+              <Route path="/producto/:idProd" element={<SingleProduct />} />
+              <Route path="/category/:idCat" element={<Category />} />
+              <Route path="/categories" element={<Categories />} />
+              <Route path="/*" element={<Page404 />} />
+              <Route path="/cart" element={<Carrito />} />
+            </Routes>
+          </main>
+          <Footer />
+        </div>
+      </CartProvider>
     </BrowserRouter>
   );
 }

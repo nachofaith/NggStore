@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import Breadcrumb from "../components/BreadCrumb";
 import FormatCLP from "../components/FormateadorCLP";
 import useRead from "../hooks/useRead";
-import { Spinner } from "flowbite-react"; // Asegúrate de importar el Spinner si lo estás usando
+import { Spinner } from "flowbite-react";
 
 export default function SingleProduct() {
   const [loading, setLoading] = useState(true);
@@ -71,6 +71,7 @@ export default function SingleProduct() {
               {data && (
                 <div className="">
                   <span className="text-lg uppercase">{data.nombre_marca}</span>
+
                   <h1 className="uppercase font-anton text-transparent bg-clip-text bg-gradient-to-r from-cyan-500 to-blue-500 text-6xl">
                     {data.nombre_prod}
                   </h1>
@@ -82,43 +83,43 @@ export default function SingleProduct() {
                     <div id="precios" className="text-lg pt-4">
                       <div className="font-normal flex flex-row gap-2 items-center">
                         <span className="">
-                          Precio Efectivo o Transferencia:
+                          Efectivo o Transferencia:
                         </span>
-                        <span className="text-xl font-semibold text-gray-800">
+                        <span className="text-2xl font-semibold text-gray-800">
                           {" "}
                           <FormatCLP precio={data.precio_prod} />
                         </span>
                       </div>
 
                       <div className="font-normal flex flex-row gap-2 items-center">
-                        <span>Precio Pago con Tarjetas</span>
-                        <span className="text-xl font-semibold text-gray-800">
+                        <span>Tarjetas:</span>
+                        <span className="text-2xl font-semibold text-gray-800">
                           {" "}
                           <FormatCLP precio={data.precio_prod} />
                         </span>
                       </div>
                     </div>
                   ) : (
-                    <div id="precios" className="text-lg pt-4">
+                    <div id="precios" className="text-xl pt-4">
                       <div className="font-normal flex flex-row gap-2 items-center">
                         <span className="">
-                          Precio Efectivo o Transferencia:
+                          Efectivo o Transferencia:
                         </span>
                         <span className="font-normal text-gray-400 line-through">
                           <FormatCLP precio={data.precio_prod} />
                         </span>
-                        <span className="text-xl font-semibold text-gray-800">
+                        <span className="text-2xl font-semibold text-gray-800">
                           {" "}
                           <FormatCLP precio={data.precio_off_prod} />
                         </span>
                       </div>
 
                       <div className="font-normal flex flex-row gap-2 items-center">
-                        <span>Precio Pago con Tarjetas</span>
+                        <span>Tarjetas:</span>
                         <span className="font-normal text-gray-400 line-through">
                           <FormatCLP precio={data.precio_prod} />
                         </span>
-                        <span className="text-xl font-semibold text-gray-800">
+                        <span className="text-2xl font-semibold text-gray-800">
                           {" "}
                           <FormatCLP precio={data.precio_off_prod} />
                         </span>

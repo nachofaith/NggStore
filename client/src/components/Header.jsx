@@ -2,18 +2,26 @@ import { Dropdown } from "flowbite-react";
 import { useEffect, useState } from "react";
 import useRead from "../hooks/useRead";
 import { Spinner } from "flowbite-react";
+import { BsCartFill } from "react-icons/bs";
+import { useCart } from "../hooks/useCart";
+import { FaUser } from "react-icons/fa";
+import CartDrawer from "./Drawer";
 
 export default function Header() {
   const { dataCat } = useRead();
   const [loading, setLoading] = useState(true);
+  const { cart } = useCart();
+  const [isOpen, setIsOpen] = useState(false);
+
+  const totalItems = cart.reduce((total, item) => total + item.quantity, 0);
 
   useEffect(() => {
     if (dataCat !== null) {
-      // // Retrasar la desaparición del spinner por 5 segundos
-      // setTimeout(() => {
-      //   setLoading(false);
-      // }, 4000); 
-      setLoading(false)
+      // Retrasar la desaparición del spinner por 5 segundos
+      setTimeout(() => {
+        setLoading(false);
+      }, 1000);
+      setLoading(false);
     }
   }, [dataCat]);
 
@@ -22,9 +30,14 @@ export default function Header() {
       <div className="container mx-auto px-10">
         <nav className="text-gray-600 flex lg:flex-row md:flex-col md:items-center mx-auto p-4 justify-between pb-20">
           <div id="logo" className="flex flex-row items-end gap-2 md:pb-4">
-            <img className="h-20" src="/src/assets/logo.webp" alt="NGG Store Logo" />
+            <img
+              className="h-20"
+              src="/src/assets/logo.webp"
+              alt="NGG Store Logo"
+            />
             <h1 className="text-6xl">
-              <span className="text-gray-800 font-anton">NGG</span><span className="font-anton text-gray-400">STORE</span>
+              <span className="text-gray-800 font-anton">NGG</span>
+              <span className="font-anton text-gray-400">STORE</span>
             </h1>
           </div>
 
@@ -95,10 +108,7 @@ export default function Header() {
                         </div>
                       ) : (
                         <div className="text-xl uppercase p-2 text-gray-800 hover:text-sky-400 hover:bg-white">
-                          <a
-                            href={`/category/${category.id_cat}`}
-                          
-                          >
+                          <a href={`/category/${category.id_cat}`}>
                             {category.nombre_cat}
                           </a>
                         </div>
@@ -119,30 +129,34 @@ export default function Header() {
             </li>
           </ul>
 
-          <div className="flex justify-between align-middle items-center">
-            <a href="/login">
-              <button className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
-                Login
-                <svg
-                  className="w-6 h-6 text-white"
-                  aria-hidden="true"
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
-                  fill="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    fillRule="evenodd"
-                    d="M12 4a4 4 0 1 0 0 8 4 4 0 0 0 0-8Zm-2 9a4 4 0 0 0-4 4v1a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2v-1a4 4 0 0 0-4-4h-4Z"
-                    clipRule="evenodd"
-                  />
-                </svg>
-              </button>
-            </a>
+          <div className="flex justify-between align-middle items-center gap-2">
+            <button
+              type="button"
+              className="relative inline-flex items-center p-3 text-sm font-medium text-center text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 shadow-lg shadow-blue-500/50 dark:shadow-lg dark:shadow-blue-800/80 rounded-lg px-5 py-2.5 me-2 mb-2"
+              onClick={() => setIsOpen(true)}
+            >
+              {<BsCartFill className="w-5 h-5" />}
+              <span className="sr-only">Carro de compras</span>
+              {totalItems > 0 && (
+                <div className="absolute inline-flex items-center justify-center w-6 h-6 text-xs font-bold text-white bg-red-500 border-2 border-white rounded-full -top-2 -end-2 dark:border-gray-900">
+                  {totalItems}
+                </div>
+              )}
+            </button>
+
+            <button
+              type="button"
+              className="relative inline-flex items-center p-3 text-sm font-medium text-center text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 shadow-lg shadow-blue-500/50 dark:shadow-lg dark:shadow-blue-800/80 rounded-lg px-5 py-2.5 me-2 mb-2"
+              href="/login"
+            >
+                <FaUser className="h-5 w-5" />
+            </button>
+
+           
           </div>
         </nav>
       </div>
+      <CartDrawer open={isOpen} setIsOpen={setIsOpen}  />
     </div>
   );
 }
