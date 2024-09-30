@@ -10,9 +10,6 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
     const savedAuthState = localStorage.getItem("isAuthenticated");
     const savedAdminState = localStorage.getItem("isAdmin");
-    console.log(savedAuthState)
-    console.log(savedAdminState)
-
 
     setIsAuth(savedAuthState === "true");
     setIsAdmin(savedAdminState === "true");
@@ -59,7 +56,15 @@ export const AuthProvider = ({ children }) => {
 
   return (
     <AuthContext.Provider
-      value={{ isAuth, setIsAuth, isAdmin, setIsAdmin, login, logout, isLoading }}
+      value={{
+        isAuth,
+        setIsAuth,
+        isAdmin,
+        setIsAdmin,
+        login,
+        logout,
+        isLoading,
+      }}
     >
       {children}
     </AuthContext.Provider>

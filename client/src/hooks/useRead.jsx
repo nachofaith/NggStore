@@ -18,36 +18,31 @@ const useRead = () => {
           const response = await axios.get(`${apiUrl}/categoria`);
           const product = response.data;
           setData(product);
-         
         } catch (error) {
           console.error("Error fetching data: ", error);
         }
       };
-    
+
       fetchData();
     }, []);
-
-  }
-
+  };
 
   const readProducts = () => {
     useEffect(() => {
       const fetchData = async () => {
         try {
           const response = await axios.get(`${apiUrl}/products`);
-         
+
           const product = response.data;
           setData(product);
-         
         } catch (error) {
           console.error("Error fetching data: ", error);
         }
       };
-    
+
       fetchData();
     }, []);
-
-  }
+  };
 
   const readSingleProduct = (id) => {
     useEffect(() => {
@@ -60,14 +55,13 @@ const useRead = () => {
 
           const frontImage = product.images.find((image) => image.front === 1);
           const frontImageUrl = frontImage
-            ? `${apiUrl}/uploads/${frontImage.url_img}`
+            ? // ? `${apiUrl}/uploads/${frontImage.url_img}`
+              `${frontImage.url_img}`
             : null;
           setCover(frontImageUrl);
 
           if (product.images) {
-            const urls = product.images.map(
-              (image) => `${apiUrl}/uploads/${image.url_img}`
-            );
+            const urls = product.images.map((image) => `${image.url_img}`);
             setImageUrls(urls);
           }
         } catch (error) {
@@ -118,8 +112,24 @@ const useRead = () => {
     }, [id]);
   };
 
+  const prodSubCat = (id) => {
+    useEffect(() => {
+      const fetchData = async () => {
+        try {
+          const response = await axios.get(`${apiUrl}/subCategory/${id}`);
+          const product = response.data;
+          setData(product);
+        } catch (error) {
+          console.error("Error fetching data: ", error);
+          setError(error);
+        }
+      };
 
-
+      if (id) {
+        fetchData();
+      }
+    }, [id]);
+  };
 
   // Handle click function
   const handleClick = (item) => {
@@ -137,7 +147,8 @@ const useRead = () => {
     prodCat,
     readSingleProduct,
     readProducts,
-    readCategories
+    readCategories,
+    prodSubCat,
   };
 };
 

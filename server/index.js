@@ -5,7 +5,7 @@ const jwt = require("jsonwebtoken");
 const app = express();
 const port = 3000;
 const cors = require("cors");
-require('dotenv').config();
+require("dotenv").config();
 // const crypto = require("crypto");
 const multer = require("multer");
 const path = require("path");
@@ -22,7 +22,7 @@ const db = mysql.createConnection({
   host: process.env.DB_HOST,
   user: process.env.DB_USER,
   password: process.env.DB_PASSWORD,
-  database: process.env.DB_NAME
+  database: process.env.DB_NAME,
 });
 
 // Conectar a la base de datos
@@ -338,7 +338,6 @@ app.get("/categoria", (req, res) => {
     c.id_cat, c.nombre_cat
 `;
 
-
   db.query(query, (err, results) => {
     if (err) {
       console.error("Error ejecutando la consulta:", err);
@@ -349,11 +348,10 @@ app.get("/categoria", (req, res) => {
   });
 });
 
-
 app.post("/readCategoria", (req, res) => {
   const { id } = req.body;
   console.log(`id: ${id}`);
-  
+
   const query = `
     SELECT 
       c.id_cat, 
@@ -388,8 +386,6 @@ app.post("/readCategoria", (req, res) => {
     res.json(results[0]); // Devolver el resultado como un objeto, ya que solo esperamos un resultado
   });
 });
-
-
 
 //Ruta para mostrar SubCategorias
 app.post("/subCategoria", async (req, res) => {
@@ -611,21 +607,28 @@ app.get("/producto/:idProd", async (req, res) => {
     return new Promise((resolve, reject) => {
       const query = `
         SELECT 
-          p.id_prod,
-          p.nombre_prod,
-          p.desc_prod,
-          p.stock_prod,
-          p.precio_prod,
-          p.precio_off_prod,
-          p.id_marca,
-          m.nombre_marca,
-          p.id_subCat,
-          p.id_cat,
-          c.nombre_cat
-        FROM producto p
-        INNER JOIN marca m ON p.id_marca = m.id_marca
-        INNER JOIN categoria c ON p.id_cat = c.id_cat
-        WHERE p.id_prod = ?;
+    p.id_prod,
+    p.nombre_prod,
+    p.desc_prod,
+    p.stock_prod,
+    p.precio_prod,
+    p.precio_off_prod,
+    p.id_marca,
+    m.nombre_marca,
+    p.id_subCat,
+    s.nombre_subCat,  
+    p.id_cat,
+    c.nombre_cat
+FROM 
+    producto p
+INNER JOIN 
+    marca m ON p.id_marca = m.id_marca
+INNER JOIN 
+    categoria c ON p.id_cat = c.id_cat
+LEFT JOIN 
+    sub_categoria s ON p.id_subCat = s.id_subCat  
+WHERE 
+    p.id_prod = ?;
       `;
       db.query(query, [idProd], (err, result) => {
         if (err) return reject(err);
@@ -671,16 +674,13 @@ app.get("/producto/:idProd", async (req, res) => {
         front: image.front,
       })),
     };
-    res.setHeader('Content-Type', 'application/json; charset=utf-8');
+    res.setHeader("Content-Type", "application/json; charset=utf-8");
     res.json(productWithImages);
   } catch (error) {
     console.error("Error fetching product data:", error);
     res.status(500).json({ error: "Error en el servidor" });
   }
 });
-
-
-
 
 app.get("/category/:idCat", async (req, res) => {
   const { idCat } = req.params;
@@ -737,18 +737,20 @@ app.get("/category/:idCat", async (req, res) => {
     const products = await getProductsByCategory();
 
     if (products.length === 0) {
-      return res.status(404).json({ error: "No se encontraron productos para esta categoría" });
+      return res
+        .status(404)
+        .json({ error: "No se encontraron productos para esta categoría" });
     }
 
-    const productIds = products.map(product => product.id_prod);
+    const productIds = products.map((product) => product.id_prod);
     const images = await getProductImages(productIds);
 
     // Asignar las imágenes a los productos correspondientes
-    const productsWithImages = products.map(product => ({
+    const productsWithImages = products.map((product) => ({
       ...product,
       images: images
-        .filter(image => image.id_prod === product.id_prod)
-        .map(image => ({
+        .filter((image) => image.id_prod === product.id_prod)
+        .map((image) => ({
           id_img: image.id_img,
           url_img: image.url_img,
           front: image.front,
@@ -761,6 +763,94 @@ app.get("/category/:idCat", async (req, res) => {
     res.status(500).json({ error: "Error en el servidor" });
   }
 });
+
+
+
+
+app.get("/subCategory/:id", async (req, res) => {
+  const { id } = req.params;
+
+  // Consulta para obtener todos los productos de una categoría específica
+  const getProductsByCategory = () => {
+    return new Promise((resolve, reject) => {
+      const query = `
+      SELECT 
+          p.id_prod,
+          p.nombre_prod,
+          p.desc_prod,
+          p.stock_prod,
+          p.precio_prod,
+          p.precio_off_prod,
+          p.id_marca,
+          m.nombre_marca,
+          p.id_subCat,
+          s.nombre_subCat,
+          p.id_cat,
+          c.nombre_cat
+        FROM producto p
+        INNER JOIN marca m ON p.id_marca = m.id_marca
+        INNER JOIN sub_categoria s ON p.id_subCat = s.id_subCat
+        INNER JOIN categoria c ON p.id_cat = c.id_cat
+        WHERE p.id_subCat = ?;
+      `;
+      db.query(query, [id], (err, result) => {
+        if (err) return reject(err);
+        resolve(result); // Devolver todos los productos de la categoría
+      });
+    });
+  };
+
+  // Consulta para obtener las imágenes de los productos específicos
+  const getProductImages = (productIds) => {
+    return new Promise((resolve, reject) => {
+      const query = `
+        SELECT
+          i.id_img,
+          i.url_img,
+          i.front,
+          hi.id_prod
+        FROM images i
+        INNER JOIN has_images hi ON i.id_img = hi.id_img
+        WHERE hi.id_prod IN (?);
+      `;
+      db.query(query, [productIds], (err, result) => {
+        if (err) return reject(err);
+        resolve(result);
+      });
+    });
+  };
+
+  try {
+    const products = await getProductsByCategory();
+
+    if (products.length === 0) {
+      return res
+        .status(404)
+        .json({ error: "No se encontraron productos para esta categoría" });
+    }
+
+    const productIds = products.map((product) => product.id_prod);
+    const images = await getProductImages(productIds);
+
+    // Asignar las imágenes a los productos correspondientes
+    const productsWithImages = products.map((product) => ({
+      ...product,
+      images: images
+        .filter((image) => image.id_prod === product.id_prod)
+        .map((image) => ({
+          id_img: image.id_img,
+          url_img: image.url_img,
+          front: image.front,
+        })),
+    }));
+
+    res.json(productsWithImages);
+  } catch (error) {
+    console.error("Error fetching product data:", error);
+    res.status(500).json({ error: "Error en el servidor" });
+  }
+});
+
 
 
 // Ruta para actualizar una nueva Marca
@@ -807,7 +897,6 @@ app.post("/productoUpdate", async (req, res) => {
 // Ruta para actualizar una nueva Marca
 app.post("/updateImageFront", async (req, res) => {
   const { cover, idProd } = req.body;
-
 
   const vaciarFront =
     "UPDATE images SET front = 0 WHERE id_img in (SELECT id_img FROM has_images WHERE id_prod = ?)";

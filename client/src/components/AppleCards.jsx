@@ -120,14 +120,14 @@ export const Carousel = ({ items, initialScroll = 0 }) => {
         </div>
         <div className="flex justify-end gap-2 mr-10">
           <button
-            className="relative z-40 h-10 w-20 rounded-full bg-blue-500 hover:bg-blue-400 flex items-center justify-center disabled:opacity-50"
+            className="relative z-40 h-10 w-20 rounded-full bg-blue-500 hover:bg-blue-700 flex items-center justify-center disabled:hover:bg-blue-500 disabled:opacity-50"
             onClick={scrollLeft}
             disabled={!canScrollLeft}
           >
             <IconArrowNarrowLeft className="h-8 w-8 text-white" />
           </button>
           <button
-            className="relative z-40 h-10 w-20 rounded-full bg-blue-500 hover:bg-blue-400 flex items-center justify-center disabled:opacity-50"
+            className="relative z-40 h-10 w-20 rounded-full bg-blue-500 hover:bg-blue-700 disabled:hover:bg-blue-500 flex items-center justify-center disabled:opacity-50"
             onClick={scrollRight}
             disabled={!canScrollRight}
           >

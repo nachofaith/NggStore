@@ -1,12 +1,26 @@
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import Breadcrumb from "../components/BreadCrumb";
 import FormatCLP from "../components/FormateadorCLP";
 import useRead from "../hooks/useRead";
 import { Spinner } from "flowbite-react";
+import { useCart } from "../hooks/useCart";
+import { BsCartPlus } from "react-icons/bs";
+import CartDrawer from "../components/Drawer";
+import { BsFillCartCheckFill } from "react-icons/bs";
+import { HiOutlineArrowRight } from "react-icons/hi";
 
 export default function SingleProduct() {
   const [loading, setLoading] = useState(true);
+  const [nombreProd, setNombreProd] = useState("");
+  const [precioProd, setPrecioProd] = useState("");
+  const [precioProdOff, setPrecioProdOff] = useState("");
+  const [stockProd, setStockProd] = useState("");
+  const [isOpen, setIsOpen] = useState(false);
+  const { addToCart, cart } = useCart();
+  const navigate = useNavigate();
+
+  const apiUrl = import.meta.env.VITE_API_URL;
   const { idProd } = useParams();
   const { data, cover, imageUrls, error, handleClick, readSingleProduct } =
     useRead();
@@ -14,6 +28,10 @@ export default function SingleProduct() {
 
   useEffect(() => {
     if (data !== null) {
+      setNombreProd(data.nombre_prod);
+      setPrecioProd(data.precio_prod);
+      setPrecioProdOff(data.precio_off_prod);
+      setStockProd(data.stock_prod);
       setTimeout(() => {
         setLoading(false);
       }, 1000);
@@ -21,11 +39,58 @@ export default function SingleProduct() {
   }, [data]);
 
   useEffect(() => {
-    window.scrollTo(0, 0)
-  }, [])
+    window.scrollTo(0, 0);
+  }, []);
 
+  const handleAddClick = (e) => {
+    e.preventDefault();
+
+    const id = Number(idProd); // Convertir idProd a número
+    const frontImage = cover;
+    if (isProductInCart) {
+      setIsOpen(true);
+    } else {
+      addToCart({
+        id, // Usar el idProd convertido a número
+        nombreProd,
+        precioProd,
+        precioProdOff,
+        frontImage,
+        stockProd,
+      });
+    }
+
+    setIsOpen(true); // Abrir el Drawer
+  };
+
+  const isProductInCart = cart.some((item) => item.id === Number(idProd));
+
+  const handleComprar = (e) => {
+    e.preventDefault();
+    if (isProductInCart) {
+      navigate("/cart"); 
+    } else {
+      const id = Number(idProd); // Convertir idProd a número
+      const frontImage = cover;
+      addToCart({
+        id, // Usar el idProd convertido a número
+        nombreProd,
+        precioProd,
+        precioProdOff,
+        frontImage,
+        stockProd,
+      });
+      window.location.href = "/cart";
+    }
+  };
+
+
+
+  
   return (
     <>
+      <CartDrawer open={isOpen} setIsOpen={setIsOpen} />
+      <CartDrawer />
       {loading ? (
         <div className="h-screen pt-20 container mx-auto">
           <div className="text-center">
@@ -34,7 +99,7 @@ export default function SingleProduct() {
         </div>
       ) : (
         <div className="min-h-screen container mx-auto px-10">
-          <Breadcrumb data={data} />
+          <Breadcrumb data={data} type="singleProduct" />
           {error && <p className="">{error}</p>}
           <div className="columns-2 gap-8 flex flex-row pt-20">
             <div
@@ -45,7 +110,7 @@ export default function SingleProduct() {
                 {imageUrls.map((item, index) => (
                   <img
                     key={index}
-                    src={item}
+                    src={`${apiUrl}/uploads/${item}`}
                     alt={`Image ${index + 2}`}
                     className={
                       cover == item
@@ -59,7 +124,7 @@ export default function SingleProduct() {
               {imageUrls.length > 0 && (
                 <div id="front" className="flex mb-4 w-2/3 ml-10">
                   <img
-                    src={cover}
+                    src={`${apiUrl}/uploads/${cover}`}
                     alt="Image 1"
                     className="w-full h-96 object-contain "
                   />
@@ -82,9 +147,7 @@ export default function SingleProduct() {
                   {data.precio_off_prod == 0 ? (
                     <div id="precios" className="text-lg pt-4">
                       <div className="font-normal flex flex-row gap-2 items-center">
-                        <span className="">
-                          Efectivo o Transferencia:
-                        </span>
+                        <span className="">Efectivo o Transferencia:</span>
                         <span className="text-2xl font-semibold text-gray-800">
                           {" "}
                           <FormatCLP precio={data.precio_prod} />
@@ -102,9 +165,7 @@ export default function SingleProduct() {
                   ) : (
                     <div id="precios" className="text-xl pt-4">
                       <div className="font-normal flex flex-row gap-2 items-center">
-                        <span className="">
-                          Efectivo o Transferencia:
-                        </span>
+                        <span className="">Efectivo o Transferencia:</span>
                         <span className="font-normal text-gray-400 line-through">
                           <FormatCLP precio={data.precio_prod} />
                         </span>
@@ -123,6 +184,37 @@ export default function SingleProduct() {
                           {" "}
                           <FormatCLP precio={data.precio_off_prod} />
                         </span>
+                      </div>
+                      <div className="py-4">
+                        <button
+                          type="button"
+                          className="text-white bg-blue-500 hover:bg-blue-700  focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800  font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 inline-flex items-center "
+                          onClick={handleComprar}
+                        >
+                          Comprar ahora
+                          <HiOutlineArrowRight className="ml-2 h-5 w-5" />
+                        </button>
+                        <button
+                          type="button"
+                          className={
+                            isProductInCart
+                              ? `text-white bg-green-600 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 dark:focus:ring-green-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2`
+                              : `text-white bg-blue-500 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800  font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 inline-flex items-center`
+                          }
+                          onClick={handleAddClick}
+                        >
+                          {isProductInCart ? (
+                            <div className="flex flex-row gap-2">
+                              <span>Ver carro</span>
+                              <BsFillCartCheckFill className="h-5 w-5" />
+                            </div>
+                          ) : (
+                            <div className="flex flex-row gap-2">
+                              <span>Agregar al carro </span>
+                              <BsCartPlus className="h-5 w-5" />
+                            </div>
+                          )}
+                        </button>
                       </div>
                     </div>
                   )}

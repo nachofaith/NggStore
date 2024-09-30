@@ -6,23 +6,24 @@ export default function Login() {
   const [password, setPassword] = useState("");
   const { handleLogin, error } = useLogin();
 
-
-
   const handleSubmit = (e) => {
     e.preventDefault();
     handleLogin(email, password);
   };
 
-
   return (
     <div className="h-screen mt-20 flex flex-col mx-auto ">
       <h1 className="pt-20 pb-10 text-center text-4xl">Iniciar sesión</h1>
 
-
       <form className="max-w-sm mx-auto" onSubmit={handleSubmit}>
-        {error && <div className="p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50" role="alert">
-          <span className="font-medium">Error!</span> {error}
-        </div>}
+        {error && (
+          <div
+            className="p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50"
+            role="alert"
+          >
+            <span className="font-medium">Error!</span> {error}
+          </div>
+        )}
 
         <div className="mb-5">
           <label
@@ -80,14 +81,14 @@ export default function Login() {
           >
             Iniciar
           </button>
-          <a href="/register" className="font-medium text-blue-600 hover:underline dark:text-blue-500">Registrarse</a>
-
-
+          <a
+            href="/register"
+            className="font-medium text-blue-600 hover:underline dark:text-blue-500"
+          >
+            Registrarse
+          </a>
         </div>
-
       </form>
-
-
     </div>
   );
 }

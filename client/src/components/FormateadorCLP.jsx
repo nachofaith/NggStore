@@ -9,9 +9,9 @@ const FormatCLP = ({ precio }) => {
     });
 
     return (
-        <div>
-            <span>{formatoCLP.format(precio)}</span>
-        </div>
+        <span>
+            {formatoCLP.format(precio)}
+        </span>
     );
 };
 

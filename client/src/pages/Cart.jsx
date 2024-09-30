@@ -1,57 +1,50 @@
-import { useState, useEffect } from "react";
 import Title from "../components/Title";
-import { Card } from "flowbite-react";
 import { useCart } from "../hooks/useCart";
 import FormatCLP from "../components/FormateadorCLP";
 import { FaPlus, FaMinus } from "react-icons/fa";
 import { IoClose } from "react-icons/io5";
+import { Alert } from "flowbite-react";
+import { useNavigate } from "react-router-dom";
+import Resumen from "../components/Resumen";
 
 const apiUrl = import.meta.env.VITE_API_URL;
 
 export default function Carrito() {
-  const { cart, removeFromCart, updateQuantity } = useCart();
-  const [quantities, setQuantities] = useState({});
-  const [showToast, setShowToast] = useState(false);
+  const {
+    cart,
+    removeFromCart,
+    quantities,
+    total,
+    handleUpdateClick,
+    handleQuantityChange,
+    showAlert,
+    setShowAlert,
+  } = useCart();
 
-  useEffect(() => {
-    const initialQuantities = cart.reduce((acc, item) => {
-      acc[item.id] = item.quantity;
-      return acc;
-    }, {});
-    setQuantities(initialQuantities);
-  }, [cart]);
+  const navigate = useNavigate();
 
-  const total = cart.reduce((acc, item) => {
-    const quantity = quantities[item.id] || 0;
-    return acc + item.precioProd * quantity;
-  }, 0);
-
-  const handleQuantityChange = (id, newQuantity) => {
-    if (newQuantity > 0) {
-      setQuantities((prevQuantities) => ({
-        ...prevQuantities,
-        [id]: newQuantity,
-      }));
-      setShowToast(false);
-    }
-  };
-
-  // Función para actualizar la cantidad al hacer clic en el botón
-  const handleUpdateClick = (id) => {
-    updateQuantity(id, quantities[id]); // Actualiza la cantidad en el carrito
-    setShowToast(true);
+  const handleClick = () => {
+    navigate("/checkout");
   };
 
   return (
-    <div className="md:container md:mx-auto h-screen">
-      <Title text="Carro de compras" />
+    <div className="md:container md:mx-auto ">
+      <Title text="Carro de compras" align="center" />
+      {showAlert && (
+        <div className="my-4">
+          <Alert color="success" onDismiss={() => setShowAlert(false)}>
+            <span className="font-medium">Información!</span> Cantidades
+            actualizadas correctamente
+          </Alert>
+        </div>
+      )}
       {total === 0 ? (
-        <div className="text-center p-10">
+        <div className="text-center p-10 min-h-screen">
           <span className="text-4xl">Su carro esta vacío</span>
         </div>
       ) : (
-        <div className="flex flex-row gap-4">
-          <div className="basis-3/4">
+        <div className="flex md:flex-row sm:flex-col gap-6 md:px-0 sm:px-10 min-h-screen">
+          <div className="basis-2/3">
             <div className="flex flex-col gap-2">
               {cart.map((item) => (
                 <div
@@ -60,10 +53,10 @@ export default function Carrito() {
                 >
                   {/* Círculo rojo para cerrar */}
                   <div
-                    className="absolute inline-flex items-center justify-center w-6 h-6 text-xs font-bold text-white bg-red-500 border-2 border-white rounded-full -top-2 -right-2 cursor-pointer"
+                    className="absolute flex items-center justify-center w-8 h-8 text-xs font-bold text-white bg-red-500 border-2 border-white rounded-full -top-2 -right-2 cursor-pointer"
                     onClick={() => removeFromCart(item.id)}
                   >
-                    <IoClose className="h-4 w-4" />
+                    <IoClose className="w-6 h-6" />
                   </div>
 
                   <img
@@ -115,32 +108,48 @@ export default function Carrito() {
                     </div>
                   </div>
 
-                  <span className="dark:text-gray-400 flex flex-col">
-                    <span>Pago con Tarjetas</span>
-                    <span className="font-normal text-2xl">
-                      <FormatCLP precio={item.precioProd} />
-                    </span>
-                    <span>Efectivo o Transferencias</span>
-                    <span className="font-normal text-2xl">
-                      <FormatCLP precio={item.precioProd} />
-                    </span>
-                  </span>
+                  {item.precioProdOff > 0 ? (
+                    <div>
+                      <h1>Pago con Tarjetas</h1>
+                      <div className="flex flex-row">
+                        <p className="font-normal text-xl line-through text-gray-400">
+                          <FormatCLP precio={item.precioProd} />
+                        </p>
+                        <p className="font-normal text-2xl">
+                          <FormatCLP precio={item.precioProdOff} />
+                        </p>
+                      </div>
+
+                      <h1>Efectivo o Transferencias</h1>
+                      <div className="flex - flex-row">
+                        <p className="font-normal text-xl line-through text-gray-400">
+                          <FormatCLP precio={item.precioProd} />
+                        </p>
+                        <p className="font-normal text-2xl">
+                          <FormatCLP precio={item.precioProdOff} />
+                        </p>
+                      </div>
+                    </div>
+                  ) : (
+                    <div>
+                      <span className="dark:text-gray-400 flex flex-col">
+                        <span>Pago con Tarjetas</span>
+                        <span className="font-normal text-2xl">
+                          <FormatCLP precio={item.precioProd} />
+                        </span>
+                        <span>Efectivo o Transferencias</span>
+                        <span className="font-normal text-2xl">
+                          <FormatCLP precio={item.precioProd} />
+                        </span>
+                      </span>
+                    </div>
+                  )}
                 </div>
               ))}
             </div>
           </div>
 
-          <div className="w-full h-96 border rounded-md basis-1/4">
-            <h1 className="font-semibold text-xl uppercase text-center p-4">
-              Resumen
-            </h1>
-            <div className="flex flex-row gap-2 justify-center">
-              <span>TOTAL: </span>
-              <span className="text-center">
-                <FormatCLP precio={total} />
-              </span>
-            </div>
-          </div>
+          <Resumen onClick={handleClick} />
         </div>
       )}
     </div>

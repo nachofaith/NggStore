@@ -10,6 +10,8 @@ import Category from "./pages/Category.jsx";
 import Categories from "./pages/Categories.jsx";
 import { CartProvider } from "./context/cart.jsx";
 import Carrito from "./pages/Cart.jsx";
+import Checkout from "./pages/Checkout.jsx";
+import Step2 from "./components/Step2.jsx";
 
 export default function App() {
   return (
@@ -27,6 +29,7 @@ export default function App() {
               <Route path="/categories" element={<Categories />} />
               <Route path="/*" element={<Page404 />} />
               <Route path="/cart" element={<Carrito />} />
+              <Route path="/checkout" element={<Checkout />} />
             </Routes>
           </main>
           <Footer />

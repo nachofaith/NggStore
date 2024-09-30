@@ -4,33 +4,33 @@ export default function Hero() {
   const words = [
     {
       text: "Diseñado",
-      className: "uppercase font-light font-anton text-6xl text-left",
+      className: "uppercase font-light font-anton md:text-6xl sm:text-2xl text-left",
     },
     {
       text: "Para",
-      className: "uppercase font-light font-anton text-6xl text-left",
+      className: "uppercase font-light font-anton md:text-6xl sm:text-2xl text-left",
     },
     {
       text: "Gamers",
       className:
-        "uppercase font-light font-anton text-transparent bg-clip-text bg-gradient-to-r from-cyan-500 to-blue-500 text-6xl text-left",
+        "uppercase font-light font-anton text-transparent bg-clip-text bg-gradient-to-r from-cyan-500 to-blue-500 md:text-6xl sm:text-2xl text-left",
     },
     {
       text: "Creado",
-      className: "uppercase font-light font-anton text-6xl text-left",
+      className: "uppercase font-light font-anton md:text-6xl sm:text-2xl text-left",
     },
     {
       text: "Para",
-      className: "uppercase font-light font-anton text-6xl text-left",
+      className: "uppercase font-light font-anton md:text-6xl sm:text-2xl text-left",
     },
     {
       text: "Ganadores",
       className:
-        "uppercase font-light font-anton text-transparent bg-clip-text bg-gradient-to-r from-cyan-500 to-blue-500 text-6xl text-left",
+        "uppercase font-light font-anton text-transparent bg-clip-text bg-gradient-to-r from-cyan-500 to-blue-500 md:text-6xl sm:text-2xl text-left",
     },
     {
       text: ".",
-      className: "uppercase font-light font-anton text-6xl text-left",
+      className: "uppercase font-light font-anton md:text-6xl sm:text-2xl text-left",
     },
   ];
 
@@ -53,7 +53,7 @@ export default function Hero() {
             {" "}
             <a
               href="/categories"
-              className="inline-flex justify-center items-center py-3 px-5 text-base font-medium text-center text-white rounded-lg bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 dark:focus:ring-blue-900"
+              className="inline-flex justify-center items-center py-3 px-5 text-base font-medium text-center text-white rounded-lg bg-blue-500 hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 dark:focus:ring-blue-900"
             >
               Ver productos
               <svg

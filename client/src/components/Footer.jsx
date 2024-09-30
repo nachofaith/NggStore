@@ -6,11 +6,19 @@ export default function Footer() {
         <div className="md:flex md:justify-between">
           <div className="mb-6 md:mb-0">
             
-              <img
-                src="/src/assets/logoBlanco.png"
-                className="mr-3 h-20"
-                alt="NGG Store"
-              />
+          <a href="/" className="grayscale brightness-200">
+          <div id="logo" className="flex flex-row items-end gap-2 md:pb-4">
+            <img
+              className="h-20"
+              src="/src/assets/logo.webp"
+              alt="NGG Store Logo"
+            />
+            <h1 className="text-6xl flex flex-row gap-1">
+              <span className="text-gray-800 font-bebas">NGG</span>
+              <span className="font-bebas text-gray-400">STORE</span>
+            </h1>
+          </div>
+          </a>
             
           </div>
           <div className="grid grid-cols-2 gap-8 sm:gap-6 sm:grid-cols-3 text-gray-200">
