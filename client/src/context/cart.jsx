@@ -11,6 +11,7 @@ export function CartProvider({ children }) {
     const storedCart = localStorage.getItem("cart");
     return storedCart ? JSON.parse(storedCart) : [];
   });
+  const [ship, setShip] = useState("");
 
   // Efecto para guardar el carrito en localStorage cada vez que cambie
   useEffect(() => {
@@ -68,7 +69,7 @@ export function CartProvider({ children }) {
   const addToCart = (product) => {
     setCart((prevCart) => {
       const productInCart = prevCart.find((item) => item.id === product.id);
-      
+
       if (productInCart) {
         // Si el producto ya está en el carrito, aumenta la cantidad
         const updatedCart = prevCart.map((item) =>
@@ -79,19 +80,29 @@ export function CartProvider({ children }) {
         // Calcula el nuevo total
         const newTotal = updatedCart.reduce((acc, item) => {
           const quantity = item.quantity;
-          return acc + (item.precioProdOff > 0 ? item.precioProdOff * quantity : item.precioProd * quantity);
+          return (
+            acc +
+            (item.precioProdOff > 0
+              ? item.precioProdOff * quantity
+              : item.precioProd * quantity)
+          );
         }, 0);
         setTotal(newTotal); // Actualiza el total
         return updatedCart;
       }
-      
+
       // Si no está en el carrito, agrégalo con cantidad 1
       const newCart = [...prevCart, { ...product, quantity: 1 }];
-      
+
       // Calcula el nuevo total
       const newTotal = newCart.reduce((acc, item) => {
         const quantity = item.quantity;
-        return acc + (item.precioProdOff > 0 ? item.precioProdOff * quantity : item.precioProd * quantity);
+        return (
+          acc +
+          (item.precioProdOff > 0
+            ? item.precioProdOff * quantity
+            : item.precioProd * quantity)
+        );
       }, 0);
       setTotal(newTotal); // Actualiza el total
       return newCart;
@@ -121,6 +132,8 @@ export function CartProvider({ children }) {
         handleQuantityChange,
         showAlert,
         setShowAlert,
+        ship,
+        setShip,
       }}
     >
       {children}

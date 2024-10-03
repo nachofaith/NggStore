@@ -1,6 +1,10 @@
+import { useState } from "react";
 import Resumen from "../components/Resumen";
 
 export default function Step2({ setCurrentStep }) {
+
+  const [ship, setShip] = useState(null); 
+
   const handleStep1Click = () => {
     setCurrentStep(1); // Cambia el estado a 1
   };
@@ -12,6 +16,10 @@ export default function Step2({ setCurrentStep }) {
     } else {
       console.log("El formulario contiene errores.");
     }
+  };
+
+  const handleShippingChange = (e) => {
+    setShip(e.target.value); // Actualiza el estado con la opción seleccionada
   };
 
   return (
@@ -68,9 +76,10 @@ export default function Step2({ setCurrentStep }) {
                 type="radio"
                 id="hosting-small"
                 name="hosting"
-                value="hosting-small"
+                value="Envío a Domicilio"
                 class="hidden peer"
                 required
+                onChange={handleShippingChange} 
               />
               <label
                 for="hosting-small"
@@ -88,8 +97,9 @@ export default function Step2({ setCurrentStep }) {
                 type="radio"
                 id="hosting-big"
                 name="hosting"
-                value="hosting-big"
+                value="Retiro en Dirección comercial"
                 class="hidden peer"
+                onChange={handleShippingChange} 
               />
               <label
                 for="hosting-big"
@@ -106,7 +116,7 @@ export default function Step2({ setCurrentStep }) {
 
          
         </div>
-        <Resumen onClick={handleClick} />
+        <Resumen onClick={handleClick} ship={ship} />
       </div>
     </>
   );

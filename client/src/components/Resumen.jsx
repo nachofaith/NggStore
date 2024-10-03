@@ -1,7 +1,7 @@
 import FormatCLP from "../components/FormateadorCLP";
 import { useCart } from "../hooks/useCart";
 
-export default function Resumen({ onClick }) {
+export default function Resumen({ onClick, ship }) {
   const { cart, total } = useCart();
 
   const handleClick = (e) => {
@@ -43,6 +43,8 @@ export default function Resumen({ onClick }) {
                 </div>
               </div>
 
+             
+
               {/* Totales */}
               <div className="ml-auto text-right">
                 {data.precioProdOff > 0 ? (
@@ -61,6 +63,11 @@ export default function Resumen({ onClick }) {
           );
         })}
       </div>
+
+      <div>
+                {ship}
+              </div>
+
       <div>
       <h2 className="text-lg uppercase font-bold px-4 text-right">Total</h2>
       <div className="flex flex-row gap-2 items-center justify-between px-4">
