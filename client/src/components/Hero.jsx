@@ -4,82 +4,82 @@ export default function Hero() {
   const words = [
     {
       text: "Diseñado",
-      className: "uppercase font-light font-anton md:text-6xl sm:text-2xl text-left",
+      className: "uppercase font-light font-anton md:text-6xl  text-left",
     },
     {
       text: "Para",
-      className: "uppercase font-light font-anton md:text-6xl sm:text-2xl text-left",
+      className: "uppercase font-light font-anton md:text-6xl  text-left",
     },
     {
       text: "Gamers",
       className:
-        "uppercase font-light font-anton text-transparent bg-clip-text bg-gradient-to-r from-cyan-500 to-blue-500 md:text-6xl sm:text-2xl text-left",
+        "uppercase font-light font-anton text-transparent bg-clip-text bg-gradient-to-r from-cyan-500 to-blue-500 md:text-6xl text-left",
     },
     {
       text: "Creado",
-      className: "uppercase font-light font-anton md:text-6xl sm:text-2xl text-left",
+      className: "uppercase font-light font-anton md:text-6xl text-left",
     },
     {
       text: "Para",
-      className: "uppercase font-light font-anton md:text-6xl sm:text-2xl text-left",
+      className: "uppercase font-light font-anton md:text-6xl text-left",
     },
     {
       text: "Ganadores",
       className:
-        "uppercase font-light font-anton text-transparent bg-clip-text bg-gradient-to-r from-cyan-500 to-blue-500 md:text-6xl sm:text-2xl text-left",
+        "uppercase font-light font-anton text-transparent bg-clip-text bg-gradient-to-r from-cyan-500 to-blue-500 md:text-6xl  text-left",
     },
     {
       text: ".",
-      className: "uppercase font-light font-anton md:text-6xl sm:text-2xl text-left",
+      className: "uppercase font-light font-anton md:text-6xl text-left",
     },
   ];
 
   return (
     <section id="hero" className="container mx-auto">
       <div className="md:container md:mx-auto flex flex-row lg:flex-row md:flex-col sm:flex-col gap-8 items-center">
-        <div className="basis-1/2 flex flex-col text-grey-600 gap-8 lg:text-left md:text-center">
-          <div className="">
+        <div className="grid md:grid-cols-1 md:text-left lg:grid-cols-2 sm:grid-cols-1 text-grey-600 gap-8 lg:text-left">
+          <div className="pt-8">
             <TypewriterEffect words={words} />
+            <p className="pt-4">
+              En nuestra tienda online, ofrecemos una amplia gama de productos
+              diseñados para satisfacer las necesidades de los gamers más
+              exigentes. Desde teclados mecánicos y ratones de alta precisión
+              hasta tarjetas gráficas y sistemas de enfriamiento avanzados,
+              tenemos todo lo que necesitas para mejorar tu setup.
+            </p>
+            <div className="flex pt-4">
+              {" "}
+              <a
+                href="/categories"
+                className="inline-flex justify-center items-center py-3 px-5 text-base font-medium text-center text-white rounded-lg bg-blue-500 hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 dark:focus:ring-blue-900"
+              >
+                Ver productos
+                <svg
+                  className="w-3.5 h-3.5 ms-2 rtl:rotate-180"
+                  aria-hidden="true"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 14 10"
+                >
+                  <path
+                    stroke="currentColor"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M1 5h12m0 0L9 1m4 4L9 9"
+                  />
+                </svg>
+              </a>
+            </div>
           </div>
 
-          <p className="">
-            En nuestra tienda online, ofrecemos una amplia gama de productos
-            diseñados para satisfacer las necesidades de los gamers más
-            exigentes. Desde teclados mecánicos y ratones de alta precisión
-            hasta tarjetas gráficas y sistemas de enfriamiento avanzados,
-            tenemos todo lo que necesitas para mejorar tu setup.
-          </p>
-          <div className="flex lg:mx-0 md:mx-auto">
-            {" "}
-            <a
-              href="/categories"
-              className="inline-flex justify-center items-center py-3 px-5 text-base font-medium text-center text-white rounded-lg bg-blue-500 hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 dark:focus:ring-blue-900"
-            >
-              Ver productos
-              <svg
-                className="w-3.5 h-3.5 ms-2 rtl:rotate-180"
-                aria-hidden="true"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 14 10"
-              >
-                <path
-                  stroke="currentColor"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  d="M1 5h12m0 0L9 1m4 4L9 9"
-                />
-              </svg>
-            </a>
+          <div className="">
+            <img
+              className="rounded-lg w-full"
+              src="/src/assets/perifericos.webp"
+              alt=""
+            />
           </div>
-        </div>
-        <div className="basis-1/2">
-          <img
-            className="rounded-lg w-full"
-            src="/src/assets/perifericos.webp"
-            alt=""
-          />
         </div>
       </div>
       <div id="brands">

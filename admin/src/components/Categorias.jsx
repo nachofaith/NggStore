@@ -67,7 +67,7 @@ export default function Categoria() {
         trigger={trigger}
         setTrigger={setTrigger}
       />
-      <div className="mx-auto ">
+      <div className="mx-auto">
         <h2 className="text-black text-4xl text-center p-10 font-semibold">
           Categorias
         </h2>

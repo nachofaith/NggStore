@@ -10,6 +10,8 @@ import {
   HiFolder,
   HiBriefcase,
 } from "react-icons/hi";
+import { MdLocalShipping } from "react-icons/md";
+
 
 export default function Aside() {
   const { logout } = useAuth();
@@ -41,6 +43,13 @@ export default function Aside() {
           <Sidebar.Item href="/dashboard/products" icon={HiShoppingBag}>
             Products
           </Sidebar.Item>
+
+          <Sidebar.Item href="/dashboard/ship" icon={MdLocalShipping}>
+            Envíos
+          </Sidebar.Item>
+
+
+
         </Sidebar.ItemGroup>
         <Sidebar.ItemGroup>
           <Sidebar.Item onClick={logout} href="#" icon={HiLogout}>

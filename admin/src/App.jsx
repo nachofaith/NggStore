@@ -8,6 +8,7 @@ import Marcas from "./components/Marcas.jsx";
 import Categorias from "./components/Categorias.jsx";
 import Users from "./components/Users.jsx";
 import Products from "./components/Products.jsx";
+import Ship from "./components/Ship.jsx";
 
 export default function App() {
   return (
@@ -27,6 +28,7 @@ export default function App() {
                     <Route path="/categorias" element={<Categorias />} />
                     <Route path="/users" element={<Users />} />
                     <Route path="/products" element={<Products />} />
+                    <Route path="/ship" element={<Ship />} />
                     <Route path="/*" element={<Page404 />} />
                   </Routes>
                 </main>

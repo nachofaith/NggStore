@@ -75,19 +75,21 @@ export default function Step1({ setCurrentStep }) {
   };
 
   const handleRUT = (e) => {
-    const value = e.target.value;
-
-    // Formatea el RUT
+    const { value } = e.target;
     const formattedRUT = formatRUT(value);
 
-    // Validar longitud
+    // Actualizar el formData con el RUT formateado
+    setFormData((prevData) => ({
+      ...prevData,
+      rut: formattedRUT,
+    }));
+
+    // Opcional: Validación del RUT (si es necesario)
     if (formattedRUT.replace(/[^0-9kK.-]/g, "").length < 12) {
-      setError("El RUT debe tener 9 caracteres");
+      setError("El RUT debe tener al menos 9 caracteres");
     } else {
       setError(""); // Resetea el error si la longitud es válida
     }
-
-    setRut(formattedRUT); // Actualiza el estado con el RUT formateado
   };
 
   return (
@@ -207,7 +209,7 @@ export default function Step1({ setCurrentStep }) {
                   }
                   placeholder="11.222.333-5"
                   value={formData.rut}
-                  onChange={handleInputChange}
+                  onChange={handleRUT}
                   maxLength={12}
                   required
                 />

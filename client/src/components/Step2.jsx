@@ -1,9 +1,21 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import useShipping from "../hooks/useShipping";
+import FormatCLP from "./FormateadorCLP";
+import { Label } from "flowbite-react";
+
 import Resumen from "../components/Resumen";
 
 export default function Step2({ setCurrentStep }) {
+  const [ship, setShip] = useState(null);
+  const { readShip, shippingData, error } = useShipping();
 
-  const [ship, setShip] = useState(null); 
+  const fetchShippingData = async () => {
+    const result = await readShip();
+  };
+
+  useEffect(() => {
+    fetchShippingData(); // Llama a la función para consultar los tipos de envío al montar el componente
+  }, []);
 
   const handleStep1Click = () => {
     setCurrentStep(1); // Cambia el estado a 1
@@ -18,9 +30,13 @@ export default function Step2({ setCurrentStep }) {
     }
   };
 
-  const handleShippingChange = (e) => {
-    setShip(e.target.value); // Actualiza el estado con la opción seleccionada
+  const handleShippingChange = (selectedShip) => {
+    setShip(selectedShip); // Actualiza el estado con el objeto del envío seleccionado
   };
+
+  if (error) {
+    return <div>Error: {error}</div>;
+  }
 
   return (
     <>
@@ -70,51 +86,39 @@ export default function Step2({ setCurrentStep }) {
           className="md:basis-2/3 sm:flex-col sm:flex p-10 border rounded-md"
         >
           <h1 className="text-xl pb-4 text-center">Opciones de Entrega</h1>
-          <ul class="grid w-full gap-6 md:grid-cols-1">
-            <li>
-              <input
-                type="radio"
-                id="hosting-small"
-                name="hosting"
-                value="Envío a Domicilio"
-                class="hidden peer"
-                required
-                onChange={handleShippingChange} 
-              />
-              <label
-                for="hosting-small"
-                class="inline-flex items-center justify-between w-full p-5 text-gray-500 bg-white border border-gray-200 rounded-lg cursor-pointer dark:hover:text-gray-300 dark:border-gray-700 dark:peer-checked:text-blue-500 peer-checked:border-blue-600 peer-checked:text-blue-600 hover:text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:bg-gray-800 dark:hover:bg-gray-700"
-              >
-                <div class="block">
-                  <div class="w-full text-lg font-semibold">Envío a Domicilio</div>
-                  <div class="w-full">2 a 3 días Hábiles </div>
-                </div>
-                $3990
-              </label>
-            </li>
-            <li>
-              <input
-                type="radio"
-                id="hosting-big"
-                name="hosting"
-                value="Retiro en Dirección comercial"
-                class="hidden peer"
-                onChange={handleShippingChange} 
-              />
-              <label
-                for="hosting-big"
-                class="inline-flex items-center justify-between w-full p-5 text-gray-500 bg-white border border-gray-200 rounded-lg cursor-pointer dark:hover:text-gray-300 dark:border-gray-700 dark:peer-checked:text-blue-500 peer-checked:border-blue-600 peer-checked:text-blue-600 hover:text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:bg-gray-800 dark:hover:bg-gray-700"
-              >
-                <div class="block">
-                  <div class="w-full text-lg font-semibold">Retiro en Dirección comercial</div>
-                  <div class="w-full">Huara #5240, Comuna San Joaquin</div>
-                </div>
-                Gratis
-              </label>
-            </li>
+          <ul className="grid w-full gap-6 md:grid-cols-1">
+            {shippingData.map((item) => (
+              <li key={item.idShipp}>
+                <input
+                  type="radio"
+                  id={`check${item.idShipp}`}
+                  name="shipping"
+                  value={item.idShipp}
+                  className="hidden peer"
+                  required
+                  onChange={() => handleShippingChange(item)} // Enviar el objeto `item` completo
+                />
+                <label
+                  htmlFor={`check${item.idShipp}`}
+                  className="inline-flex items-center justify-between w-full p-5 text-gray-500 bg-white border border-gray-200 rounded-lg cursor-pointer dark:hover:text-gray-300 dark:border-gray-700 dark:peer-checked:text-blue-500 peer-checked:border-blue-600 peer-checked:text-blue-600 hover:text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:bg-gray-800 dark:hover:bg-gray-700"
+                >
+                  <div className="block">
+                    <div className="w-full text-lg font-semibold">
+                      {item.nameShipp}
+                    </div>
+                    <div className="w-full">{item.descShipp}</div>
+                  </div>
+                  <span className="uppercase">
+                    {item.typeShipp == "porpagar" && `Por Pagar`}
+                    {item.typeShipp == "normal" && (
+                      <FormatCLP precio={item.priceShipp} />
+                    )}
+                    {item.typeShipp == "tienda" && `Gratis`}
+                  </span>
+                </label>
+              </li>
+            ))}
           </ul>
-
-         
         </div>
         <Resumen onClick={handleClick} ship={ship} />
       </div>

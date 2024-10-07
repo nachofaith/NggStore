@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import FormatCLP from "../components/FormateadorCLP";
 import { useCart } from "../hooks/useCart";
 
@@ -43,8 +44,6 @@ export default function Resumen({ onClick, ship }) {
                 </div>
               </div>
 
-             
-
               {/* Totales */}
               <div className="ml-auto text-right">
                 {data.precioProdOff > 0 ? (
@@ -62,46 +61,46 @@ export default function Resumen({ onClick, ship }) {
             </div>
           );
         })}
+
+        {ship && (
+          <div className="flex flex-row gap-2 items-center justify-between border-b py-2">
+            <p>{ship.nameShipp}</p>
+          </div>
+        )}
       </div>
 
       <div>
-                {ship}
-              </div>
-
-      <div>
-      <h2 className="text-lg uppercase font-bold px-4 text-right">Total</h2>
-      <div className="flex flex-row gap-2 items-center justify-between px-4">
-        <div className="flex flex-col gap-2 justify-center">
-          <h3>Pago Tarjetas</h3>
+        <h2 className="text-lg uppercase font-bold px-4 text-right">Total</h2>
+        <div className="flex flex-row gap-2 items-center justify-between px-4">
+          <div className="flex flex-col gap-2 justify-center">
+            <h3>Pago Tarjetas</h3>
+          </div>
+          <div className="flex flex-row gap-2 items-center">
+            <p className="text-lg font-semibold">
+              <FormatCLP precio={total} />
+            </p>
+          </div>
         </div>
-        <div className="flex flex-row gap-2 items-center">
-          <p className="text-lg font-semibold">
-            <FormatCLP precio={total} />
-          </p>
+        <div className="flex flex-row gap-2 items-center justify-between px-4 pb-4">
+          <div className="flex flex-col gap-2 justify-center">
+            <h3>Pago Efectivo o Tarjetas</h3>
+          </div>
+          <div className="flex flex-row gap-2 items-center">
+            <p className="text-lg font-semibold">
+              <FormatCLP precio={total} />
+            </p>
+          </div>
+        </div>
+        <div className="w-full p-4">
+          <a
+            className="block w-full text-white bg-blue-500 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-sm py-2.5 text-center"
+            onClick={handleClick}
+            href="#"
+          >
+            Continuar
+          </a>
         </div>
       </div>
-      <div className="flex flex-row gap-2 items-center justify-between px-4 pb-4">
-        <div className="flex flex-col gap-2 justify-center">
-          <h3>Pago Efectivo o Tarjetas</h3>
-        </div>
-        <div className="flex flex-row gap-2 items-center">
-          <p className="text-lg font-semibold">
-            <FormatCLP precio={total} />
-          </p>
-        </div>
-      </div>
-      <div className="w-full p-4">
-        <a
-          className="block w-full text-white bg-blue-500 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-sm py-2.5 text-center"
-          onClick={handleClick}
-          href="#"
-        >
-          Continuar
-        </a>
-      </div>
-
-      </div>
-    
     </div>
   );
 }

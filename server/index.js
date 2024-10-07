@@ -1,14 +1,21 @@
 const express = require("express");
-const mysql = require("mysql2");
+const db = require("./config/db");
+// const mysql = require("mysql2");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const app = express();
-const port = 3000;
+// const port = 3000;
+const port = process.env.PORT || 3000;
 const cors = require("cors");
 require("dotenv").config();
 // const crypto = require("crypto");
 const multer = require("multer");
 const path = require("path");
+
+
+
+//ROUTES
+const shippingRoutes = require("./routes/shippingRoutes");
 
 const jwtSecret =
   "875032869ee3511558cd74b5be1d517dc63b74bfc92abdc54ba253a619c80ce5"; // Cambia esto por una cadena secreta segura
@@ -17,22 +24,29 @@ app.use(cors());
 app.use(express.json());
 app.use("/uploads", express.static("uploads"));
 
-// Configuración de la conexión a la base de datos
-const db = mysql.createConnection({
-  host: process.env.DB_HOST,
-  user: process.env.DB_USER,
-  password: process.env.DB_PASSWORD,
-  database: process.env.DB_NAME,
+
+app.listen(port, () => {
+  console.log(`Servidor ejecutándose en el puerto ${port}`);
 });
 
-// Conectar a la base de datos
-db.connect((err) => {
-  if (err) {
-    console.error("Error conectando a la base de datos:", err);
-    return;
-  }
-  console.log("Conectado a la base de datos MySQL");
-});
+
+
+app.use("/shipping", shippingRoutes);
+
+// const db = mysql.createConnection({
+//   host: process.env.DB_HOST,
+//   user: process.env.DB_USER,
+//   password: process.env.DB_PASSWORD,
+//   database: process.env.DB_NAME,
+// });
+
+// db.connect((err) => {
+//   if (err) {
+//     console.error("Error conectando a la base de datos:", err);
+//     return;
+//   }
+//   console.log("Conectado a la base de datos MySQL");
+// });
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -972,6 +986,6 @@ app.post("/deleteImg", async (req, res) => {
 });
 
 // Iniciar el servidor
-app.listen(port, () => {
-  console.log(`Servidor escuchando en http://localhost:${port}`);
-});
+// app.listen(port, () => {
+//   console.log(`Servidor escuchando en http://localhost:${port}`);
+// });

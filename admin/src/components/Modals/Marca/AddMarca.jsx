@@ -2,13 +2,10 @@ import { Button, Modal } from "flowbite-react";
 import { useState } from "react";
 import useRegister from "../../../hooks/Marca/useRegister";
 
-// eslint-disable-next-line react/prop-types
 export default function AddMarca({ modal, trigger, setTrigger, setOpenModal }) {
-  
-  // const [modalPlacement, setModalPlacement] = useState("center");
-  const modalPlacement = "center";
-  const { handleRegister, error } = useRegister();
+  const [modalPlacement, setModalPlacement] = useState("center");
   const [nombreMarca, setNombreMarca] = useState("");
+  const { handleRegister, error } = useRegister();
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -16,10 +13,6 @@ export default function AddMarca({ modal, trigger, setTrigger, setOpenModal }) {
     setTrigger(!trigger);
     setOpenModal(false);
   };
-
-  // useEffect(() => {
-  //   setOpenModal(modal);
-  // }, [modal]);
 
   return (
     <Modal

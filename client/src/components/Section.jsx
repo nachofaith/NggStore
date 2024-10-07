@@ -9,7 +9,7 @@ export default function Section({ data, text, tipo, limit }) {
     <div className="container mx-auto my-20">
       {tipo === "cat" ? null : <Title text={text} align="center" />}
 
-      <div className="inline-grid lg:grid-cols-4 md:grid-cols-2 sm:grid-cols-1 gap-4">
+      <div className="grid xl:grid-cols-4 lg:grid-cols-2 md:grid-cols-2 sm:grid-cols-1 gap-4">
         {limitedData.map((item) => {
           // Filtra las imágenes para obtener solo la que tiene front: 1
           const frontImage =
