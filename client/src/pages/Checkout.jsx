@@ -1,6 +1,7 @@
 import Title from "../components/Title";
 import Step1 from "../components/Step1";
 import Step2 from "../components/Step2";
+import Step3 from "../components/Step3";
 import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { useCart } from "../hooks/useCart";
@@ -21,6 +22,7 @@ export default function Checkout() {
       <Title text="Checkout" align="center" />
       {currentStep === 1 && <Step1 setCurrentStep={setCurrentStep} />}
       {currentStep === 2 && <Step2 setCurrentStep={setCurrentStep} />}
+      {currentStep === 3 && <Step3 setCurrentStep={setCurrentStep} />}
     </section>
   );
 }

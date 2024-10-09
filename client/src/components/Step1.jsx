@@ -1,6 +1,7 @@
 import SelectAnidado from "../components/Select";
 import Resumen from "../components/Resumen";
 import { useEffect, useState, useRef } from "react";
+import Stepper from "./Stepper";
 
 export default function Step1({ setCurrentStep }) {
   const formRef = useRef(null);
@@ -94,46 +95,11 @@ export default function Step1({ setCurrentStep }) {
 
   return (
     <>
-      <div
-        id="stepper"
-        className="flex justify-center items-center border rounded-md py-4"
-      >
-        <ol className="items-center space-y-4 md:space-x-52 sm:flex sm:space-x-30 sm:space-y-0 rtl:space-x-reverse">
-          <li className="flex items-center text-blue-600 dark:text-blue-500 space-x-2.5 rtl:space-x-reverse">
-            <span className="flex items-center justify-center w-8 h-8 border border-blue-600 rounded-full shrink-0 dark:border-blue-500">
-              1
-            </span>
-            <span>
-              <h3 className="font-medium leading-tight">
-                Información del Cliente
-              </h3>
-              <p className="text-sm">Dirección y datos</p>
-            </span>
-          </li>
-          <li className="flex items-center text-gray-500 dark:text-gray-400 space-x-2.5 rtl:space-x-reverse">
-            <span className="flex items-center justify-center w-8 h-8 border border-gray-500 rounded-full shrink-0 dark:border-gray-400">
-              2
-            </span>
-            <span>
-              <h3 className="font-medium leading-tight">Opciones de entrega</h3>
-              <p className="text-sm">Envío o Retiro</p>
-            </span>
-          </li>
-          <li className="flex items-center text-gray-500 dark:text-gray-400 space-x-2.5 rtl:space-x-reverse">
-            <span className="flex items-center justify-center w-8 h-8 border border-gray-500 rounded-full shrink-0 dark:border-gray-400">
-              3
-            </span>
-            <span>
-              <h3 className="font-medium leading-tight">Pagar</h3>
-              <p className="text-sm">Opciones de</p>
-            </span>
-          </li>
-        </ol>
-      </div>
-      <div className="flex flex-row pt-10 gap-4 ">
+      <Stepper step={1} />
+      <div className="pt-10 gap-4 grid md:grid-cols-4 sm:grid-cols-1 mx-2">
         <div
           id="datos"
-          className="md:basis-2/3 sm:flex-col sm:flex p-10 border rounded-md "
+          className=" lg:col-span-3 md:col-span-3 p-10 border rounded-md"
         >
           <form ref={formRef} onSubmit={handleSubmit}>
             <div className="grid gap-6 mb-6 md:grid-cols-2 sm:grid-cols-1">
@@ -350,8 +316,9 @@ export default function Step1({ setCurrentStep }) {
             </div>
           </form>
         </div>
-
-        <Resumen onClick={handleClick} />
+        <div>
+          <Resumen onClick={handleClick} />
+        </div>
       </div>
     </>
   );

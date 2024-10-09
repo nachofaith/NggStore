@@ -2,16 +2,17 @@ import { useEffect, useState } from "react";
 import FormatCLP from "../components/FormateadorCLP";
 import { useCart } from "../hooks/useCart";
 
-export default function Resumen({ onClick, ship }) {
-  const { cart, total } = useCart();
+export default function Resumen({ onClick, data }) {
+  const { cart, total } = useCart(); // Accedemos a la función updateShip del contexto
+// Cada vez que ship cambie, actualizamos el contexto
 
   const handleClick = (e) => {
-    e.preventDefault(); // Previene el comportamiento de navegación
-    onClick(); // Ejecuta la función pasada desde el padre
+    e.preventDefault();
+    onClick();
   };
 
   return (
-    <div className="w-auto h-full basis-1/3 border rounded-md flex flex-col">
+    <div className="w-auto h-auto border rounded-md flex flex-col">
       <h1 className="font-semibold text-xl uppercase text-center p-4">
         Resumen
       </h1>
@@ -22,7 +23,6 @@ export default function Resumen({ onClick, ship }) {
               key={data.id}
               className="flex flex-row gap-2 items-center justify-between border-b"
             >
-              {/* Nombre del producto y cantidad */}
               <div>
                 <h2 className="text-lg">{data.nombreProd}</h2>
                 <div className="flex flex-row gap-2 items-center">
@@ -44,7 +44,6 @@ export default function Resumen({ onClick, ship }) {
                 </div>
               </div>
 
-              {/* Totales */}
               <div className="ml-auto text-right">
                 {data.precioProdOff > 0 ? (
                   <>
@@ -62,9 +61,16 @@ export default function Resumen({ onClick, ship }) {
           );
         })}
 
-        {ship && (
+        {data && (
           <div className="flex flex-row gap-2 items-center justify-between border-b py-2">
-            <p>{ship.nameShipp}</p>
+            <p>{data.nameShipp}</p>
+            <div className="ml-auto text-right">
+              {data.typeShipp === "porpagar" && `Por Pagar`}
+              {data.typeShipp === "normal" && (
+                <FormatCLP precio={data.priceShipp} />
+              )}
+              {data.typeShipp === "tienda" && `Gratis`}
+            </div>
           </div>
         )}
       </div>
@@ -74,16 +80,6 @@ export default function Resumen({ onClick, ship }) {
         <div className="flex flex-row gap-2 items-center justify-between px-4">
           <div className="flex flex-col gap-2 justify-center">
             <h3>Pago Tarjetas</h3>
-          </div>
-          <div className="flex flex-row gap-2 items-center">
-            <p className="text-lg font-semibold">
-              <FormatCLP precio={total} />
-            </p>
-          </div>
-        </div>
-        <div className="flex flex-row gap-2 items-center justify-between px-4 pb-4">
-          <div className="flex flex-col gap-2 justify-center">
-            <h3>Pago Efectivo o Tarjetas</h3>
           </div>
           <div className="flex flex-row gap-2 items-center">
             <p className="text-lg font-semibold">

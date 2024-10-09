@@ -7,16 +7,26 @@ export function CartProvider({ children }) {
   const [total, setTotal] = useState("");
   const [showAlert, setShowAlert] = useState(false);
   const [cart, setCart] = useState(() => {
-    // Recuperar carrito de localStorage al montar el componente
     const storedCart = localStorage.getItem("cart");
     return storedCart ? JSON.parse(storedCart) : [];
   });
-  const [ship, setShip] = useState("");
+  const [ship, setShip] = useState(() => {
+    // Recuperar información de envío de localStorage al montar el componente
+    const storedShip = localStorage.getItem("ship");
+    return storedShip ? JSON.parse(storedShip) : null;
+  });
 
   // Efecto para guardar el carrito en localStorage cada vez que cambie
   useEffect(() => {
     localStorage.setItem("cart", JSON.stringify(cart));
   }, [cart]);
+
+  // Efecto para guardar la opción de envío en localStorage cada vez que cambie
+  useEffect(() => {
+    if (ship) {
+      localStorage.setItem("ship", JSON.stringify(ship));
+    }
+  }, [ship]);
 
   useEffect(() => {
     const initialQuantities = cart.reduce((acc, item) => {
@@ -39,9 +49,8 @@ export function CartProvider({ children }) {
     setTotal(newTotal);
   }, [total, cart]);
 
-  // Función para actualizar la cantidad al hacer clic en el botón
   const handleUpdateClick = (id) => {
-    updateQuantity(id, quantities[id]); // Actualiza la cantidad en el carrito
+    updateQuantity(id, quantities[id]);
     setShowAlert(true);
   };
 
@@ -49,9 +58,8 @@ export function CartProvider({ children }) {
     const item = cart.find((product) => product.id === id);
 
     if (item) {
-      const availableStock = item.stockProd; // Asegúrate de que `stock` esté disponible en el objeto del producto
+      const availableStock = item.stockProd;
 
-      // Verifica que la nueva cantidad no exceda el stock y que sea mayor a 0
       if (newQuantity > 0 && newQuantity <= availableStock) {
         setQuantities((prevQuantities) => ({
           ...prevQuantities,
@@ -59,9 +67,8 @@ export function CartProvider({ children }) {
         }));
         setShowAlert(false);
       } else if (newQuantity > availableStock) {
-        // Muestra un mensaje de error o alerta si la cantidad excede el stock
+        // Manejo de cantidad que excede el stock
         null;
-        // Aquí podrías mostrar un mensaje específico o manejar la alerta
       }
     }
   };
@@ -71,13 +78,12 @@ export function CartProvider({ children }) {
       const productInCart = prevCart.find((item) => item.id === product.id);
 
       if (productInCart) {
-        // Si el producto ya está en el carrito, aumenta la cantidad
         const updatedCart = prevCart.map((item) =>
           item.id === product.id
             ? { ...item, quantity: item.quantity + 1 }
             : item
         );
-        // Calcula el nuevo total
+
         const newTotal = updatedCart.reduce((acc, item) => {
           const quantity = item.quantity;
           return (
@@ -87,14 +93,12 @@ export function CartProvider({ children }) {
               : item.precioProd * quantity)
           );
         }, 0);
-        setTotal(newTotal); // Actualiza el total
+        setTotal(newTotal);
         return updatedCart;
       }
 
-      // Si no está en el carrito, agrégalo con cantidad 1
       const newCart = [...prevCart, { ...product, quantity: 1 }];
 
-      // Calcula el nuevo total
       const newTotal = newCart.reduce((acc, item) => {
         const quantity = item.quantity;
         return (
@@ -104,7 +108,7 @@ export function CartProvider({ children }) {
             : item.precioProd * quantity)
         );
       }, 0);
-      setTotal(newTotal); // Actualiza el total
+      setTotal(newTotal);
       return newCart;
     });
   };
@@ -133,7 +137,7 @@ export function CartProvider({ children }) {
         showAlert,
         setShowAlert,
         ship,
-        setShip,
+        setShip, // Ahora puedes usar setShip para actualizar la opción de envío en el resto de tu aplicación
       }}
     >
       {children}

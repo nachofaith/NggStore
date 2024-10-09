@@ -28,7 +28,7 @@ export default function Carrito() {
   };
 
   return (
-    <div className="md:container md:mx-auto ">
+    <div className="md:container md:mx-auto h-screen">
       <Title text="Carro de compras" align="center" />
       {showAlert && (
         <div className="my-4">
@@ -43,8 +43,8 @@ export default function Carrito() {
           <span className="text-4xl">Su carro esta vacío</span>
         </div>
       ) : (
-        <div className="flex md:flex-row sm:flex-col gap-6 md:px-0 sm:px-10 min-h-screen">
-          <div className="basis-2/3">
+        <div className="grid lg:grid-cols-4 md:grid-cols-4 gap-6 md:px-0 sm:px-10">
+          <div className="col-span-3">
             <div className="flex flex-col gap-2">
               {cart.map((item) => (
                 <div
@@ -148,8 +148,11 @@ export default function Carrito() {
               ))}
             </div>
           </div>
-
+          <div className="h-auto">
           <Resumen onClick={handleClick} />
+          </div>
+
+       
         </div>
       )}
     </div>
