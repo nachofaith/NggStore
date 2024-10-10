@@ -3,7 +3,7 @@ import { Carousel, Card } from "./AppleCards";
 const data = [
   {
     category: "DESTACADOS",
-    title: "MOUSE | MOUSEPAD",
+    title: "MOUSE",
     src: "/src/assets/mouse2.webp",
   },
   {

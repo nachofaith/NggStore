@@ -21,6 +21,7 @@ export default function Carrito() {
     setShowAlert,
   } = useCart();
 
+  const isCartEmpty = cart.items.length === 0;
   const navigate = useNavigate();
 
   const handleClick = () => {
@@ -31,22 +32,22 @@ export default function Carrito() {
     <div className="md:container md:mx-auto h-screen">
       <Title text="Carro de compras" align="center" />
       {showAlert && (
-        <div className="my-4">
+        <div className="my-4 px-10">
           <Alert color="success" onDismiss={() => setShowAlert(false)}>
             <span className="font-medium">Información!</span> Cantidades
             actualizadas correctamente
           </Alert>
         </div>
       )}
-      {total === 0 ? (
+      {isCartEmpty ? (
         <div className="text-center p-10 min-h-screen">
           <span className="text-4xl">Su carro esta vacío</span>
         </div>
       ) : (
-        <div className="grid lg:grid-cols-4 md:grid-cols-4 gap-6 md:px-0 sm:px-10">
+        <div className="grid lg:grid-cols-4 md:grid-cols-4 gap-6  sm:px-10">
           <div className="col-span-3">
             <div className="flex flex-col gap-2">
-              {cart.map((item) => (
+              {cart.items.map((item) => (
                 <div
                   key={item.id}
                   className="relative p-4 grid grid-cols-4 gap-2 border rounded-md items-center w-full"
@@ -149,10 +150,8 @@ export default function Carrito() {
             </div>
           </div>
           <div className="h-auto">
-          <Resumen onClick={handleClick} />
+            <Resumen onClick={handleClick} />
           </div>
-
-       
         </div>
       )}
     </div>

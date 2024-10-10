@@ -10,10 +10,14 @@ import CartDrawer from "./Drawer";
 export default function Header() {
   const { dataCat } = useRead();
   const [loading, setLoading] = useState(true);
-  const { cart } = useCart();
+  const { cart } = useCart(); // cart ahora tiene la estructura { items: [], ship: {} }
   const [isOpen, setIsOpen] = useState(false);
 
-  const totalItems = cart.reduce((total, item) => total + item.quantity, 0);
+  // Cambiar el acceso a cart.items para el cálculo
+  const totalItems = cart.items.reduce(
+    (total, item) => total + item.quantity,
+    0
+  );
 
   useEffect(() => {
     if (dataCat !== null) {
@@ -59,64 +63,68 @@ export default function Header() {
                 inline
               >
                 {!loading &&
-                  dataCat.sort((a, b) => a.nombre_cat.localeCompare(b.nombre_cat)).map((category) => (
-                    <div key={category.id_cat} className="relative group">
-                      {category.subCategorias ? (
-                        <div className="text-lg p-2 text-gray-800 cursor-pointer">
-                          <span className="text-sm lg:text-xl text-gray-800">
-                            <a
-                              href={`/category/${category.id_cat}`}
-                              className="flex flex-row items-center gap-1 hover:text-blue-400"
-                            >
-                              {category.nombre_cat.toUpperCase()}
-                              <svg
-                                className="w-4 h-4"
-                                aria-hidden="true"
-                                xmlns="http://www.w3.org/2000/svg"
-                                width="24"
-                                height="24"
-                                fill="none"
-                                viewBox="0 0 24 24"
+                  dataCat
+                    .sort((a, b) => a.nombre_cat.localeCompare(b.nombre_cat))
+                    .map((category) => (
+                      <div key={category.id_cat} className="relative group">
+                        {category.subCategorias ? (
+                          <div className="text-lg p-2 text-gray-800 cursor-pointer">
+                            <span className="text-sm lg:text-xl text-gray-800">
+                              <a
+                                href={`/category/${category.id_cat}`}
+                                className="flex flex-row items-center gap-1 hover:text-blue-400"
                               >
-                                <path
-                                  stroke="currentColor"
-                                  strokeLinecap="round"
-                                  strokeLinejoin="round"
-                                  strokeWidth="2"
-                                  d="m9 5 7 7-7 7"
-                                />
-                              </svg>
-                            </a>
-                          </span>
-                          <div className="absolute left-full w-max top-0 mt-0 ml-2 bg-white border border-gray-300 rounded-lg shadow-lg z-10 opacity-0 group-hover:opacity-100 group-hover:scale-100 transition-opacity duration-300 transform scale-95">
-                            {category.subCategorias
-                              .split(", ")
-                              .map((subCategoria, index) => {
-                                const subCategoriaId =
-                                  category.subCategoriaIds.split(", ")[index];
+                                {category.nombre_cat.toUpperCase()}
+                                <svg
+                                  className="w-4 h-4"
+                                  aria-hidden="true"
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  width="24"
+                                  height="24"
+                                  fill="none"
+                                  viewBox="0 0 24 24"
+                                >
+                                  <path
+                                    stroke="currentColor"
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    strokeWidth="2"
+                                    d="m9 5 7 7-7 7"
+                                  />
+                                </svg>
+                              </a>
+                            </span>
+                            <div className="absolute left-full w-max top-0 mt-0 ml-2 bg-white border border-gray-300 rounded-lg shadow-lg z-10 opacity-0 group-hover:opacity-100 group-hover:scale-100 transition-opacity duration-300 transform scale-95">
+                              {category.subCategorias
+                                .split(", ")
+                                .map((subCategoria, index) => {
+                                  const subCategoriaId =
+                                    category.subCategoriaIds.split(", ")[index];
 
-                                return (
-                                  <div
-                                    key={index}
-                                    className="uppercase text-sm lg:text-xl p-2 text-gray-800 hover:text-blue-400 hover:bg-white hover:rounded-lg"
-                                  >
-                                    <a href={`/category/sub_${subCategoriaId}`}>
-                                      {subCategoria}
-                                    </a>
-                                  </div>
-                                );
-                              })}
+                                  return (
+                                    <div
+                                      key={index}
+                                      className="uppercase text-sm lg:text-xl p-2 text-gray-800 hover:text-blue-400 hover:bg-white hover:rounded-lg"
+                                    >
+                                      <a
+                                        href={`/category/sub_${subCategoriaId}`}
+                                      >
+                                        {subCategoria}
+                                      </a>
+                                    </div>
+                                  );
+                                })}
+                            </div>
                           </div>
-                        </div>
-                      ) : (
-                        <div className="text-sm lg:text-xl uppercase p-2 text-gray-800 hover:text-blue-400 hover:bg-white">
-                          <a href={`/category/${category.id_cat}`}>
-                            {category.nombre_cat}
-                          </a>
-                        </div>
-                      )}
-                    </div>
-                  ))}
+                        ) : (
+                          <div className="text-sm lg:text-xl uppercase p-2 text-gray-800 hover:text-blue-400 hover:bg-white">
+                            <a href={`/category/${category.id_cat}`}>
+                              {category.nombre_cat}
+                            </a>
+                          </div>
+                        )}
+                      </div>
+                    ))}
               </Dropdown>
             </li>
             <li className="hover:text-blue-400">
@@ -133,7 +141,7 @@ export default function Header() {
           <div className="flex justify-between items-center gap-2">
             <button
               type="button"
-              className="relative inline-flex items-center p-2 lg:p-3 text-sm font-medium text-center text-white bg-blue-500 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 shadow-lg rounded-lg"
+              className="relative inline-flex items-center p-2 lg:p-3 text-sm font-medium text-center text-white bg-gradient-to-r from-cyan-500 to-blue-500 hover:opacity-80 rounded-lg"
               onClick={() => setIsOpen(true)}
             >
               <BsCartFill className="w-5 h-5" />
@@ -147,7 +155,7 @@ export default function Header() {
 
             <button
               type="button"
-              className="relative inline-flex items-center p-2 lg:p-3 text-sm font-medium text-center text-white bg-blue-500 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 shadow-lg rounded-lg"
+              className="relative inline-flex items-center p-2 lg:p-3 text-sm font-medium text-center text-white bg-gradient-to-r from-cyan-500 to-blue-500 hover:opacity-80 rounded-lg"
               href="/login"
             >
               <FaUser className="h-5 w-5" />

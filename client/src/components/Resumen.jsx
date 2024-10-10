@@ -3,8 +3,8 @@ import FormatCLP from "../components/FormateadorCLP";
 import { useCart } from "../hooks/useCart";
 
 export default function Resumen({ onClick, data }) {
-  const { cart, total } = useCart(); // Accedemos a la función updateShip del contexto
-// Cada vez que ship cambie, actualizamos el contexto
+  const { cart, total } = useCart();
+  const shippingInfo = cart.ship;
 
   const handleClick = (e) => {
     e.preventDefault();
@@ -17,7 +17,7 @@ export default function Resumen({ onClick, data }) {
         Resumen
       </h1>
       <div className="flex flex-col gap-2 justify-center p-4">
-        {cart.map((data) => {
+        {cart.items.map((data) => {
           return (
             <div
               key={data.id}
@@ -61,15 +61,15 @@ export default function Resumen({ onClick, data }) {
           );
         })}
 
-        {data && (
+        {shippingInfo && (
           <div className="flex flex-row gap-2 items-center justify-between border-b py-2">
-            <p>{data.nameShipp}</p>
-            <div className="ml-auto text-right">
-              {data.typeShipp === "porpagar" && `Por Pagar`}
-              {data.typeShipp === "normal" && (
-                <FormatCLP precio={data.priceShipp} />
+            <span className="text-lg">{shippingInfo.nameShipp}</span>
+            <div className="ml-auto text-right text-lg">
+              {shippingInfo.typeShipp === "porpagar" && `Por Pagar`}
+              {shippingInfo.typeShipp === "normal" && (
+                <FormatCLP precio={shippingInfo.priceShipp} />
               )}
-              {data.typeShipp === "tienda" && `Gratis`}
+              {shippingInfo.typeShipp === "tienda" && `Gratis`}
             </div>
           </div>
         )}
@@ -79,11 +79,21 @@ export default function Resumen({ onClick, data }) {
         <h2 className="text-lg uppercase font-bold px-4 text-right">Total</h2>
         <div className="flex flex-row gap-2 items-center justify-between px-4">
           <div className="flex flex-col gap-2 justify-center">
-            <h3>Pago Tarjetas</h3>
+            <h3>Efectivo o Transferencia</h3>
           </div>
           <div className="flex flex-row gap-2 items-center">
             <p className="text-lg font-semibold">
               <FormatCLP precio={total} />
+            </p>
+          </div>
+        </div>
+        <div className="flex flex-row gap-2 items-center justify-between px-4">
+          <div className="flex flex-col gap-2 justify-center">
+            <h3>Pago con Tarjetas</h3>
+          </div>
+          <div className="flex flex-row gap-2 items-center">
+            <p className="text-lg font-semibold">
+              <FormatCLP precio={total*1.0395} />
             </p>
           </div>
         </div>

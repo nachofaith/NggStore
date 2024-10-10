@@ -4,58 +4,60 @@ export const CartContext = createContext();
 
 export function CartProvider({ children }) {
   const [quantities, setQuantities] = useState({});
-  const [total, setTotal] = useState("");
+  const [total, setTotal] = useState(0); // Inicializa el total en 0
   const [showAlert, setShowAlert] = useState(false);
+  const [paymentMethod, setPaymentMethod] = useState(""); // Estado para el método de pago seleccionado
+
   const [cart, setCart] = useState(() => {
     const storedCart = localStorage.getItem("cart");
-    return storedCart ? JSON.parse(storedCart) : [];
-  });
-  const [ship, setShip] = useState(() => {
-    // Recuperar información de envío de localStorage al montar el componente
-    const storedShip = localStorage.getItem("ship");
-    return storedShip ? JSON.parse(storedShip) : null;
+    return storedCart ? JSON.parse(storedCart) : { items: [], ship: null, payment: "" };
   });
 
-  // Efecto para guardar el carrito en localStorage cada vez que cambie
   useEffect(() => {
     localStorage.setItem("cart", JSON.stringify(cart));
   }, [cart]);
 
-  // Efecto para guardar la opción de envío en localStorage cada vez que cambie
   useEffect(() => {
-    if (ship) {
-      localStorage.setItem("ship", JSON.stringify(ship));
-    }
-  }, [ship]);
-
-  useEffect(() => {
-    const initialQuantities = cart.reduce((acc, item) => {
+    const initialQuantities = cart.items.reduce((acc, item) => {
       acc[item.id] = item.quantity;
       return acc;
     }, {});
     setQuantities(initialQuantities);
-  }, [cart]);
 
-  useEffect(() => {
-    const newTotal = cart.reduce((acc, item) => {
-      const quantity = quantities[item.id] || 0;
-
-      if (item.precioProdOff > 0) {
-        return acc + item.precioProdOff * quantity;
-      } else {
-        return acc + item.precioProd * quantity;
-      }
+    const initialTotal = cart.items.reduce((acc, item) => {
+      const productTotal = item.precioProdOff > 0
+        ? item.precioProdOff * item.quantity
+        : item.precioProd * item.quantity;
+      return acc + productTotal;
     }, 0);
-    setTotal(newTotal);
-  }, [total, cart]);
 
-  const handleUpdateClick = (id) => {
-    updateQuantity(id, quantities[id]);
+    const shippingCost = cart.ship?.priceShipp ? cart.ship.priceShipp : 0;
+    setTotal(initialTotal + shippingCost);
+  }, [cart.items, cart.ship]);
+
+  const handleUpdateClick = () => {
+    cart.items.forEach((item) => {
+      const newQuantity = quantities[item.id] || item.quantity;
+      if (newQuantity !== item.quantity) {
+        updateQuantity(item.id, newQuantity);
+      }
+    });
+
+    const newTotal = cart.items.reduce((acc, item) => {
+      const quantity = quantities[item.id] || item.quantity;
+      const productTotal = item.precioProdOff > 0
+        ? item.precioProdOff * quantity
+        : item.precioProd * quantity;
+      return acc + productTotal;
+    }, 0);
+
+    const shippingCost = cart.ship?.priceShipp ? cart.ship.priceShipp : 0;
+    setTotal(newTotal + shippingCost);
     setShowAlert(true);
   };
 
   const handleQuantityChange = (id, newQuantity) => {
-    const item = cart.find((product) => product.id === id);
+    const item = cart.items.find((product) => product.id === id);
 
     if (item) {
       const availableStock = item.stockProd;
@@ -66,61 +68,57 @@ export function CartProvider({ children }) {
           [id]: newQuantity,
         }));
         setShowAlert(false);
-      } else if (newQuantity > availableStock) {
-        // Manejo de cantidad que excede el stock
-        null;
       }
     }
   };
 
   const addToCart = (product) => {
     setCart((prevCart) => {
-      const productInCart = prevCart.find((item) => item.id === product.id);
+      const productInCart = prevCart.items.find((item) => item.id === product.id);
 
       if (productInCart) {
-        const updatedCart = prevCart.map((item) =>
+        const updatedItems = prevCart.items.map((item) =>
           item.id === product.id
             ? { ...item, quantity: item.quantity + 1 }
             : item
         );
-
-        const newTotal = updatedCart.reduce((acc, item) => {
-          const quantity = item.quantity;
-          return (
-            acc +
-            (item.precioProdOff > 0
-              ? item.precioProdOff * quantity
-              : item.precioProd * quantity)
-          );
-        }, 0);
-        setTotal(newTotal);
-        return updatedCart;
+        return { ...prevCart, items: updatedItems };
       }
 
-      const newCart = [...prevCart, { ...product, quantity: 1 }];
-
-      const newTotal = newCart.reduce((acc, item) => {
-        const quantity = item.quantity;
-        return (
-          acc +
-          (item.precioProdOff > 0
-            ? item.precioProdOff * quantity
-            : item.precioProd * quantity)
-        );
-      }, 0);
-      setTotal(newTotal);
-      return newCart;
+      return { ...prevCart, items: [...prevCart.items, { ...product, quantity: 1 }] };
     });
   };
 
   const removeFromCart = (id) => {
-    setCart((prevCart) => prevCart.filter((item) => item.id !== id));
+    setCart((prevCart) => ({
+      ...prevCart,
+      items: prevCart.items.filter((item) => item.id !== id),
+    }));
   };
 
   const updateQuantity = (id, quantity) => {
-    setCart((prevCart) =>
-      prevCart.map((item) => (item.id === id ? { ...item, quantity } : item))
-    );
+    setCart((prevCart) => ({
+      ...prevCart,
+      items: prevCart.items.map((item) =>
+        item.id === id ? { ...item, quantity } : item
+      ),
+    }));
+  };
+
+  const setShip = (ship) => {
+    setCart((prevCart) => ({
+      ...prevCart,
+      ship: ship,
+    }));
+  };
+
+  // Función para actualizar el método de pago
+  const setPayment = (payment) => {
+    setPaymentMethod(payment);
+    setCart((prevCart) => ({
+      ...prevCart,
+      payment: payment,
+    }));
   };
 
   return (
@@ -136,8 +134,9 @@ export function CartProvider({ children }) {
         handleQuantityChange,
         showAlert,
         setShowAlert,
-        ship,
-        setShip, // Ahora puedes usar setShip para actualizar la opción de envío en el resto de tu aplicación
+        setShip,
+        paymentMethod, // Método de pago seleccionado
+        setPayment, // Función para actualizar el método de pago
       }}
     >
       {children}

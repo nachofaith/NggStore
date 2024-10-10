@@ -10,6 +10,8 @@ export default {
     extend: {
       fontFamily: {
         anton: ["Anton SC", "sans-serif"],
+        oswald: ["Oswald", "sans-serif"],
+
         bebas: ["Bebas Neue", "sans-serif"],
       },
     },

@@ -93,7 +93,7 @@ export const Carousel = ({ items, initialScroll = 0 }) => {
             )}
           >
             {items.map((item, index) => (
-              <div key={index} className=" opacity-20 hover:opacity-100 transition hover:scale-105 blur-sm hover:blur-none delay-300 duration-300 ease-in-out">
+              <div key={index} className="transition hover:scale-105 duration-300 ease-in-out">
                 <motion.div
                   initial={{
                     opacity: 0,
@@ -149,13 +149,13 @@ export const Card = ({ card, layout = false }) => {
       <a href="/categories">
         <motion.button
           layoutId={layout ? `card-${card.title}` : undefined}
-          className="rounded-3xl dark:bg-neutral-900 h-80 w-56 md:h-[40rem] md:w-96 overflow-hidden flex flex-col items-start justify-start relative z-10"
+          className="items-center justify-center align-middle rounded-3xl dark:bg-neutral-900 h-80 w-56 md:h-[40rem] md:w-96 overflow-hidden flex flex-col relative z-10"
         >
           <div className="absolute h-full top-0 inset-x-0 bg-gradient-to-b from-black/50 via-transparent to-transparent z-30 pointer-events-none" />
           <div className="relative z-40 p-8">
             <motion.p
               layoutId={layout ? `category-${card.category}` : undefined}
-              className="text-white text-sm md:text-base font-medium font-sans text-left"
+              className="text-white text-sm md:text-base font-medium font-sans"
             >
               <span className="bg-green-600 text-white text-sm font-medium me-2 px-2.5 py-0.5 rounded dark:bg-yellow-900 dark:text-yellow-300">
                 {card.category}
@@ -163,7 +163,7 @@ export const Card = ({ card, layout = false }) => {
             </motion.p>
             <motion.p
               layoutId={layout ? `title-${card.title}` : undefined}
-              className="text-white text-xl md:text-3xl font-semibold max-w-xs text-left [text-wrap:balance] font-sans mt-2"
+              className=" text-white text-xl md:text-3xl font-semibold max-w-xs text-left [text-wrap:balance] font-sans mt-2"
             >
               {card.title}
             </motion.p>
@@ -188,6 +188,11 @@ export const BlurImage = ({ height, width, src, className, alt, ...rest }) => {
         "object-cover",
         "relative",
         "h-full",
+        "mix-blend-multiply",
+        "blur-md",
+        "hover:blur-none",
+        "hover:opacity-100",
+        
         isLoading ? "blur-sm" : "blur-0",
         className
       )}

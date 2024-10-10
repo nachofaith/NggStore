@@ -9,10 +9,11 @@ import { useCart } from "../hooks/useCart";
 export default function Checkout() {
   const { cart } = useCart();
   const navigate = useNavigate();
+  const isCartEmpty = cart.items.length === 0;
   const [currentStep, setCurrentStep] = useState(1);
 
   useEffect(() => {
-    if (cart.length === 0) {
+    if (isCartEmpty ) {
       navigate("/");
     }
   }, [cart, navigate]);

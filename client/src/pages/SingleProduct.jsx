@@ -63,12 +63,13 @@ export default function SingleProduct() {
     setIsOpen(true); // Abrir el Drawer
   };
 
-  const isProductInCart = cart.some((item) => item.id === Number(idProd));
+  const isProductInCart =
+    Array.isArray(cart.items) && cart.items.some((item) => item.id === Number(idProd));
 
   const handleComprar = (e) => {
     e.preventDefault();
     if (isProductInCart) {
-      navigate("/cart"); 
+      navigate("/cart");
     } else {
       const id = Number(idProd); // Convertir idProd a número
       const frontImage = cover;
@@ -84,9 +85,6 @@ export default function SingleProduct() {
     }
   };
 
-
-
-  
   return (
     <>
       <CartDrawer open={isOpen} setIsOpen={setIsOpen} />

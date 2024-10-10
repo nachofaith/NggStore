@@ -317,7 +317,7 @@ export default function Step1({ setCurrentStep }) {
           </form>
         </div>
         <div>
-          <Resumen onClick={handleClick} />
+          <Resumen onClick={handleClick}/>
         </div>
       </div>
     </>

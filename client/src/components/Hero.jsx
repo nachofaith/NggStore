@@ -48,10 +48,9 @@ export default function Hero() {
               tenemos todo lo que necesitas para mejorar tu setup.
             </p>
             <div className="flex pt-4">
-              {" "}
               <a
                 href="/categories"
-                className="inline-flex justify-center items-center py-3 px-5 text-base font-medium text-center text-white rounded-lg bg-blue-500 hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 dark:focus:ring-blue-900"
+                className="inline-flex justify-center items-center py-3 px-5 text-base font-medium text-center text-white rounded-lg bg-gradient-to-r from-cyan-500 to-blue-500 hover:opacity-80 focus:ring-4 focus:ring-blue-300 dark:focus:ring-blue-900"
               >
                 Ver productos
                 <svg

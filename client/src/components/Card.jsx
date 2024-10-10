@@ -6,7 +6,6 @@ import { HiOutlineArrowRight } from "react-icons/hi";
 import { BsCartPlus } from "react-icons/bs";
 import { BsFillCartCheckFill } from "react-icons/bs";
 import { useCart } from "../hooks/useCart";
-import { Button } from "flowbite-react";
 
 export function Products(props) {
   const [isOpen, setIsOpen] = useState(false);
@@ -41,7 +40,8 @@ export function Products(props) {
 
   const { addToCart, cart } = useCart();
 
-  const isProductInCart = cart.some((item) => item.id === id);
+  const isProductInCart =
+    Array.isArray(cart.items) && cart.items.some((item) => item.id === id);
 
   return (
     <>

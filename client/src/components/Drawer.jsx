@@ -1,8 +1,8 @@
-import { Button, Drawer, HR } from "flowbite-react";
+import { Drawer, HR } from "flowbite-react";
 import { useCart } from "../hooks/useCart";
 import FormatCLP from "./FormateadorCLP";
 import { Alert } from "flowbite-react";
-import { IoClose } from "react-icons/io5";
+import { useEffect } from "react"; // Importa useEffect
 
 const apiUrl = import.meta.env.VITE_API_URL;
 
@@ -11,9 +11,8 @@ export default function CartDrawer({ open, setIsOpen }) {
   const {
     cart,
     removeFromCart,
-    updateQuantity,
     quantities,
-    setQuantities,
+
     total,
     handleUpdateClick,
     handleQuantityChange,
@@ -21,19 +20,39 @@ export default function CartDrawer({ open, setIsOpen }) {
     setShowAlert,
   } = useCart();
 
-  console.log(total);
+  const shippingInfo = cart.ship;
+
+  // Agrega useEffect para manejar la clase overflow
+  useEffect(() => {
+    if (open) {
+      document.body.classList.add("overflow-hidden");
+    } else {
+      document.body.classList.remove("overflow-hidden");
+    }
+
+    // Limpieza al desmontar
+    return () => {
+      document.body.classList.remove("overflow-hidden");
+    };
+  }, [open]); // Dependencia para que se ejecute cada vez que 'open' cambie
 
   return (
-    <Drawer open={open} onClose={handleClose} position="right" style={{ width: '400px' }}>
+    <Drawer
+      open={open}
+      onClose={handleClose}
+      position="right"
+      style={{ width: "400px" }}
+      className="z-50"
+    >
       <Drawer.Header title="" titleIcon={() => <></>} />
-      {Object.keys(quantities).length === 0 ? (
+      {cart.items.length === 0 ? (
         <Drawer.Items>
           <h1 className="text-center">Carro de compras vacío </h1>
         </Drawer.Items>
       ) : (
         <Drawer.Items>
           <h1 className="text-center text-xl py-4">Resumen</h1>
-          {cart.map((item) => (
+          {cart.items.map((item) => (
             <div key={item.id} className="p-2 flex items-center">
               <div className="flex flex-row gap-2 items-center justify-center border rounded-md p-4 w-full">
                 <img
@@ -132,12 +151,31 @@ export default function CartDrawer({ open, setIsOpen }) {
             </div>
           ))}
 
+          {shippingInfo && (
+            <div>
+              <HR />
+              <div className="flex flex-row gap-2 items-center justify-between px-4">
+                <p>{shippingInfo.nameShipp}</p>
+                <div className="ml-auto text-right">
+                  {shippingInfo.typeShipp === "porpagar" && `Por Pagar`}
+                  {shippingInfo.typeShipp === "normal" && (
+                    <FormatCLP precio={shippingInfo.priceShipp} />
+                  )}
+                  {shippingInfo.typeShipp === "tienda" && `Gratis`}
+                </div>
+              </div>
+            </div>
+          )}
+
           <HR />
+
           <div>
-            <h2 className="text-lg uppercase px-4 text-right font-bold">Total</h2>
+            <h2 className="text-lg uppercase px-4 text-right font-bold">
+              Total
+            </h2>
             <div className="flex flex-row gap-2 items-center justify-between px-4">
               <div className="flex flex-col gap-2 justify-center">
-                <h3>Pago Tarjetas</h3>
+                <h3>Efectivo o Transferencia</h3>
               </div>
               <div className="flex flex-row gap-2 items-center">
                 <p className="text-lg">
@@ -147,11 +185,11 @@ export default function CartDrawer({ open, setIsOpen }) {
             </div>
             <div className="flex flex-row gap-2 items-center justify-between px-4 pb-4">
               <div className="flex flex-col gap-2 justify-center">
-                <h3>Pago Efectivo o Tarjetas</h3>
+                <h3>Pago Tarjetas</h3>
               </div>
               <div className="flex flex-row gap-2 items-center">
                 <p className="text-lg">
-                  <FormatCLP precio={total} />
+                  <FormatCLP precio={total*1.0395} />
                 </p>
               </div>
             </div>
@@ -169,14 +207,14 @@ export default function CartDrawer({ open, setIsOpen }) {
 
             <a
               type="button"
-              className="justify-center flex flex-row text-white bg-blue-500 hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700"
+              className="justify-center flex flex-row text-white bg-gradient-to-r from-cyan-500 to-blue-500 hover:opacity-80 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700"
               href={`/cart`}
             >
               Carro de Compras
             </a>
             <a
               type="button"
-              className="justify-center flex flex-row text-white bg-blue-500 hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700"
+              className="justify-center flex flex-row text-white bg-gradient-to-r from-cyan-500 to-blue-500 hover:opacity-80 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700"
               href={`/checkout`}
             >
               Finalizar Compra
