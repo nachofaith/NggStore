@@ -34,15 +34,13 @@ CREATE TABLE `categoria` (
 -- Dumping data for table `categoria`
 --
 
-LOCK TABLES `categoria` WRITE;
 /*!40000 ALTER TABLE `categoria` DISABLE KEYS */;
 INSERT INTO `categoria` VALUES
 (1,'Teclado'),
 (3,'Audifonos'),
 (4,'Audio'),
 (8,'Discos');
-/*!40000 ALTER TABLE `has_images` ENABLE KEYS */;
-UNLOCK TABLES;
+/*!40000 ALTER TABLE `categoria` ENABLE KEYS */;
 
 --
 -- Table structure for table `images`
@@ -63,7 +61,6 @@ CREATE TABLE `images` (
 -- Dumping data for table `images`
 --
 
-LOCK TABLES `images` WRITE;
 /*!40000 ALTER TABLE `images` DISABLE KEYS */;
 INSERT INTO `images` VALUES
 (125,'images-1724977581813-357981981.jpg',0),
@@ -81,8 +78,7 @@ INSERT INTO `images` VALUES
 (137,'images-1725038265387-881981154.jpg',1),
 (138,'images-1725038807627-586509117.jpg',1),
 (139,'images-1725039276660-779973112.jpg',1);
-/*!40000 ALTER TABLE `marca` ENABLE KEYS */;
-UNLOCK TABLES;
+/*!40000 ALTER TABLE `images` ENABLE KEYS */;
 
 --
 -- Table structure for table `producto`
@@ -109,7 +105,6 @@ CREATE TABLE `producto` (
 -- Dumping data for table `producto`
 --
 
-LOCK TABLES `producto` WRITE;
 /*!40000 ALTER TABLE `producto` DISABLE KEYS */;
 INSERT INTO `producto` VALUES
 (96,'Control XBOX ','mi <b>Descripción del Producto</b>','5','90990','78990',12,0,1),
@@ -117,7 +112,6 @@ INSERT INTO `producto` VALUES
 (100,'WebCam FIFINE K420','mi <b>Descripción del Producto</b>','1','125990','110000',1,16,3),
 (101,'Mouse','mi <b>Descripción del Producto</b>','5','99999','22222',1,0,1);
 /*!40000 ALTER TABLE `producto` ENABLE KEYS */;
-UNLOCK TABLES;
 
 --
 -- Table structure for table `shipping`
@@ -141,14 +135,12 @@ CREATE TABLE `shipping` (
 -- Dumping data for table `shipping`
 --
 
-LOCK TABLES `shipping` WRITE;
 /*!40000 ALTER TABLE `shipping` DISABLE KEYS */;
 INSERT INTO `shipping` VALUES
 (7,'Retiro en dirección comercial',0,'Retiro en Huara #5240, Comuna San Joaquín','tienda'),
 (8,'NGG Envíos',3990,'Envío a domicilio entre 2 a 3 días hábiles','normal'),
 (12,'STARKEN',0,'2 a 3 dias habiles','porpagar');
-/*!40000 ALTER TABLE `sub_categoria` ENABLE KEYS */;
-UNLOCK TABLES;
+/*!40000 ALTER TABLE `shipping` ENABLE KEYS */;
 
 --
 -- Table structure for table `usuarios`
@@ -174,7 +166,6 @@ CREATE TABLE `usuarios` (
 -- Dumping data for table `usuarios`
 --
 
-LOCK TABLES `usuarios` WRITE;
 /*!40000 ALTER TABLE `usuarios` DISABLE KEYS */;
 INSERT INTO `usuarios` VALUES
 (3,'nachofaith','ruben.godoy@ngg.cl','$2a$10$f/vwJmiVPmzuhgoWmOKLxO4wiFBcuCoe1EeBBYaAoLjlNowiinQHu','admin','2024-08-13 21:02:00');
@@ -189,3 +180,4 @@ INSERT INTO `usuarios` VALUES
 /*M!100616 SET NOTE_VERBOSITY=@OLD_NOTE_VERBOSITY */;
 
 -- Dump completed on 2024-10-07 19:16:34
+

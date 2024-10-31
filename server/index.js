@@ -1,21 +1,20 @@
 const express = require("express");
 const db = require("./config/db");
-// const mysql = require("mysql2");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const app = express();
-// const port = 3000;
 const port = process.env.PORT || 3000;
 const cors = require("cors");
 require("dotenv").config();
-// const crypto = require("crypto");
 const multer = require("multer");
 const path = require("path");
+const { WebpayPlus, Options, IntegrationCommerceCodes, IntegrationApiKeys, Environment } = require('transbank-sdk'); // ES6
 
-
+const router = express.Router();
 
 //ROUTES
 const shippingRoutes = require("./routes/shippingRoutes");
+const webpayRoutes = require('./routes/webpayRoutes');
 
 const jwtSecret =
   "875032869ee3511558cd74b5be1d517dc63b74bfc92abdc54ba253a619c80ce5"; // Cambia esto por una cadena secreta segura
@@ -23,30 +22,42 @@ const jwtSecret =
 app.use(cors());
 app.use(express.json());
 app.use("/uploads", express.static("uploads"));
-
+app.use('/api/webpay', webpayRoutes);
 
 app.listen(port, () => {
   console.log(`Servidor ejecutándose en el puerto ${port}`);
 });
 
-
-
 app.use("/shipping", shippingRoutes);
 
-// const db = mysql.createConnection({
-//   host: process.env.DB_HOST,
-//   user: process.env.DB_USER,
-//   password: process.env.DB_PASSWORD,
-//   database: process.env.DB_NAME,
-// });
+const webpay = new WebpayPlus.Transaction();
 
-// db.connect((err) => {
-//   if (err) {
-//     console.error("Error conectando a la base de datos:", err);
-//     return;
-//   }
-//   console.log("Conectado a la base de datos MySQL");
-// });
+app.post("/api/webpay/create-transaction", async (req, res) => {
+  try {
+    const { buyOrder, sessionId, amount, returnUrl } = req.body;
+
+    // Crea la transacción en Webpay
+    const createResponse = await webpay.create(
+      buyOrder,
+      sessionId,
+      amount,
+      returnUrl
+    );
+
+    // Responde con el token y la URL que el cliente necesita para redirigir
+    res.json({
+      token: createResponse.token,
+      url: createResponse.url,
+    });
+  } catch (error) {
+    console.error("Error al crear la transacción en Webpay:", error);
+    res.status(500).json({ error: "Error al crear la transacción en Webpay" });
+  }
+});
+
+
+
+
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -778,9 +789,6 @@ app.get("/category/:idCat", async (req, res) => {
   }
 });
 
-
-
-
 app.get("/subCategory/:id", async (req, res) => {
   const { id } = req.params;
 
@@ -864,8 +872,6 @@ app.get("/subCategory/:id", async (req, res) => {
     res.status(500).json({ error: "Error en el servidor" });
   }
 });
-
-
 
 // Ruta para actualizar una nueva Marca
 app.post("/productoUpdate", async (req, res) => {

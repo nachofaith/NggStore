@@ -27,6 +27,9 @@
     "desc": {
       "type": "text",
       "required": true
+    },
+    "recargo": {
+      "type": "decimal"
     }
   }
 }

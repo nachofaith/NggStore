@@ -11,30 +11,40 @@ import Categories from "./pages/Categories.jsx";
 import { CartProvider } from "./context/cart.jsx";
 import Carrito from "./pages/Cart.jsx";
 import Checkout from "./pages/Checkout.jsx";
-import Step2 from "./components/Step2.jsx";
+import Profile from "./pages/Profile.jsx"; // Importa el componente Profile
+import RutaProtegida from "./components/RutaProtegida.jsx"; // Importa la ruta protegida
+import { AuthProvider } from "./context/AuthContext.jsx"; // Importa el AuthProvider
+import Payment from "./pages/Payment.jsx";
 
 export default function App() {
   return (
     <BrowserRouter>
-      <CartProvider>
-        <div>
-          <Header />
-          <main>
-            <Routes>
-              <Route path="/" element={<Home />} />
-              <Route path="/login" element={<Login />} />
-              <Route path="/register" element={<Register />} />
-              <Route path="/producto/:idProd" element={<SingleProduct />} />
-              <Route path="/category/:idCat" element={<Category />} />
-              <Route path="/categories" element={<Categories />} />
-              <Route path="/*" element={<Page404 />} />
-              <Route path="/cart" element={<Carrito />} />
-              <Route path="/checkout" element={<Checkout />} />
-            </Routes>
-          </main>
-          <Footer />
-        </div>
-      </CartProvider>
+      <AuthProvider>
+        <CartProvider>
+          <div>
+            <Header />
+            <main>
+              <Routes>
+                <Route path="/" element={<Home />} />
+                <Route path="/login" element={<Login />} />
+                <Route path="/register" element={<Register />} />
+                <Route path="/producto/:idProd" element={<SingleProduct />} />
+                <Route path="/category/:idCat" element={<Category />} />
+                <Route path="/categories" element={<Categories />} />
+                <Route path="/cart" element={<Carrito />} />
+                <Route path="/checkout" element={<Checkout />} />
+                <Route path="/*" element={<Page404 />} />
+                <Route path="/payment" element={<Payment />} />
+
+
+                {/* Ruta protegida para el perfil */}
+                <Route path="/profile" element={<RutaProtegida element={<Profile />} />} />
+              </Routes>
+            </main>
+            <Footer />
+          </div>
+        </CartProvider>
+      </AuthProvider>
     </BrowserRouter>
   );
 }

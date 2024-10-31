@@ -1,90 +1,61 @@
 export default function Stepper({ step, handleStepClick }) {
+  const steps = [
+    {
+      id: 1,
+      title: "Información del Cliente",
+      description: "Dirección y datos",
+      clickable: step >= 2,
+    },
+    {
+      id: 2,
+      title: "Opciones de entrega",
+      description: "Envío o Retiro",
+      clickable: step >= 3,
+    },
+    {
+      id: 3,
+      title: "Pagar",
+      description: "Opciones de Pago",
+      clickable: step >= 4,
+    },
+    {
+      id: 4,
+      title: "Confirmar Pedido",
+      description: "Resumen final",
+      clickable: false, // Último paso, no es clickeable
+    },
+  ];
+
+  const getStepClasses = (currentStep) => {
+    return step === currentStep
+      ? "text-blue-600 dark:text-blue-500"
+      : "text-gray-500 dark:text-gray-400";
+  };
+
+  const getCircleClasses = (currentStep) => {
+    return step === currentStep
+      ? "flex items-center justify-center w-8 h-8 border border-blue-600 rounded-full shrink-0 dark:border-blue-500"
+      : "flex items-center justify-center w-8 h-8 border border-gray-500 rounded-full shrink-0 dark:border-gray-400";
+  };
+
   return (
     <div
       id="stepper"
-      className="flex justify-center items-center border rounded-md py-4 px-2 mx-2"
+      className="flex justify-center items-center border rounded-md py-4 px-6 w-full"
     >
-      <ol className="items-center space-y-4 md:space-x-52 sm:flex sm:space-x-30 sm:space-y-0 rtl:space-x-reverse">
-        <a
-          href="#"
-          onClick={
-            step === 2 || step === 3 ? () => handleStepClick(1) : undefined
-          }
-        >
+      {/* Ajustes responsivos con flex-wrap, max-w-full y un mejor centrado */}
+      <ol className="flex flex-wrap justify-center items-center space-y-4 sm:flex-row sm:space-x-30 md:space-x-52 rtl:space-x-reverse w-full max-w-full">
+        {steps.map(({ id, title, description, clickable }) => (
           <li
-            className={
-              step === 1
-                ? `flex items-center text-blue-600 dark:text-blue-500 space-x-2.5 rtl:space-x-reverse`
-                : `flex items-center text-gray-500 dark:text-gray-400 space-x-2.5 rtl:space-x-reverse`
-            }
+            key={id}
+            className={`flex flex-col items-center text-center cursor-pointer ${getStepClasses(id)} w-full sm:w-auto`}
+            onClick={clickable ? () => handleStepClick(id) : undefined}
           >
-            <span
-              className={
-                step === 1
-                  ? `flex items-center justify-center w-8 h-8 border border-blue-600 rounded-full shrink-0 dark:border-blue-500`
-                  : `flex items-center justify-center w-8 h-8 border border-gray-500 rounded-full shrink-0 dark:border-gray-400`
-              }
-            >
-              1
-            </span>
-            <span>
-              <h3 className="font-medium leading-tight">
-                Información del Cliente
-              </h3>
-              <p className="text-sm">Dirección y datos</p>
-            </span>
+            <span className={getCircleClasses(id)}>{id}</span>
+            <h3 className="font-medium leading-tight mt-2">{title}</h3>
+            <p className="text-sm">{description}</p>
           </li>
-        </a>
-
-        <a href="#" onClick={step === 3 ? () => handleStepClick(2) : undefined}>
-          <li
-            className={
-              step === 2
-                ? `flex items-center text-blue-600 dark:text-blue-500 space-x-2.5 rtl:space-x-reverse`
-                : `flex items-center text-gray-500 dark:text-gray-400 space-x-2.5 rtl:space-x-reverse`
-            }
-          >
-            <span
-              className={
-                step === 2
-                  ? `flex items-center justify-center w-8 h-8 border border-blue-600 rounded-full shrink-0 dark:border-blue-500`
-                  : `flex items-center justify-center w-8 h-8 border border-gray-500 rounded-full shrink-0 dark:border-gray-400`
-              }
-            >
-              {" "}
-              2
-            </span>
-            <span>
-              <h3 className="font-medium leading-tight">Opciones de entrega</h3>
-              <p className="text-sm">Envío o Retiro</p>
-            </span>
-          </li>
-        </a>
-
-        <a href="#">
-          <li
-            className={
-              step === 3
-                ? `flex items-center text-blue-600 dark:text-blue-500 space-x-2.5 rtl:space-x-reverse`
-                : `flex items-center text-gray-500 dark:text-gray-400 space-x-2.5 rtl:space-x-reverse`
-            }
-          >
-            <span
-              className={
-                step === 3
-                  ? `flex items-center justify-center w-8 h-8 border border-blue-600 rounded-full shrink-0 dark:border-blue-500`
-                  : `flex items-center justify-center w-8 h-8 border border-gray-500 rounded-full shrink-0 dark:border-gray-400`
-              }
-            >
-              {" "}
-              3
-            </span>
-            <span>
-              <h3 className="font-medium leading-tight">Pagar</h3>
-              <p className="text-sm">Opciones de Pago</p>
-            </span>
-          </li>
-        </a>
+        ))}
       </ol>
     </div>
   );

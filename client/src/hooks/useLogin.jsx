@@ -1,31 +1,58 @@
 import { useState } from "react";
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "../context/login";
+import axios from "axios";
+import { useAuth } from "../context/AuthContext"; // Importar el contexto de autenticación
 
-const useLogin = () => {
+export default function useLogin() {
   const [error, setError] = useState(null);
-  const { login } = useAuth();
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const { login } = useAuth(); // Usar el contexto de autenticación para almacenar los datos del usuario
+
+  const API_URL = import.meta.env.VITE_APIV2_URL;
 
   const handleLogin = async (email, password) => {
+    setLoading(true);
+    setError(null); // Limpiar errores previos
+
     try {
-      const response = await axios.post("http://localhost:3000/login", {
-        email,
-        password,
+      // Hacer la solicitud para obtener el JWT
+      const response = await axios.post(`${API_URL}/api/auth/local`, {
+        identifier: email,
+        password: password,
       });
-      localStorage.setItem("token", response.data.token);
-      navigate("/");
-      login();
-    } catch (error) {
-      setError(error.data);
+
+      const jwt = response.data.jwt;
+      localStorage.setItem("token", jwt); // Almacenar el JWT en localStorage (opcional)
+
+      // Obtener datos del usuario usando el JWT
+      const userResponse = await axios.get(`${API_URL}/api/users/me`, {
+        headers: {
+          Authorization: `Bearer ${jwt}`,
+        },
+      });
+
+      const userData = userResponse.data;
+
+      // Actualizar el contexto de autenticación con el usuario y el token
+      login(userData, jwt);
+
+      // Redirigir al perfil
+      navigate("/profile");
+
+      console.log("Inicio de sesión exitoso");
+      return true; // Devolvemos true si el login fue exitoso
+    } catch (err) {
+      console.error(
+        "Error en el login:",
+        err.response ? err.response.data : err.message
+      );
+      setError("Credenciales incorrectas. Por favor intenta nuevamente.");
+      return false; // Devolvemos false si hubo un error
+    } finally {
+      setLoading(false);
     }
   };
 
-  return {
-    handleLogin,
-    error,
-  };
-};
-
-export default useLogin;
+  return { error, loading, handleLogin };
+}

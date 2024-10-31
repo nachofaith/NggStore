@@ -43,7 +43,6 @@ export default function Step2({ setCurrentStep }) {
   };
 
   const handleShippingChange = (selectedShip) => {
-    
     setErrorRadio(null);
     setShip(selectedShip); // Actualiza el estado con el objeto del envío seleccionado
   };
@@ -52,13 +51,13 @@ export default function Step2({ setCurrentStep }) {
     return <div>Error: {error}</div>;
   }
 
-  const shippingInfo = cart.ship; 
+  const shippingInfo = cart.ship;
 
   return (
     <>
       <Stepper step={2} handleStepClick={handleStepClick} />
 
-      <div className="pt-10 gap-4 grid md:grid-cols-4 sm:grid-cols-1 mx-2">
+      <div className="pt-10 gap-4 grid md:grid-cols-4 sm:grid-cols-1">
         <div
           id="datos"
           className="lg:col-span-3 md:col-span-3 p-10 border rounded-md"
@@ -88,7 +87,7 @@ export default function Step2({ setCurrentStep }) {
                       required
                       onChange={() => handleShippingChange(item)} // Enviar el objeto `item` completo
                       checked={shippingInfo?.idShipp === item.idShipp} // Verifica si esta opción es la seleccionada
-                      />
+                    />
                     <label
                       htmlFor={`check${item.idShipp}`}
                       className="inline-flex items-center justify-between w-full p-5 text-gray-500 bg-white border border-gray-200 rounded-lg cursor-pointer dark:hover:text-gray-300 dark:border-gray-700 dark:peer-checked:text-blue-500 peer-checked:border-blue-600 peer-checked:text-blue-600 hover:text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:bg-gray-800 dark:hover:bg-gray-700"

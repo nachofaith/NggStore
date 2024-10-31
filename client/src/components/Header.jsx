@@ -1,19 +1,25 @@
-import { Dropdown } from "flowbite-react";
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { Dropdown } from "flowbite-react";
 import useRead from "../hooks/useRead";
 import { Spinner } from "flowbite-react";
 import { BsCartFill } from "react-icons/bs";
 import { useCart } from "../hooks/useCart";
 import { FaUser } from "react-icons/fa";
 import CartDrawer from "./Drawer";
+import useUser from "../hooks/useUser";
+import { useAuth } from "../context/AuthContext";
 
 export default function Header() {
   const { dataCat } = useRead();
   const [loading, setLoading] = useState(true);
-  const { cart } = useCart(); // cart ahora tiene la estructura { items: [], ship: {} }
   const [isOpen, setIsOpen] = useState(false);
+  const { cart } = useCart(); // cart ahora tiene la estructura { items: [], ship: {} }
 
-  // Cambiar el acceso a cart.items para el cálculo
+  const navigate = useNavigate();
+  const { user, logout } = useAuth();
+
+
   const totalItems = cart.items.reduce(
     (total, item) => total + item.quantity,
     0
@@ -27,6 +33,10 @@ export default function Header() {
       setLoading(false);
     }
   }, [dataCat]);
+
+  const handleLoginClick = () => {
+    navigate("/login");
+  };
 
   return (
     <div className="w-full">
@@ -141,7 +151,7 @@ export default function Header() {
           <div className="flex justify-between items-center gap-2">
             <button
               type="button"
-              className="relative inline-flex items-center p-2 lg:p-3 text-sm font-medium text-center text-white bg-gradient-to-r from-cyan-500 to-blue-500 hover:opacity-80 rounded-lg"
+              className="relative inline-flex items-center p-3 text-sm font-medium text-center text-white bg-gradient-to-r from-cyan-500 to-blue-500 hover:opacity-80 rounded-lg"
               onClick={() => setIsOpen(true)}
             >
               <BsCartFill className="w-5 h-5" />
@@ -153,13 +163,43 @@ export default function Header() {
               )}
             </button>
 
-            <button
-              type="button"
-              className="relative inline-flex items-center p-2 lg:p-3 text-sm font-medium text-center text-white bg-gradient-to-r from-cyan-500 to-blue-500 hover:opacity-80 rounded-lg"
-              href="/login"
-            >
-              <FaUser className="h-5 w-5" />
-            </button>
+            {!user && (
+              <button
+                type="button"
+                className="relative inline-flex items-center p-3 text-sm font-medium text-center text-white bg-gradient-to-r from-cyan-500 to-blue-500 hover:opacity-80 rounded-lg"
+                onClick={handleLoginClick}
+              >
+                <FaUser className="w-5 h-5" />
+                <span className="sr-only">Login</span>
+              </button>
+            )}
+
+            {user && (
+              <div className="flex md:order-2">
+                <Dropdown
+                  arrowIcon={false}
+                  inline
+                  label={
+                    // Usamos un div en lugar de button para evitar el error
+                    <div className="relative inline-flex items-center p-3 text-sm font-medium text-center text-white bg-gradient-to-r from-cyan-500 to-blue-500 hover:opacity-80 rounded-lg cursor-pointer">
+                      <FaUser className="w-5 h-5" />
+                      <span className="sr-only">Profile</span>
+                    </div>
+                  }
+                >
+                  <Dropdown.Item>
+                    <div className="flex flex-row gap-1">
+                      <span className="block text-sm">Bienvenid@</span>
+                      <span className="font-semibold">{user.username}</span>
+                    </div>
+                  </Dropdown.Item>
+                  <Dropdown.Item href="/profile" >Cuenta</Dropdown.Item>
+
+                  <Dropdown.Divider />
+                  <Dropdown.Item onClick={logout}>Salir</Dropdown.Item>
+                </Dropdown>
+              </div>
+            )}
           </div>
         </nav>
       </div>
