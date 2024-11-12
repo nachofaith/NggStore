@@ -66,13 +66,13 @@ export default function Resumen({ onClick }) {
 
         {shippingInfo && (
           <div className="flex flex-row gap-2 items-center justify-between border-b py-2">
-            <span className="text-lg">{shippingInfo.nameShipp}</span>
+            <span className="text-lg">{shippingInfo.name}</span>
             <div className="ml-auto text-right text-lg">
-              {shippingInfo.typeShipp === "porpagar" && `Por Pagar`}
-              {shippingInfo.typeShipp === "normal" && (
-                <FormatCLP precio={shippingInfo.priceShipp} />
-              )}
-              {shippingInfo.typeShipp === "tienda" && `Gratis`}
+              {shippingInfo.type === "Envío por pagar" && `Por Pagar`}
+              {shippingInfo.price === 0 &&
+                shippingInfo.type !== "Envío por pagar" &&
+                "GRATIS"}
+              {shippingInfo.price > 0 && <FormatCLP precio={shippingInfo.price} />}
             </div>
           </div>
         )}

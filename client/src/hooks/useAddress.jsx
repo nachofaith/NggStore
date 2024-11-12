@@ -92,9 +92,7 @@ const useAddress = () => {
       setAddresses(response.data.data); // Almacena las direcciones en el estado (ajusta según la estructura de respuesta)
     } catch (err) {
       setError(err.message);
-    } finally {
-      setLoading(false);
-    }
+    } 
   };
 
   useEffect(() => {
@@ -111,6 +109,7 @@ const useAddress = () => {
     fetchAddresses, // Función para obtener direcciones
     addresses, // Lista de direcciones
     loading, // Estado de carga
+    setLoading,
     error, // Estado de error
   };
 };

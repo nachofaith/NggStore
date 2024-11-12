@@ -612,6 +612,33 @@ export interface ApiPaymentPayment extends Struct.CollectionTypeSchema {
   };
 }
 
+export interface ApiPedidoPedido extends Struct.CollectionTypeSchema {
+  collectionName: 'pedidos';
+  info: {
+    singularName: 'pedido';
+    pluralName: 'pedidos';
+    displayName: 'Pedido';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    orden: Schema.Attribute.UID;
+    products: Schema.Attribute.Relation<'oneToMany', 'api::product.product'>;
+    fecha: Schema.Attribute.DateTime;
+    total: Schema.Attribute.Integer;
+    createdAt: Schema.Attribute.DateTime;
+    updatedAt: Schema.Attribute.DateTime;
+    publishedAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    locale: Schema.Attribute.String;
+    localizations: Schema.Attribute.Relation<'oneToMany', 'api::pedido.pedido'>;
+  };
+}
+
 export interface ApiProductProduct extends Struct.CollectionTypeSchema {
   collectionName: 'products';
   info: {
@@ -631,8 +658,9 @@ export interface ApiProductProduct extends Struct.CollectionTypeSchema {
     priceOff: Schema.Attribute.Integer & Schema.Attribute.DefaultTo<0>;
     brand: Schema.Attribute.Relation<'manyToOne', 'api::brand.brand'>;
     category: Schema.Attribute.Relation<'manyToOne', 'api::category.category'>;
-    image: Schema.Attribute.Media<'images' | 'files', true> &
-      Schema.Attribute.Required;
+    images: Schema.Attribute.Media<'images' | 'files', true>;
+    cover: Schema.Attribute.Media<'images' | 'files'>;
+    pedido: Schema.Attribute.Relation<'manyToOne', 'api::pedido.pedido'>;
     createdAt: Schema.Attribute.DateTime;
     updatedAt: Schema.Attribute.DateTime;
     publishedAt: Schema.Attribute.DateTime;
@@ -645,6 +673,36 @@ export interface ApiProductProduct extends Struct.CollectionTypeSchema {
       'oneToMany',
       'api::product.product'
     >;
+  };
+}
+
+export interface ApiShipShip extends Struct.CollectionTypeSchema {
+  collectionName: 'ships';
+  info: {
+    singularName: 'ship';
+    pluralName: 'ships';
+    displayName: 'Ship';
+    description: '';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    name: Schema.Attribute.String;
+    desc: Schema.Attribute.Text;
+    type: Schema.Attribute.Enumeration<
+      ['Retiro en tienda', 'Env\u00EDo por pagar', 'Env\u00EDo normal']
+    >;
+    price: Schema.Attribute.Integer;
+    createdAt: Schema.Attribute.DateTime;
+    updatedAt: Schema.Attribute.DateTime;
+    publishedAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    locale: Schema.Attribute.String;
+    localizations: Schema.Attribute.Relation<'oneToMany', 'api::ship.ship'>;
   };
 }
 
@@ -1027,7 +1085,9 @@ declare module '@strapi/strapi' {
       'api::brand.brand': ApiBrandBrand;
       'api::category.category': ApiCategoryCategory;
       'api::payment.payment': ApiPaymentPayment;
+      'api::pedido.pedido': ApiPedidoPedido;
       'api::product.product': ApiProductProduct;
+      'api::ship.ship': ApiShipShip;
       'admin::permission': AdminPermission;
       'admin::user': AdminUser;
       'admin::role': AdminRole;

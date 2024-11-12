@@ -6,6 +6,8 @@ import { IoClose } from "react-icons/io5";
 import { Alert } from "flowbite-react";
 import { useNavigate } from "react-router-dom";
 import Resumen from "../components/Resumen";
+const API_URL = import.meta.env.VITE_APIV2_URL;
+
 
 const apiUrl = import.meta.env.VITE_API_URL;
 
@@ -61,7 +63,7 @@ export default function Carrito() {
                   </div>
 
                   <img
-                    src={`${apiUrl}/uploads/${item.frontImage}`}
+                    src={`${API_URL}/${item.frontImage}`}
                     alt=""
                     className="w-40 h-40 object-contain p-2 mx-auto"
                   />

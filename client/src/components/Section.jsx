@@ -2,7 +2,7 @@ import { Products } from "./Card";
 import Title from "./Title";
 
 export default function Section({ data, text, tipo, limit }) {
-  // Si `limit` está definido, limita los datos, de lo contrario, muestra todos
+  // Si `limit` está definido, limita los datos; de lo contrario, muestra todos
   const limitedData = limit ? data.slice(0, limit) : data;
 
   return (
@@ -11,20 +11,16 @@ export default function Section({ data, text, tipo, limit }) {
 
       <div className="grid xl:grid-cols-4 lg:grid-cols-2 md:grid-cols-2 sm:grid-cols-1 gap-4">
         {limitedData.map((item) => {
-          // Filtra las imágenes para obtener solo la que tiene front: 1
-          const frontImage =
-            item.images.find((img) => img.front === 1)?.url_img || "";
-
           return (
             <Products
-              key={item.id_prod}
-              id={item.id_prod}
+              key={item.id}
+              id={item.id}
               tipo={tipo}
-              nombreProd={item.nombre_prod}
-              precioProd={item.precio_prod}
-              precioProdOff={item.precio_off_prod}
-              frontImage={frontImage}
-              stockProd={item.stock_prod}
+              nombreProd={item.name}
+              precioProd={item.price}
+              precioProdOff={item.priceOff}
+              frontImage={item.cover?.url || "/path/to/default-image.jpg"} // Usa la URL del cover o una imagen por defecto
+              stockProd={item.stock}
             />
           );
         })}

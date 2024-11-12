@@ -3,7 +3,11 @@ import axios from "axios";
 
 const useShipping = () => {
   const [error, setError] = useState(null);
-  const [shippingData, setShippingData] = useState([]); 
+  const [shippingData, setShippingData] = useState([]);
+
+  const API_URL = import.meta.env.VITE_APIV2_URL; // URL base de la API
+  const API_KEY = import.meta.env.VITE_API_TOKEN;
+
   const apiUrl = import.meta.env.VITE_API_URL;
 
   const createShip = useCallback(
@@ -43,13 +47,18 @@ const useShipping = () => {
     [apiUrl]
   );
 
-
   const readShip = useCallback(async () => {
     setError(null); // Resetea el error
 
     try {
-      const response = await axios.get(`${apiUrl}/shipping/readShip`);
-      setShippingData(response.data); // Almacena los datos obtenidos
+      // Agregar el filtro por usuario en la URL
+      const response = await axios.get(`${API_URL}/api/ships`, {
+        headers: {
+          Authorization: `Bearer ${API_KEY}`,
+        },
+      });
+
+      setShippingData(response.data.data); // Almacena los datos obtenidos
       return { success: true, data: response.data };
     } catch (error) {
       if (error.response) {
@@ -57,9 +66,7 @@ const useShipping = () => {
           `Error: ${error.response.status} - ${error.response.data.message}`
         );
       } else if (error.request) {
-        setError(
-          "Error: No response from the server. Please try again later."
-        );
+        setError("Error: No response from the server. Please try again later.");
       } else {
         setError("Error: " + error.message);
       }
@@ -101,7 +108,6 @@ const useShipping = () => {
     },
     [apiUrl]
   );
-
 
   return {
     createShip,

@@ -7,21 +7,35 @@ import { CartContext } from "../context/cart"; // Importar el contexto del carri
 import usePayment from "../hooks/usePayment";
 import { Spinner } from "flowbite-react";
 const apiUrl = import.meta.env.VITE_API_URL;
+const API_URL = import.meta.env.VITE_APIV2_URL;
+import { useNavigate } from "react-router-dom"; // Importa useNavigate
+
 
 const Payment = () => {
   const [transactionDetails, setTransactionDetails] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [isCashOrTransfer, setIsCashOrTransfer] = useState(false); // Nuevo estado
   const location = useLocation();
 
   const { cart, total } = useContext(CartContext); // Usar el contexto del carrito
   const { readPayment, paymentData } = usePayment();
   const shippingInfo = cart.ship;
   const paymentMethod = cart.payment;
+  const navigate = useNavigate();
 
   useEffect(() => {
     readPayment();
   }, [readPayment]);
+
+    // Verificar que el usuario ha completado los pasos anteriores
+    useEffect(() => {
+      if (!cart || !cart.items.length || !cart.ship || !cart.payment) {
+        // Si falta información esencial, redirige al paso inicial del checkout
+        navigate("/checkout");
+        return;
+      }
+    }, [cart, navigate]);
 
   useEffect(() => {
     // Obtener el token_ws de la URL
@@ -47,7 +61,9 @@ const Payment = () => {
 
       confirmTransaction();
     } else {
-      setError("No se encontró el token en la URL.");
+      // Si no hay token, el pago se realizó con efectivo o transferencia
+      setIsCashOrTransfer(true);
+      setLoading(false); // Desactivar el spinner inmediatamente
     }
   }, [location]);
 
@@ -73,35 +89,67 @@ const Payment = () => {
 
   return (
     <div className="h-screen md:container mx-auto">
-      <Title text="Pago realizado correctamente" align="center" />
+      <Title text="Orden Realizada" align="center" />
       <p className="text-center text-xl pb-8">
         A continuación podrá ver el detalle
       </p>
 
-      {/* Detalle de la transacción */}
-      <div className="border rounded-md p-4 mb-2">
-        <p>
-          <strong>Orden de Compra: </strong> {transactionDetails.buy_order}
-        </p>
-        <p>
-          <strong>Tipo de pago: </strong> {transactionDetails.payment_type_code}
-        </p>
-        <p>
-          <strong>Monto: </strong>
-          <FormatCLP precio={transactionDetails.amount} />
-        </p>
-        <p>
-          <strong>Estado: </strong> {transactionDetails.status}
-        </p>
-        <p>
-          <strong>Código de Autorización:</strong>{" "}
-          {transactionDetails.authorization_code}
-        </p>
-        <p>
-          <strong>Fecha de Transacción:</strong>{" "}
-          {transactionDetails.transaction_date}
-        </p>
-      </div>
+      {isCashOrTransfer ? (
+        // Información de pago para transferencia
+        <div className="border rounded-md p-4 mb-2">
+          <h2 className="text-lg font-semibold">
+            Detalles de Pago por Transferencia
+          </h2>
+          <p>
+            <strong>Banco: </strong> Banco Ejemplo
+          </p>
+          <p>
+            <strong>Cuenta: </strong> 123456789
+          </p>
+          <p>
+            <strong>Tipo de cuenta: </strong> Corriente
+          </p>
+          <p>
+            <strong>Rut: </strong> 12.345.678-9
+          </p>
+          <p>
+            <strong>Email: </strong> pago@ejemplo.com
+          </p>
+          <p>
+            <strong>Monto a Transferir: </strong>
+            <FormatCLP precio={total} />
+          </p>
+          <p>
+            <strong>Descripción: </strong> Indique su nombre y orden de compra
+          </p>
+        </div>
+      ) : (
+        // Detalle de la transacción Webpay
+        <div className="border rounded-md p-4 mb-2">
+          <p>
+            <strong>Orden de Compra: </strong> {transactionDetails.buy_order}
+          </p>
+          <p>
+            <strong>Tipo de pago: </strong>{" "}
+            {transactionDetails.payment_type_code}
+          </p>
+          <p>
+            <strong>Monto: </strong>
+            <FormatCLP precio={transactionDetails.amount} />
+          </p>
+          <p>
+            <strong>Estado: </strong> {transactionDetails.status}
+          </p>
+          <p>
+            <strong>Código de Autorización:</strong>{" "}
+            {transactionDetails.authorization_code}
+          </p>
+          <p>
+            <strong>Fecha de Transacción:</strong>{" "}
+            {transactionDetails.transaction_date}
+          </p>
+        </div>
+      )}
 
       {/* Detalle del carrito de compras */}
       <div className="border rounded-md p-4 mb-2">
@@ -114,7 +162,7 @@ const Payment = () => {
               className="flex flex-row gap-2 items-center justify-between border-b"
             >
               <img
-                src={`${apiUrl}/uploads/${data.frontImage}`}
+                src={`${API_URL}/${data.frontImage}`}
                 alt={data.nombreProd}
                 className="w-16 h-16 object-contain rounded mr-4"
               />
@@ -155,13 +203,15 @@ const Payment = () => {
 
           {shippingInfo && (
             <div className="flex flex-row gap-2 items-center justify-between border-b py-2">
-              <span className="text-lg">{shippingInfo.nameShipp}</span>
+              <span className="text-lg">{shippingInfo.name}</span>
               <div className="ml-auto text-right text-lg">
-                {shippingInfo.typeShipp === "porpagar" && `Por Pagar`}
-                {shippingInfo.typeShipp === "normal" && (
-                  <FormatCLP precio={shippingInfo.priceShipp} />
+                {shippingInfo.type === "Envío por pagar" && `Por Pagar`}
+                {shippingInfo.price === 0 &&
+                  shippingInfo.type !== "Envío por pagar" &&
+                  "GRATIS"}
+                {shippingInfo.price > 0 && (
+                  <FormatCLP precio={shippingInfo.price} />
                 )}
-                {shippingInfo.typeShipp === "tienda" && `Gratis`}
               </div>
             </div>
           )}
@@ -171,7 +221,6 @@ const Payment = () => {
           <h2 className="text-lg uppercase font-bold pt-2 text-right">Total</h2>
 
           {/* Mostrar solo el método de pago seleccionado o todos si no hay selección */}
-          {console.log(paymentMethod)}
           {paymentMethod &&
           paymentData.data?.data.some(
             (paymentOption) => paymentOption.name === paymentMethod.name
@@ -204,8 +253,8 @@ const Payment = () => {
                 </div>
               ))
           ) : (
-            <p className="text-red-500">
-              No se ha seleccionado un método de pago.
+            <p className="text-lg font-semibold text-right">
+              <FormatCLP precio={total} />
             </p>
           )}
         </div>

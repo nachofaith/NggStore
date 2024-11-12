@@ -8,17 +8,17 @@ import { useCart } from "../hooks/useCart";
 import { FaUser } from "react-icons/fa";
 import CartDrawer from "./Drawer";
 import useUser from "../hooks/useUser";
+import useCat from "../hooks/useCat";
 import { useAuth } from "../context/AuthContext";
 
 export default function Header() {
-  const { dataCat } = useRead();
-  const [loading, setLoading] = useState(true);
+  const { fetchCat, cat, setLoading, loading, error } = useCat();
+
   const [isOpen, setIsOpen] = useState(false);
   const { cart } = useCart(); // cart ahora tiene la estructura { items: [], ship: {} }
 
   const navigate = useNavigate();
   const { user, logout } = useAuth();
-
 
   const totalItems = cart.items.reduce(
     (total, item) => total + item.quantity,
@@ -26,13 +26,16 @@ export default function Header() {
   );
 
   useEffect(() => {
-    if (dataCat !== null) {
+    fetchCat();
+  }, []);
+
+  useEffect(() => {
+    if (cat !== null) {
       setTimeout(() => {
         setLoading(false);
-      }, 1000);
-      setLoading(false);
+      }, 500);
     }
-  }, [dataCat]);
+  }, [cat]);
 
   const handleLoginClick = () => {
     navigate("/login");
@@ -73,63 +76,14 @@ export default function Header() {
                 inline
               >
                 {!loading &&
-                  dataCat
-                    .sort((a, b) => a.nombre_cat.localeCompare(b.nombre_cat))
+                  cat
+                    .sort((a, b) => a.name.localeCompare(b.name))
                     .map((category) => (
-                      <div key={category.id_cat} className="relative group">
-                        {category.subCategorias ? (
-                          <div className="text-lg p-2 text-gray-800 cursor-pointer">
-                            <span className="text-sm lg:text-xl text-gray-800">
-                              <a
-                                href={`/category/${category.id_cat}`}
-                                className="flex flex-row items-center gap-1 hover:text-blue-400"
-                              >
-                                {category.nombre_cat.toUpperCase()}
-                                <svg
-                                  className="w-4 h-4"
-                                  aria-hidden="true"
-                                  xmlns="http://www.w3.org/2000/svg"
-                                  width="24"
-                                  height="24"
-                                  fill="none"
-                                  viewBox="0 0 24 24"
-                                >
-                                  <path
-                                    stroke="currentColor"
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                    strokeWidth="2"
-                                    d="m9 5 7 7-7 7"
-                                  />
-                                </svg>
-                              </a>
-                            </span>
-                            <div className="absolute left-full w-max top-0 mt-0 ml-2 bg-white border border-gray-300 rounded-lg shadow-lg z-10 opacity-0 group-hover:opacity-100 group-hover:scale-100 transition-opacity duration-300 transform scale-95">
-                              {category.subCategorias
-                                .split(", ")
-                                .map((subCategoria, index) => {
-                                  const subCategoriaId =
-                                    category.subCategoriaIds.split(", ")[index];
-
-                                  return (
-                                    <div
-                                      key={index}
-                                      className="uppercase text-sm lg:text-xl p-2 text-gray-800 hover:text-blue-400 hover:bg-white hover:rounded-lg"
-                                    >
-                                      <a
-                                        href={`/category/sub_${subCategoriaId}`}
-                                      >
-                                        {subCategoria}
-                                      </a>
-                                    </div>
-                                  );
-                                })}
-                            </div>
-                          </div>
-                        ) : (
+                      <div key={category.id} className="relative group">
+                        {cat && (
                           <div className="text-sm lg:text-xl uppercase p-2 text-gray-800 hover:text-blue-400 hover:bg-white">
-                            <a href={`/category/${category.id_cat}`}>
-                              {category.nombre_cat}
+                            <a href={`/category/${category.id}`}>
+                              {category.name}
                             </a>
                           </div>
                         )}
@@ -187,14 +141,15 @@ export default function Header() {
                     </div>
                   }
                 >
-                  <Dropdown.Item>
-                    <div className="flex flex-row gap-1">
-                      <span className="block text-sm">Bienvenid@</span>
-                      <span className="font-semibold">{user.username}</span>
-                    </div>
-                  </Dropdown.Item>
-                  <Dropdown.Item href="/profile" >Cuenta</Dropdown.Item>
+                  <Dropdown.Header>
+                    <span className="block text-sm">Bienvenid@</span>
+                    <span className="block truncate text-sm font-medium">
+                      {user.first_name}
+                    </span>
+                  </Dropdown.Header>
 
+                  <Dropdown.Item href="/profile">Cuenta</Dropdown.Item>
+                  <Dropdown.Item href="/profile">Pedidos</Dropdown.Item>
                   <Dropdown.Divider />
                   <Dropdown.Item onClick={logout}>Salir</Dropdown.Item>
                 </Dropdown>

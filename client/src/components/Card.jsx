@@ -20,6 +20,7 @@ export function Products(props) {
   } = props;
 
   const apiUrl = import.meta.env.VITE_API_URL;
+  const API_URL = import.meta.env.VITE_APIV2_URL;
 
   const handleAddClick = (e) => {
     e.preventDefault();
@@ -64,7 +65,7 @@ export function Products(props) {
           <div className="flex-grow mx-auto overflow-hidden rounded-lg flex justify-center items-center">
             <img
               className="object-scale-down w-[300px] h-[300px] p-4"
-              src={`${apiUrl}/uploads/${frontImage}`}
+              src={`${API_URL}/${frontImage}`}
               alt="Product Image"
             />
           </div>

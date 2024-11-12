@@ -7,6 +7,10 @@ export function CartProvider({ children }) {
   const [total, setTotal] = useState(0); // Inicializa el total en 0
   const [showAlert, setShowAlert] = useState(false);
   const [paymentMethod, setPaymentMethod] = useState(""); // Estado para el método de pago seleccionado
+  const [currentStep, setCurrentStep] = useState(() => {
+    const savedStep = localStorage.getItem("currentStep");
+    return savedStep ? parseInt(savedStep, 10) : 1; // Recupera el paso o usa el paso 1 por defecto
+  });
 
   const [cart, setCart] = useState(() => {
     const storedCart = localStorage.getItem("cart");
@@ -16,6 +20,12 @@ export function CartProvider({ children }) {
   useEffect(() => {
     localStorage.setItem("cart", JSON.stringify(cart));
   }, [cart]);
+
+  useEffect(() => {
+    if (currentStep) {
+      localStorage.setItem("currentStep", currentStep);
+    }
+  }, [currentStep]);
 
   useEffect(() => {
     const initialQuantities = cart.items.reduce((acc, item) => {
@@ -31,9 +41,19 @@ export function CartProvider({ children }) {
       return acc + productTotal;
     }, 0);
 
-    const shippingCost = cart.ship?.priceShipp ? cart.ship.priceShipp : 0;
+    const shippingCost = cart.ship?.price ? cart.ship.price : 0;
     setTotal(initialTotal + shippingCost);
   }, [cart.items, cart.ship]);
+
+    // Función para avanzar al siguiente paso
+    const nextStep = () => {
+      setCurrentStep((prevStep) => prevStep + 1);
+    };
+  
+    // Función para retroceder al paso anterior
+    const prevStep = () => {
+      setCurrentStep((prevStep) => (prevStep > 1 ? prevStep - 1 : 1));
+    };
 
   const handleUpdateClick = () => {
     cart.items.forEach((item) => {
@@ -51,7 +71,7 @@ export function CartProvider({ children }) {
       return acc + productTotal;
     }, 0);
 
-    const shippingCost = cart.ship?.priceShipp ? cart.ship.priceShipp : 0;
+    const shippingCost = cart.ship?.price ? cart.ship.price : 0;
     setTotal(newTotal + shippingCost);
     setShowAlert(true);
   };
@@ -140,6 +160,10 @@ export function CartProvider({ children }) {
         setShip,
         paymentMethod, // Método de pago seleccionado
         setPayment, // Función para actualizar el método de pago
+        currentStep, // Paso actual en el flujo de compra
+        setCurrentStep,
+        nextStep, // Función para avanzar al siguiente paso
+        prevStep, // Función para retroceder al paso anterior
       }}
     >
       {children}

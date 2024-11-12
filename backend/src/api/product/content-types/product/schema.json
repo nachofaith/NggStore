@@ -42,14 +42,29 @@
       "target": "api::category.category",
       "inversedBy": "products"
     },
-    "image": {
+    "images": {
+      "type": "media",
+      "multiple": true,
+      "required": false,
       "allowedTypes": [
         "images",
         "files"
-      ],
+      ]
+    },
+    "cover": {
       "type": "media",
-      "multiple": true,
-      "required": true
+      "multiple": false,
+      "required": false,
+      "allowedTypes": [
+        "images",
+        "files"
+      ]
+    },
+    "pedido": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::pedido.pedido",
+      "inversedBy": "products"
     }
   }
 }

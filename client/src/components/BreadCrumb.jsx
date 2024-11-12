@@ -6,10 +6,8 @@ import { useParams, useNavigate } from "react-router-dom";
 
 export default function Migajas({ data, type }) {
   const [loading, setLoading] = useState(true);
-  const [isSubCategory, setIsSubCategory] = useState(false)
+  const [isSubCategory, setIsSubCategory] = useState(false);
   const { idCat } = useParams();
-  
- 
 
   useEffect(() => {
     if (data !== null) {
@@ -20,11 +18,7 @@ export default function Migajas({ data, type }) {
       const isSub = idCat.startsWith("sub_");
       setIsSubCategory(isSub);
     }
-  
   }, [data]);
-
-
- 
 
   return (
     <>
@@ -72,20 +66,7 @@ export default function Migajas({ data, type }) {
                 Home
               </Breadcrumb.Item>
               <Breadcrumb.Item href="/categories">Categorías</Breadcrumb.Item>
-              {data[0].id_subCat > 0 ? (
-                isSubCategory ? (
-                  <>
-                    <Breadcrumb.Item href={`/category/${data[0].id_cat}`}>
-                      {data[0].nombre_cat}
-                    </Breadcrumb.Item>
-                    <Breadcrumb.Item>{data[0].nombre_subCat}</Breadcrumb.Item>
-                  </>
-                ) : (
-                  <Breadcrumb.Item>{data[0].nombre_cat}</Breadcrumb.Item>
-                )
-              ) : (
-                <Breadcrumb.Item>{data[0].nombre_cat}</Breadcrumb.Item>
-              )}
+              {data && <Breadcrumb.Item>{data[0]?.name}</Breadcrumb.Item>}
             </Breadcrumb>
           )}
         </section>

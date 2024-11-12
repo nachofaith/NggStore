@@ -3,6 +3,7 @@ import { useCart } from "../hooks/useCart";
 import FormatCLP from "./FormateadorCLP";
 import { Alert } from "flowbite-react";
 import { useEffect } from "react"; // Importa useEffect
+const API_URL = import.meta.env.VITE_APIV2_URL;
 
 const apiUrl = import.meta.env.VITE_API_URL;
 
@@ -12,7 +13,6 @@ export default function CartDrawer({ open, setIsOpen }) {
     cart,
     removeFromCart,
     quantities,
-
     total,
     handleUpdateClick,
     handleQuantityChange,
@@ -56,7 +56,7 @@ export default function CartDrawer({ open, setIsOpen }) {
             <div key={item.id} className="p-2 flex items-center">
               <div className="flex flex-row gap-2 items-center justify-center border rounded-md p-4 w-full">
                 <img
-                  src={`${apiUrl}/uploads/${item.frontImage}`}
+                  src={`${API_URL}/${item.frontImage}`}
                   alt={item.nombreProd}
                   className="w-16 h-16 object-contain rounded mr-4"
                 />

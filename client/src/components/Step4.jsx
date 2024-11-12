@@ -1,8 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 import { Spinner } from "flowbite-react";
-import CryptoJS from "crypto-js";
 import axios from "axios";
-import { WebpayPlus } from "transbank-sdk"; // ES6
+import { useNavigate } from "react-router-dom"; // Importa useNavigate
+
 
 //HOOKS
 import usePayment from "../hooks/usePayment";
@@ -12,54 +12,60 @@ import FormatCLP from "./FormateadorCLP";
 import Title from "./Title";
 import Stepper from "./Stepper";
 
+const API_URL = import.meta.env.VITE_APIV2_URL;
 const apiUrl = import.meta.env.VITE_API_URL;
 
 export default function Step4({ setCurrentStep }) {
-  const { cart, total } = useCart(); // Ahora obtenemos `paymentMethod` desde el contexto
+  const { cart, total, currentStep, nextStep } = useCart(); // Ahora obtenemos `paymentMethod` desde el contexto
   const { readPayment, paymentData } = usePayment();
 
+  const navigate = useNavigate(); // Inicializa useNavigate
   const paymentMethod = cart.payment;
 
   const handleClick = async () => {
-    try {
-      const buyOrder = `order-${new Date().getTime()}`; // Orden de compra única
-      const sessionId = `session-${new Date().getTime()}`; // ID de sesión único
-      const amount = Math.round(
-        total / (1 - (119 * paymentMethod.recargo) / 10000)
-      );
+    if (paymentMethod.name === "Efectivo o Transferencia") {
+      navigate("/payment"); 
+    } else {
+      try {
+        const buyOrder = `order-${new Date().getTime()}`; // Orden de compra única
+        const sessionId = `session-${new Date().getTime()}`; // ID de sesión único
+        const amount = Math.round(
+          total / (1 - (119 * paymentMethod.recargo) / 10000)
+        );
 
-      // Monto total a pagar (del carrito)
-      const returnUrl = `${window.location.origin}/payment`; // URL de retorno después del pago
+        // Monto total a pagar (del carrito)
+        const returnUrl = `${window.location.origin}/payment`; // URL de retorno después del pago
 
-      // Enviar solicitud al backend para crear la transacción
-      const response = await axios.post(
-        `${apiUrl}/api/webpay/create-transaction`,
-        {
-          buyOrder,
-          sessionId,
-          amount,
-          returnUrl,
-        }
-      );
+        // Enviar solicitud al backend para crear la transacción
+        const response = await axios.post(
+          `${apiUrl}/api/webpay/create-transaction`,
+          {
+            buyOrder,
+            sessionId,
+            amount,
+            returnUrl,
+          }
+        );
 
-      const { token, url } = response.data;
+        const { token, url } = response.data;
 
-      // Crear un formulario dinámico para redirigir al usuario a Webpay
-      const form = document.createElement("form");
-      form.method = "POST";
-      form.action = url;
+        // Crear un formulario dinámico para redirigir al usuario a Webpay
+        const form = document.createElement("form");
+        form.method = "POST";
+        form.action = url;
 
-      const tokenInput = document.createElement("input");
-      tokenInput.type = "hidden";
-      tokenInput.name = "token_ws";
-      tokenInput.value = token;
+        const tokenInput = document.createElement("input");
+        tokenInput.type = "hidden";
+        tokenInput.name = "token_ws";
+        tokenInput.value = token;
 
-      form.appendChild(tokenInput);
-      document.body.appendChild(form);
+        form.appendChild(tokenInput);
+        document.body.appendChild(form);
 
-      form.submit(); // Redirigir al usuario a Webpay para procesar el pago
-    } catch (error) {
-      console.error("Error al procesar la transacción:", error);
+        form.submit(); // Redirigir al usuario a Webpay para procesar el pago
+      } catch (error) {
+        console.error("Error al procesar la transacción:", error);
+      }
     }
   };
 
@@ -132,7 +138,7 @@ export default function Step4({ setCurrentStep }) {
                       className="flex flex-row gap-2 items-center justify-between border-b"
                     >
                       <img
-                        src={`${apiUrl}/uploads/${data.frontImage}`}
+                        src={`${API_URL}/${data.frontImage}`}
                         alt={data.nombreProd}
                         className="w-16 h-16 object-contain rounded mr-4"
                       />
@@ -177,13 +183,15 @@ export default function Step4({ setCurrentStep }) {
 
                   {shippingInfo && (
                     <div className="flex flex-row gap-2 items-center justify-between border-b py-2">
-                      <span className="text-lg">{shippingInfo.nameShipp}</span>
+                      <span className="text-lg">{shippingInfo.name}</span>
                       <div className="ml-auto text-right text-lg">
-                        {shippingInfo.typeShipp === "porpagar" && `Por Pagar`}
-                        {shippingInfo.typeShipp === "normal" && (
-                          <FormatCLP precio={shippingInfo.priceShipp} />
+                        {shippingInfo.type === "Envío por pagar" && `Por Pagar`}
+                        {shippingInfo.price === 0 &&
+                          shippingInfo.type !== "Envío por pagar" &&
+                          "GRATIS"}
+                        {shippingInfo.price > 0 && (
+                          <FormatCLP precio={shippingInfo.price} />
                         )}
-                        {shippingInfo.typeShipp === "tienda" && `Gratis`}
                       </div>
                     </div>
                   )}
@@ -193,7 +201,9 @@ export default function Step4({ setCurrentStep }) {
                   <h2 className="text-lg uppercase font-bold pt-2 text-right">
                     Total
                   </h2>
-
+                  <p className="text-right text-lg">
+                    <FormatCLP precio={total} />
+                  </p>
                   {/* Mostrar solo el método de pago seleccionado o todos si no hay selección */}
                   {paymentMethod
                     ? paymentData.data?.data
@@ -275,13 +285,13 @@ export default function Step4({ setCurrentStep }) {
 
               <div className="border rounded-md p-4 mb-2">
                 <h1 className="uppercase pb-4">Método de entrega</h1>
-                <div>
+                <div className="flex-col flex">
                   <span className="font-semibold">Seleccionado:</span>
                   <span>
                     {" "}
-                    {shippingInfo.nameShipp + " "} ({shippingInfo.descShipp}){" "}
+                    {shippingInfo.name + " "} ({shippingInfo.desc}){" "}
                     <span className="font-semibold">
-                      <FormatCLP precio={shippingInfo.priceShipp} />
+                      <FormatCLP precio={shippingInfo.price} />
                     </span>
                   </span>
                 </div>

@@ -1,55 +1,73 @@
 import { useParams, useNavigate } from "react-router-dom";
-import useRead from "../hooks/useRead";
-import { useEffect, useState } from "react";
-import { Spinner } from "flowbite-react"; // Asegúrate de importar el Spinner si lo estás usando
+import { useEffect } from "react";
+import { Spinner } from "flowbite-react";
 import Section from "../components/Section";
 import Breadcrumb from "../components/BreadCrumb";
+import useCat from "../hooks/useCat";
+import useProducts from "../hooks/useProducts";
+import Title from "../components/Title";
 
 export default function Category() {
   const { idCat } = useParams();
-  const { prodCat, prodSubCat, data, error } = useRead();
-  const [loading, setLoading] = useState(true);
+  const {
+    singleCat,
+    fetchSingleCat,
+    setLoading: setLoadCat,
+    loading: loadCat,
+    error: errorCat,
+  } = useCat();
+
+  const {
+    fetchProductsByCat,
+    productsByCat,
+    setLoading: setLoadProd,
+    loading: loadProd,
+    error: errorProd,
+  } = useProducts();
+
   const navigate = useNavigate();
 
-  if (idCat) {
-    const isSubCategory = idCat.startsWith("sub_");
-  
-    if (isSubCategory) {
-      const id = idCat.replace("sub_", ""); // Elimina el prefijo
-      prodSubCat(id); // Usa el ID sin el prefijo
-    } else {
-      prodCat(idCat); // Usa el ID original para categorías
+  useEffect(() => {
+    if (idCat) {
+      fetchSingleCat(idCat);
+      fetchProductsByCat(idCat);
     }
-  } else {
-    console.error("El ID no está definido");
-  }
+  }, [idCat]);
 
   useEffect(() => {
-    if (error) {
+    if (errorCat || errorProd) {
       navigate("/404"); // Redirige a 404 si hay un error
-    } else if (data !== null) {
+    } else if (singleCat !== null && productsByCat !== null) {
       setTimeout(() => {
-        setLoading(false);
+        setLoadCat(false);
+        setLoadProd(false);
       }, 1000);
     }
-  }, [error, data, navigate]);
-
-  const categoryName = data?.[0]?.nombre_cat || "Categoría desconocida";
-
-  console.log(data)
+  }, [errorCat, errorProd, singleCat, productsByCat, navigate]);
 
   return (
     <>
-      {loading ? (
+      {loadProd && loadCat ? (
         <div className="h-screen pt-20 container mx-auto ">
           <div className="text-center">
             <Spinner aria-label="Center-aligned spinner example" size="xl" />
           </div>
         </div>
       ) : (
-        <div className="h-screen container mx-auto">
-          <Breadcrumb data={data} type="category" />
-          <Section data={data} text={categoryName} tipo="cat" />
+        // <Section
+        //   data={productsByCat}
+        //   text={singleCat[0]?.name || "Nombre no disponible"}
+        //   limit={4}
+        // />
+
+        <div className="mx-auto container h-screen">
+          <Breadcrumb data={singleCat} type="category" />
+
+          <Section
+            data={productsByCat}
+            text={singleCat[0]?.name || "Nombre no disponible"}
+            tipo="cat"
+          />
         </div>
       )}
     </>
@@ -57,11 +75,4 @@ export default function Category() {
 }
 
 {
-  /* 
-          <div className="container mx-auto">
-            <h1 className="text-center text-2xl">Categoría: </h1>
-            {data && data.map((product) => (
-              <p key={product.id}>{product.nombre_cat}</p>
-            ))}
-          </div> */
 }

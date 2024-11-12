@@ -56,7 +56,7 @@ export default function Address() {
         fetchAddresses(user.id);
         setShowSpinner(false); // Ocultar el spinner después de los 2 segundos
       }, 1000);
-      
+
       return () => clearTimeout(timer); // Limpiar el timer si el componente se desmonta
     }
   }, [user, userLoading]);
@@ -107,9 +107,17 @@ export default function Address() {
 
       <ul>
         {showSpinner ? (
-          <Spinner aria-label="Center-aligned spinner example" size="xl" />
+          <div className="mt-4">
+            <Spinner aria-label="Center-aligned spinner example" size="xl" />
+          </div>
         ) : (
-          addresses.map((address) => <li key={address.id}>{address.street}</li>)
+          addresses.map((address) => (
+            <li className=" bg-gray-100 rounded-md my-2 p-4" key={address.id}>
+              <p> {address.street}</p>
+
+              <span className=" text-red-600">Eliminar</span>
+            </li>
+          ))
         )}
       </ul>
     </>

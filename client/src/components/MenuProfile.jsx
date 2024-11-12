@@ -14,9 +14,9 @@ export default function MenuProfile({ onMenuSelect }) {
           <Sidebar.Item href="#" icon={HiUser} onClick={() => onMenuSelect("info")}>
             Información
           </Sidebar.Item>
-          <Sidebar.Item href="#" icon={MdOutlineLocalShipping} onClick={() => onMenuSelect("address")}>
+          {/* <Sidebar.Item href="#" icon={MdOutlineLocalShipping} onClick={() => onMenuSelect("address")}>
             Direcciones
-          </Sidebar.Item>
+          </Sidebar.Item> */}
           <Sidebar.Item href="#" icon={MdOutlineRequestPage} onClick={() => onMenuSelect("pedidos")}>
             Pedidos
           </Sidebar.Item>
