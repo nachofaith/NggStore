@@ -8,7 +8,7 @@ import Stepper from "./Stepper";
 export default function Step2({ setCurrentStep }) {
   const formRef = useRef(null);
   const { readShip, shippingData, error } = useShipping();
-  const { cart, setShip } = useCart(); // Obtener el método de envío y la función para actualizarlo
+  const { cart, setShip, nextStep } = useCart(); // Obtener el método de envío y la función para actualizarlo
   const [errorRadio, setErrorRadio] = useState(null);
 
   const fetchShippingData = async () => {
@@ -36,6 +36,7 @@ export default function Step2({ setCurrentStep }) {
     ) {
       formRef.current.requestSubmit();
       setCurrentStep(3); // Cambia al siguiente paso
+  
     } else {
       setErrorRadio(true);
       console.log("El formulario contiene errores.");

@@ -3,7 +3,7 @@ import FormatCLP from "../components/FormateadorCLP";
 import { useCart } from "../hooks/useCart";
 import usePayment from "../hooks/usePayment";
 
-export default function Resumen({ onClick }) {
+export default function Resumen({ onClick, button }) {
   const { cart, total } = useCart(); // Ahora obtenemos `paymentMethod` desde el contexto
   const { readPayment, paymentData } = usePayment();
   const shippingInfo = cart.ship;
@@ -72,13 +72,15 @@ export default function Resumen({ onClick }) {
               {shippingInfo.price === 0 &&
                 shippingInfo.type !== "Envío por pagar" &&
                 "GRATIS"}
-              {shippingInfo.price > 0 && <FormatCLP precio={shippingInfo.price} />}
+              {shippingInfo.price > 0 && (
+                <FormatCLP precio={shippingInfo.price} />
+              )}
             </div>
           </div>
         )}
       </div>
 
-      <div>
+      <div className="pb-4">
         <h2 className="text-lg uppercase font-bold px-4 text-right">Total</h2>
 
         {/* Mostrar solo el método de pago seleccionado o todos si no hay selección */}
@@ -113,7 +115,7 @@ export default function Resumen({ onClick }) {
           : paymentData.data?.data.map((paymentOption) => (
               <div
                 key={paymentOption.id}
-                className="flex flex-row gap-2 items-center justify-between px-4"
+                className="flex flex-row gap-2 items-center justify-between px-4 "
               >
                 <div className="flex flex-col gap-2 justify-center">
                   <h3>{paymentOption.name}</h3>
@@ -133,15 +135,18 @@ export default function Resumen({ onClick }) {
                 </div>
               </div>
             ))}
-        <div className="w-full p-4">
-          <a
-            className="block w-full text-white bg-blue-500 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-sm py-2.5 text-center"
-            onClick={handleClick}
-            href="#"
-          >
-            Continuar
-          </a>
-        </div>
+
+        {button === "OFF" ? null : (
+          <div className="w-full p-4">
+            <a
+              className="block w-full text-white bg-blue-500 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-sm py-2.5 text-center"
+              onClick={handleClick}
+              href="#"
+            >
+              Continuar
+            </a>
+          </div>
+        )}
       </div>
     </div>
   );

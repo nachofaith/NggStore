@@ -1,7 +1,7 @@
 import FormatCLP from "./FormateadorCLP";
 import { Link } from "react-router-dom";
 import CartDrawer from "./Drawer";
-import { useState } from "react";
+import { act, useState } from "react";
 import { HiOutlineArrowRight } from "react-icons/hi";
 import { BsCartPlus } from "react-icons/bs";
 import { BsFillCartCheckFill } from "react-icons/bs";
@@ -11,6 +11,7 @@ export function Products(props) {
   const [isOpen, setIsOpen] = useState(false);
   const {
     tipo,
+    documentId,
     nombreProd,
     precioProd,
     precioProdOff,
@@ -24,11 +25,28 @@ export function Products(props) {
 
   const handleAddClick = (e) => {
     e.preventDefault();
+
+    const productInCart = cart.items.find(
+      (item) => item.documentId === documentId
+    );
+    const quantityInCart = productInCart ? productInCart.quantity : 0;
+
+    if (quantityInCart >= stockProd) {
+      alert("No puedes agregar más productos, el stock está agotado.");
+      setActiveButton(false);
+
+      // Restablece el botón después de 2 segundos
+      setTimeout(() => {
+        setActiveButton(true);
+      }, 2000);
+      return;
+    }
+
     if (isProductInCart) {
       setIsOpen(true);
     } else {
       addToCart({
-        id,
+        id: documentId,
         nombreProd,
         precioProd,
         precioProdOff,
@@ -36,17 +54,20 @@ export function Products(props) {
         stockProd,
       });
     }
+
     setIsOpen(true); // Abrir el Drawer
   };
 
   const { addToCart, cart } = useCart();
+  console.log(stockProd);
 
   const isProductInCart =
-    Array.isArray(cart.items) && cart.items.some((item) => item.id === id);
+    Array.isArray(cart.items) &&
+    cart.items.some((item) => item.id === documentId);
 
   return (
     <>
-      <Link to={`/producto/${id}`}>
+      <Link to={`/producto/${documentId}`}>
         <div className="h-full hover:shadow-blue-500/50 transition hover:scale-105 hover:shadow-xl text-center flex flex-col border rounded-lg shadow pt-2">
           {tipo === "news" && (
             <div>
@@ -152,21 +173,31 @@ export function Products(props) {
               <HiOutlineArrowRight className="ml-2 h-5 w-5" />
             </button>
 
-            <button
-              type="button"
-              className={
-                isProductInCart
-                  ? `focus:outline-none text-white bg-green-600 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800`
-                  : `flex flex-row text-white bg-blue-500 hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700`
-              }
-              onClick={handleAddClick}
-            >
-              {isProductInCart ? (
-                <BsFillCartCheckFill className="h-5 w-5" />
-              ) : (
+            {stockProd < 1 ? (
+              <button
+                type="button"
+                className="text-white bg-blue-400 dark:bg-blue-500 cursor-not-allowed font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 text-center"
+                disabled
+              >
                 <BsCartPlus className="h-5 w-5" />
-              )}
-            </button>
+              </button>
+            ) : (
+              <button
+                type="button"
+                onClick={handleAddClick}
+                className={
+                  isProductInCart
+                    ? `focus:outline-none text-white bg-green-600 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800`
+                    : `flex flex-row text-white bg-blue-500 hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700`
+                }
+              >
+                {isProductInCart ? (
+                  <BsFillCartCheckFill className="h-5 w-5" />
+                ) : (
+                  <BsCartPlus className="h-5 w-5" />
+                )}
+              </button>
+            )}
           </div>
         </div>
       </Link>

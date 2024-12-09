@@ -1,22 +1,24 @@
+// Librerías y paquetes externos
 import { useEffect, useRef, useState } from "react";
-import { Spinner } from "flowbite-react";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import { useNavigate } from "react-router-dom"; // Importa useNavigate
+import { Spinner } from "flowbite-react";
 
-
-//HOOKS
+// Hooks personalizados
 import usePayment from "../hooks/usePayment";
 import { useCart } from "../hooks/useCart";
-//COMPONENTS
-import FormatCLP from "./FormateadorCLP";
-import Title from "./Title";
-import Stepper from "./Stepper";
 
+// Componentes locales
+import FormatCLP from "./FormateadorCLP";
+import Stepper from "./Stepper";
+import Title from "./Title";
+
+// Variables y constantes
 const API_URL = import.meta.env.VITE_APIV2_URL;
 const apiUrl = import.meta.env.VITE_API_URL;
 
 export default function Step4({ setCurrentStep }) {
-  const { cart, total, currentStep, nextStep } = useCart(); // Ahora obtenemos `paymentMethod` desde el contexto
+  const { cart, total, currentStep } = useCart(); // Ahora obtenemos `paymentMethod` desde el contexto
   const { readPayment, paymentData } = usePayment();
 
   const navigate = useNavigate(); // Inicializa useNavigate
@@ -24,45 +26,30 @@ export default function Step4({ setCurrentStep }) {
 
   const handleClick = async () => {
     if (paymentMethod.name === "Efectivo o Transferencia") {
-      navigate("/payment"); 
+      if (currentStep === 4) {
+        navigate("/payment");
+      }
     } else {
       try {
-        const buyOrder = `order-${new Date().getTime()}`; // Orden de compra única
-        const sessionId = `session-${new Date().getTime()}`; // ID de sesión único
         const amount = Math.round(
           total / (1 - (119 * paymentMethod.recargo) / 10000)
         );
 
-        // Monto total a pagar (del carrito)
-        const returnUrl = `${window.location.origin}/payment`; // URL de retorno después del pago
+        const urlReturn = "http://localhost:5174/payment"; // URL de retorno
+        const urlConfirmation = "http://localhost:5174/payment";
 
         // Enviar solicitud al backend para crear la transacción
-        const response = await axios.post(
-          `${apiUrl}/api/webpay/create-transaction`,
-          {
-            buyOrder,
-            sessionId,
-            amount,
-            returnUrl,
-          }
-        );
+        const response = await axios.post(`${apiUrl}/api/flow`, {
+          amount,
+          urlReturn,
+          urlConfirmation,
+          email: formData.email1,
+        });
 
-        const { token, url } = response.data;
+        const { redirectUrl } = response.data;
+        console.log(redirectUrl);
 
-        // Crear un formulario dinámico para redirigir al usuario a Webpay
-        const form = document.createElement("form");
-        form.method = "POST";
-        form.action = url;
-
-        const tokenInput = document.createElement("input");
-        tokenInput.type = "hidden";
-        tokenInput.name = "token_ws";
-        tokenInput.value = token;
-
-        form.appendChild(tokenInput);
-        document.body.appendChild(form);
-
-        form.submit(); // Redirigir al usuario a Webpay para procesar el pago
+        window.location.href = redirectUrl;
       } catch (error) {
         console.error("Error al procesar la transacción:", error);
       }
@@ -71,7 +58,6 @@ export default function Step4({ setCurrentStep }) {
 
   const shippingInfo = cart.ship;
 
-  const formRef = useRef(null);
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -201,9 +187,18 @@ export default function Step4({ setCurrentStep }) {
                   <h2 className="text-lg uppercase font-bold pt-2 text-right">
                     Total
                   </h2>
-                  <p className="text-right text-lg">
-                    <FormatCLP precio={total} />
-                  </p>
+
+                  <div className="flex flex-row gap-2 items-center justify-between">
+                    <div className="flex flex-col gap-2 justify-center">
+                      <h3>Subtotal</h3>
+                    </div>
+                    <div className="flex flex-row gap-2 items-center">
+                      <p className="text-lg font-medium">
+                        <FormatCLP precio={total} />
+                      </p>
+                    </div>
+                  </div>
+
                   {/* Mostrar solo el método de pago seleccionado o todos si no hay selección */}
                   {paymentMethod
                     ? paymentData.data?.data
@@ -281,6 +276,28 @@ export default function Step4({ setCurrentStep }) {
                   <span className="font-semibold">Email:</span>
                   <span> {formData.email1} </span>
                 </div>
+
+                <h1 className="py-4 uppercase">Dirección</h1>
+                <div>
+                  <span className="font-semibold">Region:</span>
+                  <span> {formData.region} </span>
+                </div>
+                <div>
+                  <span className="font-semibold">Ciudad:</span>
+                  <span> {formData.ciudad} </span>
+                </div>
+                <div>
+                  <span className="font-semibold">Comuna:</span>
+                  <span> {formData.comuna} </span>
+                </div>
+                <div>
+                  <span className="font-semibold">Dirección:</span>
+                  <span> {formData.direc} </span>
+                </div>
+                <div>
+                  <span className="font-semibold">Información adicional:</span>
+                  <span> {formData.opcional} </span>
+                </div>
               </div>
 
               <div className="border rounded-md p-4 mb-2">
@@ -290,9 +307,13 @@ export default function Step4({ setCurrentStep }) {
                   <span>
                     {" "}
                     {shippingInfo.name + " "} ({shippingInfo.desc}){" "}
-                    <span className="font-semibold">
-                      <FormatCLP precio={shippingInfo.price} />
-                    </span>
+                    {shippingInfo.price === 0 ? (
+                      ""
+                    ) : (
+                      <span className="font-semibold">
+                        <FormatCLP precio={shippingInfo.price} />
+                      </span>
+                    )}
                   </span>
                 </div>
               </div>

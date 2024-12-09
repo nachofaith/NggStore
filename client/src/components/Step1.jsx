@@ -17,14 +17,13 @@ export default function Step1() {
     nombre: "",
     apellido: "",
     phone: "",
+    rut: "",
     email1: "",
     email2: "",
     region: "",
     ciudad: "",
     comuna: "",
     direc: "",
-    numDirec: "",
-    rut: "",
     opcional: "",
   });
 

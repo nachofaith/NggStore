@@ -4,7 +4,7 @@
   "info": {
     "singularName": "product",
     "pluralName": "products",
-    "displayName": "Product",
+    "displayName": "product",
     "description": ""
   },
   "options": {
@@ -18,17 +18,32 @@
     "desc": {
       "type": "text"
     },
-    "stock": {
-      "type": "integer",
-      "default": 0
-    },
     "price": {
-      "type": "integer",
-      "required": true
+      "type": "integer"
     },
     "priceOff": {
-      "type": "integer",
-      "default": 0
+      "type": "integer"
+    },
+    "stock": {
+      "type": "integer"
+    },
+    "cover": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
+      "allowedTypes": [
+        "images",
+        "files"
+      ]
+    },
+    "images": {
+      "type": "media",
+      "multiple": true,
+      "required": false,
+      "allowedTypes": [
+        "images",
+        "files"
+      ]
     },
     "brand": {
       "type": "relation",
@@ -40,30 +55,6 @@
       "type": "relation",
       "relation": "manyToOne",
       "target": "api::category.category",
-      "inversedBy": "products"
-    },
-    "images": {
-      "type": "media",
-      "multiple": true,
-      "required": false,
-      "allowedTypes": [
-        "images",
-        "files"
-      ]
-    },
-    "cover": {
-      "type": "media",
-      "multiple": false,
-      "required": false,
-      "allowedTypes": [
-        "images",
-        "files"
-      ]
-    },
-    "pedido": {
-      "type": "relation",
-      "relation": "manyToOne",
-      "target": "api::pedido.pedido",
       "inversedBy": "products"
     }
   }

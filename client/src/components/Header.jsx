@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Dropdown } from "flowbite-react";
-import useRead from "../hooks/useRead";
 import { Spinner } from "flowbite-react";
 import { BsCartFill } from "react-icons/bs";
 import { useCart } from "../hooks/useCart";

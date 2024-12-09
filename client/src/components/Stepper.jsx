@@ -44,11 +44,13 @@ export default function Stepper({ step, handleStepClick }) {
       className="flex justify-center items-center border rounded-md py-4 px-6 w-full"
     >
       {/* Ajustes responsivos con flex-wrap, max-w-full y un mejor centrado */}
-      <ol className="flex flex-wrap justify-center items-center space-y-4 sm:flex-row sm:space-x-30 md:space-x-52 rtl:space-x-reverse w-full max-w-full">
+      <ol className="flex flex-wrap justify-between items-center space-y-4 sm:flex-row  rtl:space-x-reverse w-full max-w-full">
         {steps.map(({ id, title, description, clickable }) => (
           <li
             key={id}
-            className={`flex flex-col items-center text-center cursor-pointer ${getStepClasses(id)} w-full sm:w-auto`}
+            className={`flex flex-col items-center text-center cursor-pointer ${getStepClasses(
+              id
+            )} w-full sm:w-auto`}
             onClick={clickable ? () => handleStepClick(id) : undefined}
           >
             <span className={getCircleClasses(id)}>{id}</span>

@@ -15,6 +15,7 @@ export default function Section({ data, text, tipo, limit }) {
             <Products
               key={item.id}
               id={item.id}
+              documentId={item.documentId}
               tipo={tipo}
               nombreProd={item.name}
               precioProd={item.price}

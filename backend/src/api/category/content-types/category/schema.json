@@ -15,15 +15,7 @@
       "type": "string"
     },
     "desc": {
-      "type": "string"
-    },
-    "cover": {
-      "allowedTypes": [
-        "images",
-        "files"
-      ],
-      "type": "media",
-      "multiple": false
+      "type": "text"
     },
     "products": {
       "type": "relation",

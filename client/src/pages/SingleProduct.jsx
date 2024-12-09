@@ -2,7 +2,8 @@ import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import Breadcrumb from "../components/BreadCrumb";
 import FormatCLP from "../components/FormateadorCLP";
-import useRead from "../hooks/useRead";
+import { HiInformationCircle } from "react-icons/hi";
+import { Alert } from "flowbite-react";
 import { Spinner } from "flowbite-react";
 import { useCart } from "../hooks/useCart";
 import { BsCartPlus } from "react-icons/bs";
@@ -16,6 +17,7 @@ export default function SingleProduct() {
   const [nombreProd, setNombreProd] = useState("");
   const [precioProd, setPrecioProd] = useState("");
   const [precioProdOff, setPrecioProdOff] = useState("");
+  const [brand, setBrand] = useState("");
   const [stockProd, setStockProd] = useState("");
   const [coverProd, setCoverProd] = useState("");
 
@@ -35,17 +37,28 @@ export default function SingleProduct() {
   }, [idProd]);
 
   useEffect(() => {
-    if (productById && productById.length > 0) {
-      setNombreProd(productById[0].name);
-      setPrecioProd(productById[0].price);
-      setPrecioProdOff(productById[0].priceOff);
-      setStockProd(productById[0].stock);
-      // Establecer el 'cover' del primer producto
-      setCoverProd(productById[0].cover?.url);
+    if (productById) {
+      // Si productById es un arreglo y no está vacío, o si es un objeto no vacío
+      const validProduct = Array.isArray(productById)
+        ? productById[0] // Si es un arreglo, tomar el primer elemento
+        : productById; // Si es un objeto, usarlo directamente
 
-      setTimeout(() => {
-        setLoading(false);
-      }, 1000);
+      // Verificar que validProduct tenga propiedades válidas
+      if (validProduct && Object.keys(validProduct).length > 0) {
+        console.log(validProduct);
+        setNombreProd(validProduct.name);
+        setPrecioProd(validProduct.price);
+        setPrecioProdOff(validProduct.priceOff);
+        setStockProd(validProduct.stock);
+        setBrand(validProduct.brand?.name); // Usamos optional chaining por si la propiedad es indefinida
+        setCoverProd(validProduct.cover?.url); // También aquí usas optional chaining
+
+        setTimeout(() => {
+          setLoading(false);
+        }, 1000);
+      } else {
+        console.log("El producto está vacío");
+      }
     }
   }, [productById]);
 
@@ -60,7 +73,7 @@ export default function SingleProduct() {
       setIsOpen(true);
     } else {
       addToCart({
-        id: productById[0].id, // Usar el idProd convertido a número
+        id: productById.documentId, // Usar el idProd convertido a número
         nombreProd,
         precioProd,
         precioProdOff,
@@ -72,27 +85,20 @@ export default function SingleProduct() {
     setIsOpen(true); // Abrir el Drawer
   };
 
-
-
-
-
-
-
-
   const handleClick = (item) => {
     setCoverProd(item);
   };
 
   const isProductInCart =
     Array.isArray(cart.items) &&
-    cart.items.some((item) => item.id === Number(idProd));
+    cart.items.some((item) => item.id === idProd);
 
   const handleComprar = (e) => {
     e.preventDefault();
     if (isProductInCart) {
       navigate("/cart");
     } else {
-      const id = Number(idProd); // Convertir idProd a número
+      const id = idProd; // Convertir idProd a número
       const frontImage = cover;
       addToCart({
         id, // Usar el idProd convertido a número
@@ -108,7 +114,7 @@ export default function SingleProduct() {
 
   return (
     <>
-    <CartDrawer open={isOpen} setIsOpen={setIsOpen} />
+      <CartDrawer open={isOpen} setIsOpen={setIsOpen} />
       {loading ? (
         <div className="h-screen pt-20 container mx-auto">
           <div className="text-center">
@@ -124,98 +130,104 @@ export default function SingleProduct() {
               id="imagenes"
               className="w-1/2 h-full flex flex-row gap-4 columns-2"
             >
-              <div id="thumbs" className="flex flex-col">
-                {productById.map((item, index) => (
-                  <div key={index} className="flex flex-col gap-4">
-                    {item.images?.map((image, imgIndex) => (
-                      <img
-                        key={imgIndex}
-                        src={`${API_URL}/${image.url}`}
-                        alt={`Image ${imgIndex + 1}`}
-                        className={
-                          coverProd == item
-                            ? "w-20 h-20 object-contain opacity-100 rounded-lg shadow"
-                            : "w-20 h-20 object-contain opacity-30 hover:opacity-100 rounded-lg shadow-lg"
-                        }
-                        onClick={() => handleClick(image.url)}
-                      />
-                    ))}
-                  </div>
-                ))}
-              </div>
-
-              {productById.map((item, index) => (
-                <div id="front" key={index} className="flex mx-auto">
-                  <img
-                    src={
-                      `${API_URL}/${coverProd}` ||
-                      `${API_URL}/${item.cover?.url}`
-                    }
-                    alt="Cover Image"
-                    className="h-96 w-96 object-contain "
-                  />
+              {
+                <div id="thumbs" className="flex flex-col">
+                  {productById && (
+                    <div key={productById.id} className="flex flex-col gap-4">
+                      {productById.images?.map((image, imgIndex) => (
+                        <img
+                          key={imgIndex}
+                          src={`${API_URL}${image.url}`}
+                          alt={`Image ${imgIndex + 1}`}
+                          className={
+                            coverProd === image.url
+                              ? "w-20 h-20 object-contain opacity-100 rounded-lg shadow"
+                              : "w-20 h-20 object-contain opacity-30 hover:opacity-100 rounded-lg shadow-lg"
+                          }
+                          onClick={() => handleClick(image.url)}
+                        />
+                      ))}
+                    </div>
+                  )}
                 </div>
-              ))}
+              }
+
+              <div id="front" className="flex mx-auto">
+                <img
+                  src={`${API_URL}/${coverProd}`}
+                  alt="Cover Image"
+                  className="h-96 w-96 object-contain "
+                />
+              </div>
             </div>
 
             <div id="info" className="w-1/2">
-              {productById &&
-                productById.map((item) => (
-                  <div className="">
-                    <span className="text-lg uppercase">
-                      {item.brand?.name}
-                    </span>
+              {productById && (
+                <div className="">
+                  <span className="text-lg uppercase">{brand}</span>
 
-                    <h1 className="uppercase font-anton text-transparent bg-clip-text bg-gradient-to-r from-cyan-500 to-blue-500 text-6xl">
-                      {item.name}
-                    </h1>
+                  <h1 className="uppercase font-anton text-transparent bg-clip-text bg-gradient-to-r from-cyan-500 to-blue-500 text-6xl">
+                    {nombreProd}
+                  </h1>
 
-                    <p className="pt-10 text-xl">{item.desc}</p>
+                  <p className="pt-10 text-xl">Desc</p>
 
-                    {item.priceOff == 0 ? (
-                      <div id="precios" className="text-lg pt-4">
-                        <div className="font-normal flex flex-row gap-2 items-center">
-                          <span className="">Efectivo o Transferencia:</span>
-                          <span className="text-2xl font-semibold text-gray-800">
-                            {" "}
-                            <FormatCLP precio={item.price} />
-                          </span>
-                        </div>
-
-                        <div className="font-normal flex flex-row gap-2 items-center">
-                          <span>Tarjetas:</span>
-                          <span className="text-2xl font-semibold text-gray-800">
-                            {" "}
-                            <FormatCLP precio={item.price} />
-                          </span>
-                        </div>
+                  {precioProdOff == 0 ? (
+                    <div id="precios" className="text-lg pt-4">
+                      <div className="font-normal flex flex-row gap-2 items-center">
+                        <span className="">Efectivo o Transferencia:</span>
+                        <span className="text-2xl font-semibold text-gray-800">
+                          {" "}
+                          <FormatCLP precio={precioProd} />
+                        </span>
                       </div>
-                    ) : (
-                      <div id="precios" className="text-xl pt-4">
-                        <div className="font-normal flex flex-row gap-2 items-center">
-                          <span className="">Efectivo o Transferencia:</span>
-                          <span className="font-normal text-gray-400 line-through">
-                            <FormatCLP precio={item.price} />
-                          </span>
-                          <span className="text-2xl font-semibold text-gray-800">
-                            {" "}
-                            <FormatCLP precio={item.priceOff} />
-                          </span>
-                        </div>
 
-                        <div className="font-normal flex flex-row gap-2 items-center">
-                          <span>Tarjetas:</span>
-                          <span className="font-normal text-gray-400 line-through">
-                            <FormatCLP precio={item.price} />
-                          </span>
-                          <span className="text-2xl font-semibold text-gray-800">
-                            {" "}
-                            <FormatCLP precio={item.priceOff} />
-                          </span>
-                        </div>
+                      <div className="font-normal flex flex-row gap-2 items-center">
+                        <span>Tarjetas:</span>
+                        <span className="text-2xl font-semibold text-gray-800">
+                          {" "}
+                          <FormatCLP precio={precioProd} />
+                        </span>
                       </div>
-                    )}
+                    </div>
+                  ) : (
+                    <div id="precios" className="text-xl pt-4">
+                      <div className="font-normal flex flex-row gap-2 items-center">
+                        <span className="">Efectivo o Transferencia:</span>
+                        <span className="font-normal text-gray-400 line-through">
+                          <FormatCLP precio={item.price} />
+                        </span>
+                        <span className="text-2xl font-semibold text-gray-800">
+                          {" "}
+                          <FormatCLP precio={item.priceOff} />
+                        </span>
+                      </div>
 
+                      <div className="font-normal flex flex-row gap-2 items-center">
+                        <span>Tarjetas:</span>
+                        <span className="font-normal text-gray-400 line-through">
+                          <FormatCLP precio={item.price} />
+                        </span>
+                        <span className="text-2xl font-semibold text-gray-800">
+                          {" "}
+                          <FormatCLP precio={item.priceOff} />
+                        </span>
+                      </div>
+                    </div>
+                  )}
+
+                  {stockProd < 1 ? (
+                    <div className="py-4">
+                      <Alert
+                        color="failure"
+                        icon={HiInformationCircle}
+                        withBorderAccent
+                      >
+                        <span className="font-medium">Atención!</span> Este
+                        producto se encuentra actualmente Agotado
+                      </Alert>
+                    </div>
+                  ) : (
                     <div className="py-4">
                       <button
                         type="button"
@@ -247,8 +259,9 @@ export default function SingleProduct() {
                         )}
                       </button>
                     </div>
-                  </div>
-                ))}
+                  )}
+                </div>
+              )}
             </div>
           </div>
         </div>

@@ -70,15 +70,6 @@
     },
     "last_name": {
       "type": "string"
-    },
-    "rut": {
-      "type": "string"
-    },
-    "addresses": {
-      "type": "relation",
-      "relation": "oneToMany",
-      "target": "api::address.address",
-      "mappedBy": "user"
     }
   }
 }

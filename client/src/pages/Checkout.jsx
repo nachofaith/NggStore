@@ -18,6 +18,8 @@ export default function Checkout() {
     }
   }, [cart, navigate]);
 
+  console.log(currentStep)
+
   return (
     <section className="h-auto md:container md:mx-auto sm:px-20 min-h-screen">
       <Title text="Checkout" align="center" />

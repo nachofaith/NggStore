@@ -8,7 +8,7 @@ const API_URL = import.meta.env.VITE_APIV2_URL;
 
 export default function Step3({ setCurrentStep }) {
   const formRef = useRef(null);
-  const { cart, setPayment } = useCart();
+  const { cart, setPayment, nextStep } = useCart();
   const { readPayment, paymentData } = usePayment();
   const [errorRadio, setErrorRadio] = useState(null);
 
@@ -22,7 +22,7 @@ export default function Step3({ setCurrentStep }) {
   const handleClick = () => {
     if (formRef.current && formRef.current.reportValidity() && !errorRadio) {
       formRef.current.requestSubmit();
-      setCurrentStep(4); // Cambia al siguiente paso
+      nextStep(4); // Cambia al siguiente paso
     } else {
       setErrorRadio(true);
       console.log("El formulario contiene errores.");
@@ -31,6 +31,7 @@ export default function Step3({ setCurrentStep }) {
 
   const handleStepClick = (step) => {
     setCurrentStep(step);
+    
   };
 
   const handleSubmit = (e) => {

@@ -56,19 +56,18 @@ const useProducts = () => {
   const fetchSingleProduct = async (idProd) => {
     setLoading(true);
     setError(null);
-
     try {
       const responseSingleProduct = await axios.get(
-        `${API_URL}/api/products?populate=images&populate=cover&filters[id][$eq]=${idProd}&populate=brand`,
+        `${API_URL}/api/products/${idProd}?populate=images&populate=cover&populate=brand`,
         {
           headers: {
             Authorization: `Bearer ${API_KEY}`,
           },
         }
       );
-
+     
       setProductById(responseSingleProduct.data.data);
-  
+      console.log("Producto por id:", responseSingleProduct.data.data);
     } catch (err) {
       setError(err.message);
     }

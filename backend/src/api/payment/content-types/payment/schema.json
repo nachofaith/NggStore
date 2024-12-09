@@ -15,18 +15,18 @@
     "name": {
       "type": "string"
     },
+    "desc": {
+      "type": "text"
+    },
     "cover": {
-      "type": "media",
-      "multiple": false,
-      "required": false,
       "allowedTypes": [
         "images",
-        "files"
-      ]
-    },
-    "desc": {
-      "type": "text",
-      "required": true
+        "files",
+        "videos",
+        "audios"
+      ],
+      "type": "media",
+      "multiple": false
     },
     "recargo": {
       "type": "decimal"

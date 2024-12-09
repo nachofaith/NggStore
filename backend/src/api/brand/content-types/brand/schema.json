@@ -4,8 +4,7 @@
   "info": {
     "singularName": "brand",
     "pluralName": "brands",
-    "displayName": "Brand",
-    "description": ""
+    "displayName": "Brand"
   },
   "options": {
     "draftAndPublish": true
@@ -14,15 +13,6 @@
   "attributes": {
     "name": {
       "type": "string"
-    },
-    "cover": {
-      "type": "media",
-      "multiple": false,
-      "required": false,
-      "allowedTypes": [
-        "images",
-        "files"
-      ]
     },
     "products": {
       "type": "relation",

@@ -142,12 +142,21 @@ export function CartProvider({ children }) {
   };
 
 
+  const clearCart = () => {
+    setCart({ items: [], ship: null, payment: "" });
+    setQuantities({});
+    setTotal(0); // Resetear el total
+    setShowAlert(false); // Opcional, dependiendo de si quieres mostrar alguna alerta
+  };
+  
+
   
 
   return (
     <CartContext.Provider
       value={{
         cart,
+        clearCart,
         addToCart,
         removeFromCart,
         quantities,

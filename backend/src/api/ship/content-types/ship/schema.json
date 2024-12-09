@@ -15,19 +15,19 @@
     "name": {
       "type": "string"
     },
-    "desc": {
-      "type": "text"
+    "price": {
+      "type": "integer"
     },
     "type": {
       "type": "enumeration",
       "enum": [
-        "Retiro en tienda",
         "Envío por pagar",
-        "Envío normal"
+        "Envío Normal",
+        "Retiro en Local"
       ]
     },
-    "price": {
-      "type": "integer"
+    "desc": {
+      "type": "text"
     }
   }
 }
